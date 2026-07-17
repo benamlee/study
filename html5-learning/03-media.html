@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<!-- ========================================== -->
+<!-- 文件：03-media.html                         -->
+<!-- 主题：图片、视频与音频                      -->
+<!-- ========================================== -->
+
+<!--
+  【本节学习目标】
+  1. 学会使用 <img> 插入图片
+  2. 理解 src、alt、width、height 等属性
+  3. 学会使用 <figure> + <figcaption> 为图片添加说明
+  4. 学会使用 <video> 嵌入视频
+  5. 学会使用 <audio> 嵌入音频
+-->
+
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 3 课 - 图片、视频与音频</title>
+    <style>
+        body { font-family: "Microsoft YaHei", sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #fafafa; line-height: 1.8; }
+        .example { background-color: #fff; border-left: 4px solid #9b59b6; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .note { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; }
+        code { background-color: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+        img { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+
+    <h1>3. 图片、视频与音频</h1>
+
+    <!-- ========================================== -->
+    <!-- 1. 图片标签 <img>                           -->
+    <!-- ========================================== -->
+
+    <h2>1.1 图片标签 &lt;img&gt;</h2>
+
+    <!--
+      <img>：图片标签（Image）
+      - 是"空标签"（自闭合），不需要写 </img>
+      - 是行内替换元素（可以设置宽高）
+
+      核心属性：
+      src（Source）：图片文件的路径（必填）
+        - 相对路径：images/photo.jpg
+        - 绝对路径：https://example.com/photo.jpg
+      alt（Alternative Text）：图片无法显示时的替代文字（必填，重要！）
+        - 对 SEO 很重要
+        - 屏幕阅读器会朗读 alt 文本给视障用户
+        - 图片加载失败时会显示 alt 文字
+      width / height：设置图片宽度和高度（单位：像素）
+        - 如果只设置一个，另一个会自动按比例缩放
+        - 也可以使用 CSS 控制
+      title：鼠标悬停时显示的提示文字
+    -->
+
+    <h3>基本图片用法：</h3>
+
+    <!-- 使用网络图片（来自 placeholder 图片服务） -->
+    <!--
+      src 属性写图片的 URL 地址
+      alt 属性描述图片内容（图片加载失败时会显示这段文字）
+      width 和 height 设置尺寸
+    -->
+    <img
+        src="https://via.placeholder.com/400x200/3498db/ffffff?text=HTML5+图片示例"
+        alt="这是一张示例图片，蓝色背景上显示 HTML5 图片示例文字"
+        width="400"
+        height="200"
+        title="鼠标悬停时显示的提示文字"
+    >
+
+    <p>上面是一张网络图片，来自图片占位服务。</p>
+
+    <!-- ========================================== -->
+    <!-- 2. alt 属性的重要性                          -->
+    <!-- ========================================== -->
+
+    <h3>验证 alt 属性的效果：</h3>
+
+    <!-- 故意使用一个错误的图片路径，观察 alt 文字的显示效果 -->
+    <div class="example">
+        <p><strong>图片加载失败时的效果（alt 文字会显示）：</strong></p>
+        <img
+            src="不存在的图片路径.jpg"
+            alt="图片加载失败！这是替代文字，描述本该显示的图片内容"
+            width="400"
+            height="200"
+        >
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. 图片尺寸控制                              -->
+    <!-- ========================================== -->
+
+    <h3>不同尺寸的图片：</h3>
+
+    <!--
+      width 和 height 可以只设置一个，另一个自动等比缩放
+    -->
+    <img
+        src="https://via.placeholder.com/800x200/e74c3c/ffffff?text=宽度800"
+        alt="宽度固定800像素，高度自动"
+        width="800"
+    >
+    <!-- 只设置 height，宽度自动缩放 -->
+    <img
+        src="https://via.placeholder.com/200x150/2ecc71/ffffff?text=高度150"
+        alt="高度固定150像素，宽度自动"
+        height="150"
+    >
+
+    <!-- ========================================== -->
+    <!-- 4. figure 与 figcaption                     -->
+    <!-- ========================================== -->
+
+    <h2>1.2 &lt;figure&gt; 与 &lt;figcaption&gt;</h2>
+
+    <!--
+      <figure>：用于包裹独立的内容单元（图片、图表、代码块等）
+      <figcaption>：为 <figure> 添加标题/说明文字
+      好处：将图片和说明文字关联在一起，语义更清晰
+    -->
+
+    <figure>
+        <!-- figure 中的图片 -->
+        <img
+            src="https://via.placeholder.com/500x250/f39c12/ffffff?text=Figure+示例"
+            alt="figure 标签配合 figcaption 使用的示例图片"
+            width="500"
+        >
+        <!-- figcaption：图片的说明文字 -->
+        <figcaption>
+            ️图 1：这是图片的标题或说明文字（figcaption），
+            使用 <code>&lt;figure&gt;</code> 和 <code>&lt;figcaption&gt;</code> 包裹
+        </figcaption>
+    </figure>
+
+    <!-- ========================================== -->
+    <!-- 5. 视频标签 <video>                          -->
+    <!-- ========================================== -->
+
+    <h2>2. 视频标签 &lt;video&gt;</h2>
+
+    <!--
+      <video>：用于在页面中嵌入视频
+
+      核心属性：
+      src         — 视频文件路径
+      controls    — 显示播放控件（播放/暂停/音量/全屏等）
+      autoplay    — 自动播放（注意：大多数浏览器会静音自动播放）
+      muted       — 静音播放
+      loop        — 循环播放
+      poster      — 视频加载前显示的封面图片
+      width/height — 视频播放器的尺寸
+      preload     — 预加载策略（none / metadata / auto）
+
+      注意：不同浏览器支持的视频格式不同
+      最常用的格式：.mp4（H.264 编码，几乎所有浏览器支持）
+      .webm（更先进，但兼容性稍差）
+    -->
+
+    <h3>使用 controls 属性：</h3>
+    <div class="example">
+        <!--
+          controls：显示控制条
+          width：设置播放器宽度
+          poster：视频未播放时的封面图
+        -->
+        <video
+            controls
+            width="600"
+            poster="https://via.placeholder.com/600x338/2980b9/ffffff?text=视频封面"
+        >
+            <!--
+              浏览器会按顺序尝试播放 source 中的视频
+              如果 mp4 可以播放，就不会加载 webm
+            -->
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            <source src="https://www.w3schools.com/html/mov_bbb.webm" type="video/webm">
+
+            <!-- 如果所有视频都无法播放，显示这段提示文字 -->
+            您的浏览器不支持视频播放。请升级浏览器。
+        </video>
+        <!--
+          <video> 和 <source> 是配合使用的：
+          <video> 是容器，<source> 提供不同格式的视频源文件
+          这样写的好处是：如果浏览器不支持 mp4，会自动尝试 webm 格式
+        -->
+    </div>
+
+    <h3>自动播放 + 循环 + 静音：</h3>
+    <div class="note">
+        <strong>注意：</strong>现代浏览器限制自动播放有声视频。
+        要使用 autoplay，必须同时添加 muted 属性。
+    </div>
+    <video
+        autoplay
+        muted
+        loop
+        width="400"
+    >
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        您的浏览器不支持视频播放。
+    </video>
+    <p><small>上面这个视频自动播放、静音、循环。</small></p>
+
+    <!-- ========================================== -->
+    <!-- 6. 音频标签 <audio>                          -->
+    <!-- ========================================== -->
+
+    <h2>3. 音频标签 &lt;audio&gt;</h2>
+
+    <!--
+      <audio>：用于在页面中嵌入音频
+
+      核心属性（与 video 类似）：
+      src         — 音频文件路径
+      controls    — 显示播放控件
+      autoplay    — 自动播放
+      muted       — 静音
+      loop        — 循环播放
+      preload     — 预加载策略
+
+      常用音频格式：
+      .mp3 — 最通用，几乎所有浏览器支持
+      .ogg — 开源格式，Firefox 支持好
+      .wav — 未压缩，音质最好但文件大
+    -->
+
+    <h3>基本音频播放器：</h3>
+    <div class="example">
+        <audio controls>
+            <!--
+              source 同样可以指定多个格式
+              浏览器会选择第一个能播放的格式
+            -->
+            <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+            <source src="https://www.w3schools.com/html/horse.ogg" type="audio/ogg">
+            您的浏览器不支持音频播放。
+        </audio>
+        <p>点击上面的播放按钮来听一段音频。</p>
+    </div>
+
+    <h3>循环播放的音频：</h3>
+    <audio controls loop>
+        <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+        您的浏览器不支持音频播放。
+    </audio>
+    <p><small>loop 属性让音频循环播放。</small></p>
+
+    <!-- ========================================== -->
+    <!-- 7. 更多：iframe 嵌入外部内容                 -->
+    <!-- ========================================== -->
+
+    <h2>4. 嵌入外部页面 &lt;iframe&gt;</h2>
+
+    <!--
+      <iframe>：内联框架（Inline Frame）
+      - 在当前页面中嵌入另一个网页
+      - 常用于：嵌入 YouTube 视频、地图、第三方内容等
+
+      常用属性：
+      src       — 要嵌入的页面 URL
+      width     — 宽度
+      height    — 高度
+      frameborder — 边框（HTML5 推荐用 CSS 控制）
+      allowfullscreen — 允许全屏
+    -->
+
+    <div class="example">
+        <iframe
+            src="https://www.wikipedia.org"
+            width="100%"
+            height="300"
+            title="维基百科首页"
+            style="border: 1px solid #ccc;"
+        >
+            <!-- 如果浏览器不支持 iframe，显示这段文字 -->
+            您的浏览器不支持 iframe。
+        </iframe>
+        <p>上面通过 <code>&lt;iframe&gt;</code> 嵌入了维基百科首页。</p>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 学习建议与注意事项                           -->
+    <!-- ========================================== -->
+
+    <div class="note">
+        <strong>⚠️ 学习提示：</strong>
+        <ul>
+            <li>本课中的图片、视频、音频都来自网络，需要联网才能显示</li>
+            <li>你可以把 <code>src</code> 换成自己电脑上的文件路径（如 <code>images/myphoto.jpg</code>）</li>
+            <li>视频和音频文件较大，建议使用自己的小文件测试</li>
+            <li><code>alt</code> 属性不是可选的——它对无障碍访问和 SEO 非常重要</li>
+            <li>所有媒体标签都可以配合 CSS 进行样式美化</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>✏️ 课后练习</h2>
+    <ol>
+        <li>找一张你喜欢的图片 URL，用 <code>&lt;img&gt;</code> 显示在页面上</li>
+        <li>给你的图片添加 <code>alt</code>、<code>title</code>、<code>width</code> 属性</li>
+        <li>用 <code>&lt;figure&gt;</code> 和 <code>&lt;figcaption&gt;</code> 包裹一张图片并添加说明</li>
+        <li>创建一个带 <code>controls</code> 和 <code>loop</code> 的视频播放器</li>
+        <li>用 <code>&lt;iframe&gt;</code> 嵌入你喜欢的网站</li>
+    </ol>
+
+    <hr>
+
+    <p>
+        <a href="02-lists-links.html">⬅ 上一课：列表与链接</a>
+        <span style="float: right;"><a href="04-tables.html">下一课：表格 ➡</a></span>
+    </p>
+
+</body>
+</html>

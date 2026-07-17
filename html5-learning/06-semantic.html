@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<!-- ========================================== -->
+<!-- 文件：06-semantic.html                      -->
+<!-- 主题：HTML5 语义化标签                      -->
+<!-- ========================================== -->
+
+<!--
+  【本节学习目标】
+  1. 理解什么是"语义化标签"及其重要性
+  2. 学会使用 HTML5 的语义化标签构建页面结构
+  3. 理解 <header>、<nav>、<main>、<section>、<article>、<aside>、<footer>
+  4. 学会将 <div> 替换为语义化标签改善页面结构
+
+  【什么是语义化？】
+  语义化（Semantic）就是使用有意义的标签来描述内容。
+  比如 <h1> 表示"一级标题"，<nav> 表示"导航区域"。
+  而非语义化的 <div> 只是一个"容器"，没有实际含义。
+
+  【为什么要语义化？】
+  1. SEO 更好 — 搜索引擎能理解页面结构，知道哪里是标题、哪里是导航
+  2. 无障碍访问 — 屏幕阅读器能帮助视障用户导航页面
+  3. 代码可读性 — 开发者一看就知道每个区域是干什么的
+  4. 未来兼容 — 符合 Web 标准的代码更容易维护和升级
+-->
+
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 6 课 - HTML5 语义化标签</title>
+    <style>
+        /* ================================
+           基础样式
+           ================================ */
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            line-height: 1.6;
+        }
+        code { background-color: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+
+        /* ================================
+           给语义化标签添加可视的边框和背景色
+           让你在浏览器中清楚看到每个标签的区域
+           ================================ */
+
+        /* header：页面或区块的头部 */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+        }
+        header h1 {
+            margin: 0;
+            color: white;
+        }
+
+        /* nav：导航区域 */
+        nav {
+            background-color: #34495e;
+            padding: 10px 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        nav a:hover {
+            color: #f1c40f;
+        }
+
+        /* main：主要内容区域 */
+        main {
+            background-color: white;
+            padding: 20px;
+        }
+
+        /* section：章节，用不同背景色区分 */
+        section {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        /* article：独立文章/内容单元 */
+        article {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* aside：侧边栏/旁注内容 */
+        aside {
+            background-color: #fef9e7;
+            border-left: 4px solid #f1c40f;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* footer：页面或区块的底部 */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 0 0 8px 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* figure 和 figcaption */
+        figure {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        figcaption {
+            font-style: italic;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* time 标签的样式 */
+        time {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        /* 对比用的 div 示例 */
+        .div-example {
+            background-color: #e8f8f5;
+            border: 2px dashed #1abc9c;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- <header>：页面头部 / 页眉                    -->
+    <!-- ========================================== -->
+
+    <!--
+      <header>：头部区域
+      - 通常包含：网站 Logo、页面标题、搜索框等
+      - 一个页面可以有多个 <header>（每个 <article> 或 <section> 也可以有自己的 header）
+    -->
+    <header>
+        <h1>📖 HTML5 语义化标签详解</h1>
+        <p>本页演示如何使用 HTML5 语义化标签构建清晰的页面结构</p>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- <nav>：导航区域                              -->
+    <!-- ========================================== -->
+
+    <!--
+      <nav>：导航区域
+      - 包裹页面中的主要导航链接
+      - 一个页面可以有多个 <nav>（主导航、页脚导航等）
+      - 不是所有链接组都需要用 <nav>，只有主要的导航才用
+    -->
+    <nav>
+        <!-- 导航链接列表 -->
+        <a href="#what">什么是语义化？</a>
+        <a href="#why">为什么要用？</a>
+        <a href="#tags">常用语义化标签</a>
+        <a href="#compare">对比：div  vs  语义化</a>
+        <a href="#summary">小结</a>
+        <a href="index.html">返回首页</a>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- <main>：页面主体内容                         -->
+    <!-- ========================================== -->
+
+    <!--
+      <main>：主要内容区域
+      - 一个页面只能有一个 <main>
+      - 包含页面的核心内容，不包含导航、侧边栏、页脚等重复内容
+      - 屏幕阅读器可以跳转到 <main>，方便视障用户直接阅读正文
+    -->
+    <main>
+
+        <!-- ========================================== -->
+        <!-- <section>：章节                              -->
+        <!-- ========================================== -->
+
+        <!--
+          <section>：章节（Section）
+          - 表示文档中的一个独立区域/章节
+          - 通常包含一个标题（h1~h6）
+          - 例如：引言、功能介绍、联系信息等
+
+          注意：<section> 和 <article> 有时容易混淆
+          - <section>：主题相关的分组，如"产品功能"、"用户评价"
+          - <article>：独立、完整的内容单元，如一篇博客、一条新闻
+        -->
+        <section id="what">
+            <!-- 每个 section 一般都有一个标题 -->
+            <h2>什么是语义化标签？</h2>
+
+            <p>语义化标签就是用 <strong>有含义的标签</strong> 来描述内容，而不是一律使用 <code>&lt;div&gt;</code>。</p>
+
+            <!-- 例子对比 -->
+            <h3>非语义化写法（不推荐）：</h3>
+            <div class="div-example">
+                <!-- 全部用 div，看不出每个部分的含义 -->
+                <div style="font-size: 24px; font-weight: bold;">文章标题</div>
+                <div style="color: gray;">作者：张三 | 日期：2024-01-01</div>
+                <div>这里是文章正文内容...</div>
+                <div style="font-size: 12px;">版权信息</div>
+            </div>
+
+            <h3>语义化写法（推荐）：</h3>
+            <!--
+              使用有意义的标签：
+              <article> 表示这是一篇文章
+              <h2> 表示标题
+              <p> 表示段落
+              <footer> 表示底部信息
+            -->
+            <article>
+                <h2>文章标题</h2>
+                <p><small>作者：张三 | 日期：2024-01-01</small></p>
+                <p>这里是文章正文内容...</p>
+                <footer>版权信息</footer>
+            </article>
+
+            <p>👉 语义化代码即使不看 CSS，也能从标签名称上猜出内容的作用。</p>
+        </section>
+
+        <section id="why">
+            <h2>为什么要使用语义化标签？</h2>
+
+            <!--
+              <ul> + <li> 是列举内容的推荐语义化方式
+              比用 <div> + <br> 更适合做列表
+            -->
+            <ul>
+                <li><strong>SEO 优化</strong> — 搜索引擎（如 Google）根据语义化标签理解页面结构，提高排名</li>
+                <li><strong>无障碍访问</strong> — 屏幕阅读器能通过 <code>&lt;nav&gt;</code>、<code>&lt;main&gt;</code> 等标签快速导航</li>
+                <li><strong>代码可读性</strong> — 团队合作时，看到 <code>&lt;header&gt;</code> 就知道是头部，<code>&lt;footer&gt;</code> 是底部</li>
+                <li><strong>标准化</strong> — 符合 W3C 标准，未来浏览器更新也能兼容</li>
+                <li><strong>自动功能</strong> — 有些浏览器提供"阅读模式"，会根据语义化标签提取正文</li>
+            </ul>
+        </section>
+
+        <section id="tags">
+            <h2>HTML5 常用语义化标签一览</h2>
+
+            <!--
+              <table>：表格是展示标签对比的最佳方式
+            -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>标签</th>
+                        <th>含义</th>
+                        <th>使用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>&lt;header&gt;</code></td>
+                        <td>页眉 / 头部</td>
+                        <td>页面顶部，含 Logo、标题、搜索框</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;nav&gt;</code></td>
+                        <td>导航</td>
+                        <td>主导航菜单、页脚导航</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;main&gt;</code></td>
+                        <td>主要内容</td>
+                        <td>页面的核心内容，一页只有一个</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;section&gt;</code></td>
+                        <td>章节</td>
+                        <td>按主题分组的内容区块</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;article&gt;</code></td>
+                        <td>独立文章</td>
+                        <td>博客文章、新闻、用户评论</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;aside&gt;</code></td>
+                        <td>侧边栏 / 旁注</td>
+                        <td>广告、推荐文章、相关链接</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;footer&gt;</code></td>
+                        <td>页脚</td>
+                        <td>版权信息、联系方式、备案号</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;figure&gt;</code></td>
+                        <td>插图 / 媒体容器</td>
+                        <td>图片、图表、代码块等独立内容</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;figcaption&gt;</code></td>
+                        <td>插图标题</td>
+                        <td>配合 &lt;figure&gt; 使用</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;time&gt;</code></td>
+                        <td>时间 / 日期</td>
+                        <td>发布时间、活动时间</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;mark&gt;</code></td>
+                        <td>高亮标记</td>
+                        <td>搜索关键词高亮、重点内容</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;details&gt;</code> / <code>&lt;summary&gt;</code></td>
+                        <td>可折叠详情</td>
+                        <td>FAQ、展开/收起内容</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- <article>：独立的文章/内容单元               -->
+        <!-- ========================================== -->
+
+        <section id="compare">
+            <h2>对比：&lt;div&gt; 布局 vs 语义化布局</h2>
+
+            <h3>❌ 传统的 &lt;div&gt; 布局</h3>
+            <div class="div-example">
+                <!-- 纯 div 布局：所有标签都是 div，只能靠 class/id 区分 -->
+                <div class="header">网站头部</div>
+                <div class="nav">导航链接</div>
+                <div class="content">
+                    <div class="article">
+                        <div class="title">文章标题</div>
+                        <div class="text">文章内容...</div>
+                    </div>
+                    <div class="sidebar">侧边栏</div>
+                </div>
+                <div class="footer">页脚信息</div>
+            </div>
+
+            <h3>✅ 语义化布局（推荐）</h3>
+            <!--
+              语义化布局：只看标签就知道每个区域的作用
+              对搜索引擎、开发者和辅助设备都非常友好
+            -->
+            <header>网站头部</header>
+            <nav>导航链接</nav>
+            <main>
+                <article>
+                    <h3>文章标题</h3>
+                    <p>文章内容...</p>
+                </article>
+                <aside>侧边栏</aside>
+            </main>
+            <footer>页脚信息</footer>
+
+            <p>
+                <strong>看出区别了吗？</strong>
+                语义化版本的标签名称直接说明了内容的用途。
+            </p>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- <aside>：侧边栏 / 旁注内容                  -->
+        <!-- ========================================== -->
+
+        <section>
+            <h2>&lt;aside&gt; 侧边栏示例</h2>
+
+            <!--
+              <aside>：侧边栏或旁注内容
+              - 与主要内容相关但不是核心的内容
+              - 常用于：推荐文章、广告、目录、相关链接
+              - 可以出现在 <article> 内部（表示与文章相关的补充内容）
+            -->
+            <article>
+                <h3>如何学习 HTML5？</h3>
+                <p>学习 HTML5 的最好方法是动手实践，边学边做...</p>
+
+                <!-- 在 article 内部的 aside：与本文相关的补充内容 -->
+                <aside>
+                    <h4>📌 推荐学习资源</h4>
+                    <ul>
+                        <li>MDN Web Docs（Mozilla 官方文档）</li>
+                        <li>W3Schools（适合初学者的在线教程）</li>
+                        <li>freeCodeCamp（免费互动编程课程）</li>
+                    </ul>
+                </aside>
+
+                <p>除了上述资源，你还可以通过做项目来巩固知识...</p>
+            </article>
+
+            <!-- 侧边栏展示：文章目录 -->
+            <aside>
+                <h4>📑 本页目录</h4>
+                <ol>
+                    <li><a href="#what">什么是语义化？</a></li>
+                    <li><a href="#why">为什么要用？</a></li>
+                    <li><a href="#tags">常用标签</a></li>
+                    <li><a href="#compare">对比演示</a></li>
+                </ol>
+
+                <h4>🔗 相关文章</h4>
+                <ul>
+                    <li><a href="01-basics.html">HTML5 基础标签</a></li>
+                    <li><a href="05-forms.html">表单与输入</a></li>
+                </ul>
+            </aside>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- <figure> / <figcaption> / <time> / <mark>   -->
+        <!-- ========================================== -->
+
+        <section>
+            <h2>更多语义化标签示例</h2>
+
+            <!--
+              <figure> 和 <figcaption>：图片 + 说明
+            -->
+            <h3>&lt;figure&gt; + &lt;figcaption&gt;</h3>
+            <figure>
+                <img
+                    src="https://via.placeholder.com/400x200/9b59b6/ffffff?text=语义化示例"
+                    alt="语义化标签示例图片"
+                    width="400"
+                >
+                <!-- figcaption：图片的说明文字，与图片关联 -->
+                <figcaption>
+                    ️ 图 1：使用 <code>&lt;figure&gt;</code> 和 <code>&lt;figcaption&gt;</code> 包裹的图片及其标题
+                </figcaption>
+            </figure>
+
+            <!--
+              <time>：时间和日期
+              datetime 属性是机器可读的格式，便于搜索引擎理解
+            -->
+            <h3>&lt;time&gt; 时间标签</h3>
+            <p>
+                本文发布于
+                <time datetime="2024-07-14">2024 年 7 月 14 日</time>
+                ，最后更新于
+                <time datetime="2024-07-15T10:30:00">昨天上午 10:30</time>
+                。
+            </p>
+
+            <!--
+              <mark>：高亮标记
+            -->
+            <h3>&lt;mark&gt; 高亮标记</h3>
+            <p>
+                在搜索结果中，关键词通常会被 <mark>高亮显示</mark>，
+                让用户快速找到 <mark>匹配的内容</mark>。
+            </p>
+
+            <!--
+              <details> + <summary>：可折叠详情
+              点击"展开"可以查看详情内容，再点击可以收起
+            -->
+            <h3>&lt;details&gt; + &lt;summary&gt; 可折叠内容</h3>
+
+            <!-- details：可折叠的详细信息容器 -->
+            <details>
+                <!-- summary：折叠区域的标题/摘要，始终可见 -->
+                <summary>点击展开/收起：HTML5 的发展历史</summary>
+                <!-- 折叠起来的内容 -->
+                <p>
+                    HTML5 是 HTML 的第五个版本，于 2014 年 10 月 28 日正式发布。
+                    它引入了许多新特性，如语义化标签、Canvas 绘图、音频/视频支持等。
+                </p>
+            </details>
+
+            <!-- 默认展开的 details -->
+            <details open>
+                <summary>这个默认是展开的（open 属性）</summary>
+                <p>给 <code>&lt;details&gt;</code> 加上 <code>open</code> 属性，默认就是展开状态。</p>
+            </details>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 语义化标签使用建议                          -->
+        <!-- ========================================== -->
+
+        <section id="summary">
+            <h2>使用建议</h2>
+
+            <article>
+                <h3>✅ 推荐这样用</h3>
+                <ul>
+                    <li>用 <code>&lt;header&gt;</code> 放页面/区块的标题和介绍</li>
+                    <li>用 <code>&lt;nav&gt;</code> 放主要导航链接</li>
+                    <li>用 <code>&lt;main&gt;</code> 放页面的唯一核心内容</li>
+                    <li>用 <code>&lt;section&gt;</code> 对内容按主题分组</li>
+                    <li>用 <code>&lt;article&gt;</code> 放独立完整的文章/内容</li>
+                    <li>用 <code>&lt;aside&gt;</code> 放辅助/补充内容</li>
+                    <li>用 <code>&lt;footer&gt;</code> 放版权/联系方式</li>
+                </ul>
+            </article>
+
+            <article>
+                <h3>❌ 避免这样用</h3>
+                <ul>
+                    <li>不要为了"语义化"而滥用语义化标签，<code>&lt;div&gt;</code> 仍然有用</li>
+                    <li>不要在 <code>&lt;nav&gt;</code> 中放每个链接（如文章内的链接不属于导航）</li>
+                    <li>不要在一个页面中使用多个 <code>&lt;main&gt;</code></li>
+                    <li>不要把 <code>&lt;section&gt;</code> 当 <code>&lt;div&gt;</code> 用——它应该有主题和标题</li>
+                    <li>不要为了样式方便而牺牲语义</li>
+                </ul>
+            </article>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- <footer>：页面底部                           -->
+    <!-- ========================================== -->
+
+    <!--
+      <footer>：页脚
+      - 通常包含：版权信息、联系方式、备案号、相关链接
+      - 也可以用在 <article> 或 <section> 内部作为其底部
+    -->
+    <footer>
+        <!--
+          &copy; 是版权符号 © 的转义字符
+          small 表示旁注字体
+        -->
+        <p>&copy; 2024 HTML5 学习教程. 仅供学习使用.</p>
+        <p>
+            <a href="index.html" style="color: white;">返回首页</a> |
+            <a href="05-forms.html" style="color: white;">⬅ 上一课</a> |
+            <a href="07-project.html" style="color: white;">下一课：综合项目 ➡</a>
+        </p>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- 额外说明：为什么这个页面本身就在用语义化标签 -->
+    <!-- ========================================== -->
+
+    <div class="note" style="background-color: #eaf2f8; border-left: 4px solid #2980b9; padding: 15px; margin-top: 20px;">
+        <strong>💡 你有没有发现？</strong>
+        这个页面本身就是用语义化标签构建的！
+        看看页面结构：<br>
+        <code>&lt;header&gt;</code> → <code>&lt;nav&gt;</code> → <code>&lt;main&gt;</code> → （多个 <code>&lt;section&gt;</code>） → <code>&lt;footer&gt;</code>
+    </div>
+
+    <hr>
+
+    <h2>✏️ 课后练习</h2>
+    <ol>
+        <li>用语义化标签设计一个"个人博客"页面布局</li>
+        <li>在页面中添加 <code>&lt;article&gt;</code> 包含一篇完整的文章（含标题、作者、时间、正文）</li>
+        <li>在文章内部使用 <code>&lt;aside&gt;</code> 添加相关推荐</li>
+        <li>使用 <code>&lt;figure&gt;</code> + <code>&lt;figcaption&gt;</code> 展示一张图片</li>
+        <li>使用 <code>&lt;details&gt;</code> + <code>&lt;summary&gt;</code> 制作一个 FAQ</li>
+        <li>用 <code>&lt;time&gt;</code> 标签标记文章发布日期</li>
+    </ol>
+
+</body>
+</html>

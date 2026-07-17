@@ -1,0 +1,33 @@
+# === Maven (Java) ===
+target/
+*.war
+*.jar
+*.ear
+*.class
+
+# === Maven IDE files ===
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# === React / Node ===
+node_modules/
+dist/
+.vite/
+
+# === Environment ===
+.env
+.env.local
+.env.*.local
+
+# === OS garbage ===
+.DS_Store
+Thumbs.db
+
+# === Logs ===
+*.log
+
+# === VS Code ===
+.vscode/

@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ========================================== -->
+    <!-- Spring 版本大学行政管理系统                  -->
+    <!-- 功能与 Java EE + EJB 版本完全相同          -->
+    <!-- 打包方式：war（部署到 Tomcat）              -->
+    <!-- ========================================== -->
+    <groupId>com.university</groupId>
+    <artifactId>spring-university-admin</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+    <name>University Admin System - Spring Version</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <!-- Spring 5.3.x（最新稳定版，非 Spring Boot） -->
+        <spring.version>5.3.31</spring.version>
+        <!-- Hibernate 5.6.x（支持 javax.persistence.* 兼容 JDK 17） -->
+        <hibernate.version>5.6.15.Final</hibernate.version>
+    </properties>
+
+    <dependencies>
+        <!-- ========================================== -->
+        <!-- Spring MVC：提供 @Controller、@RequestMapping -->
+        <!-- Spring ORM：提供 JPA 整合、@Transactional     -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- Hibernate：JPA 实现提供者                   -->
+        <!-- 让 Spring 的 LocalContainerEntityManagerFactoryBean  -->
+        <!-- 使用 Hibernate 作为 JPA 底层实现             -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- HikariCP：高性能数据库连接池                -->
+        <!-- 替代 WebSphere 内置的连接池                 -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.0.1</version>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- H2 内存数据库（和 Java EE 版本一样）       -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.224</version>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- Servlet API（provided = 运行时由 Tomcat 提供）-->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- JSTL：JSP 中需要用 <c:forEach> <c:if> 等  -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- ========================================== -->
+            <!-- Tomcat Maven 插件：内嵌 Tomcat 服务器       -->
+            <!-- 一条命令启动，无需手动安装 Tomcat           -->
+            <!-- ========================================== -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <!-- HTTP 端口 -->
+                    <port>8080</port>
+                    <!-- 应用访问路径 -->
+                    <path>/spring-university-admin</path>
+                    <!-- 解决中文乱码 -->
+                    <uriEncoding>UTF-8</uriEncoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

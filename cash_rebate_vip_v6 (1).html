@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OpenWin · VIP & Cashback</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080c;--bg2:#0d0f16;--bg3:#141722;--bg4:#1b2030;
+  --line:#252b42;--line2:#34405f;--t:#f0f4ff;--t2:#9aa4bf;--t3:#626d8b;
+  --ac:#00e0a4;--ac2:#66ffd1;--gold:#ffd166;--violet:#8b5cf6;--blue:#4dabf7;
+  --red:#ff6b6b;--orange:#ffa94d;--glass:rgba(255,255,255,.055);
+}
+html{min-height:100%;background:#07080c}
+body{
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;color:var(--t);
+  background:
+    radial-gradient(circle at 18% -10%,rgba(0,224,164,.18),transparent 30%),
+    radial-gradient(circle at 90% 8%,rgba(139,92,246,.20),transparent 34%),
+    linear-gradient(180deg,#07080c 0%,#0b0d14 58%,#07080c 100%);
+  overflow-x:hidden;
+}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.75),transparent 80%)}
+.m{font-family:'JetBrains Mono',monospace}.wrap{max-width:1320px;margin:0 auto;padding:24px;position:relative}
+.topbar{height:54px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:10px}.mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--ac),var(--violet));display:grid;place-items:center;font-weight:900;color:#00130f;box-shadow:0 0 28px rgba(0,224,164,.25)}.brand-title{font-size:14px;font-weight:800}.brand-sub{font-size:10px;color:var(--t3);margin-top:2px}
+.status{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(255,255,255,.035);padding:8px 10px;border-radius:999px;font-size:11px;color:var(--t2)}.dot{width:8px;height:8px;border-radius:50%;background:var(--ac);box-shadow:0 0 16px var(--ac)}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);gap:16px;margin-bottom:18px}
+.hero-card,.cash-card,.panel,.card,.rule,.claim-box{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.095);box-shadow:0 18px 70px rgba(0,0,0,.28);backdrop-filter:blur(14px)}
+.hero-card{overflow:hidden;border-radius:24px;padding:26px;min-height:260px}
+.hero-card::after{content:'';position:absolute;right:-90px;top:-120px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(0,224,164,.34),transparent 62%);filter:blur(8px);animation:float 5s ease-in-out infinite}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid rgba(102,255,209,.22);border-radius:999px;color:var(--ac2);background:rgba(0,224,164,.08);font-size:11px;font-weight:800;margin-bottom:14px}
+.hero h1{font-size:42px;line-height:1.04;letter-spacing:-.8px;max-width:760px;margin-bottom:14px}.hero p{font-size:14px;line-height:1.8;color:var(--t2);max-width:780px}
+.hero-flow{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.pill{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.075);font-size:11px;color:var(--t2);font-weight:700}
+.cash-card{border-radius:24px;padding:22px;overflow:hidden}.cash-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,224,164,.10),rgba(139,92,246,.12));pointer-events:none}
+.cash-inner{position:relative}.cash-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ac2);font-weight:900}.cash-amount{font-size:46px;font-weight:900;letter-spacing:-1px;color:var(--ac2);margin:8px 0 4px;text-shadow:0 0 34px rgba(102,255,209,.24)}.cash-desc{font-size:12px;color:var(--t2);line-height:1.6}.claim-btn{margin-top:18px;width:100%;border:none;border-radius:14px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#00130f;padding:13px 14px;font-size:13px;font-weight:900;cursor:pointer;font-family:'DM Sans';box-shadow:0 14px 36px rgba(0,224,164,.22);transition:.16s}.claim-btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.mini{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.045);border-radius:14px;padding:12px}.mini .v{font-size:18px;font-weight:900}.mini .l{font-size:10px;color:var(--t3);margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
+.tabs{display:flex;gap:8px;margin:10px 0 18px;padding:4px;border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:14px;width:max-content}.tab{border:0;border-radius:10px;background:transparent;color:var(--t2);cursor:pointer;font-size:12px;font-weight:800;padding:9px 14px;font-family:'DM Sans'}.tab.active{background:linear-gradient(135deg,rgba(0,224,164,.16),rgba(139,92,246,.14));color:var(--t);box-shadow:inset 0 0 0 1px rgba(255,255,255,.075)}
+.page{display:none}.page.active{display:block}.grid{display:grid;gap:12px;margin-bottom:16px}.grid-4{grid-template-columns:repeat(4,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}
+.card{border-radius:18px;padding:16px}.label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);font-weight:900;margin-bottom:8px}.value{font-size:28px;font-weight:900;letter-spacing:-.5px}.sub{font-size:12px;color:var(--t2);line-height:1.65;margin-top:6px}.accent{color:var(--ac2)}.gold{color:var(--gold)}.violet{color:#c4b5fd}
+.panel{border-radius:20px;overflow:hidden;margin-bottom:16px}.ph{display:flex;justify-content:space-between;align-items:center;padding:15px 16px;border-bottom:1px solid rgba(255,255,255,.075)}.pt{font-size:14px;font-weight:900}.pa{font-size:11px;color:var(--t2)}.pb{padding:16px}
+.progress-track{height:14px;background:#070910;border:1px solid var(--line);border-radius:999px;overflow:hidden}.progress-fill{height:100%;width:74%;background:linear-gradient(90deg,var(--ac),var(--gold));border-radius:999px;box-shadow:0 0 22px rgba(0,224,164,.25);animation:barGlow 2.4s ease-in-out infinite}.progress-meta{display:flex;justify-content:space-between;margin-bottom:10px;color:var(--t2);font-size:12px}
+.split{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.rule-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}.rule{border-radius:18px;padding:15px}.rule h4{font-size:13px;margin-bottom:8px}.rule p{font-size:12px;color:var(--t2);line-height:1.7}.rule .num{width:26px;height:26px;border-radius:9px;display:grid;place-items:center;background:rgba(0,224,164,.12);color:var(--ac2);font-weight:900;margin-bottom:10px}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{padding:11px 10px;border-bottom:1px solid rgba(255,255,255,.075);text-align:left;white-space:nowrap}th{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--t3)}td{font-size:12px;color:var(--t2)}tr:hover td{background:rgba(255,255,255,.04)}.t-strong{color:var(--t);font-weight:800}
+.badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800}.vip{background:rgba(139,92,246,.16);color:#c4b5fd}.ok{background:rgba(0,224,164,.12);color:var(--ac2)}.wait{background:rgba(255,169,77,.13);color:var(--orange)}.live{background:rgba(77,171,247,.12);color:#8fd0ff}
+.tier-row{background:rgba(139,92,246,.07)}.note{border:1px solid rgba(255,209,102,.16);background:rgba(255,209,102,.07);border-radius:16px;padding:13px 14px;font-size:12px;color:var(--t2);line-height:1.7;margin-bottom:16px}
+.claim-box{border-radius:20px;padding:18px;margin-bottom:16px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}.claim-box h3{font-size:20px;margin-bottom:6px}.claim-box p{font-size:12px;color:var(--t2);line-height:1.7}.claim-orb{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(0,224,164,.28),rgba(0,224,164,.06) 58%,transparent 60%);border:1px solid rgba(102,255,209,.24);animation:pulse 2s ease-in-out infinite}.claim-orb span{font-size:34px;font-weight:900;color:var(--ac2)}
+.footer-hint{text-align:center;color:var(--t3);font-size:11px;padding:12px 0 24px}
+.modal-mask{display:none;position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,rgba(0,224,164,.18),transparent 34%),rgba(0,0,0,.72);z-index:50;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(9px)}.modal-mask.show{display:flex;animation:maskIn .28s ease-out}
+.modal{position:relative;width:100%;max-width:760px;background:linear-gradient(145deg,rgba(24,27,40,.97),rgba(9,11,17,.99));border:1px solid rgba(102,255,209,.26);border-radius:26px;overflow:hidden;box-shadow:0 34px 110px rgba(0,0,0,.64),0 0 46px rgba(0,224,164,.16);animation:modalPop .46s cubic-bezier(.16,1,.3,1)}.modal::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 0,rgba(102,255,209,.20),transparent 28%),radial-gradient(circle at 86% 10%,rgba(139,92,246,.24),transparent 30%);pointer-events:none}.modal::after{content:'';position:absolute;left:-20%;top:0;width:34%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:skewX(-18deg);animation:sheen 2.2s ease-out .28s both;pointer-events:none}
+.modal-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08)}.modal-title{font-size:18px;font-weight:900;display:flex;gap:10px;align-items:center}.modal-title::before{content:'$';width:31px;height:31px;border-radius:10px;background:var(--ac);color:#00130f;display:grid;place-items:center;box-shadow:0 0 24px rgba(0,224,164,.45)}.modal-close{width:32px;height:32px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--t2);cursor:pointer;font-size:16px}
+.modal-body{position:relative;padding:20px}.modal-hero{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:16px;border:1px solid rgba(102,255,209,.18);border-radius:18px;background:linear-gradient(135deg,rgba(0,224,164,.14),rgba(139,92,246,.10));margin-bottom:14px}.modal-kicker{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--ac2);font-weight:900}.modal-amount{font-size:44px;font-weight:900;color:var(--ac2);margin:6px 0 4px;text-shadow:0 0 24px rgba(102,255,209,.25)}.claim-chip{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,209,102,.10);border:1px solid rgba(255,209,102,.18);color:var(--gold);font-size:11px;font-weight:900}.claim-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.claim-stat{padding:12px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}.claim-stat .v{font-size:16px;font-weight:900}.claim-stat .l{font-size:10px;color:var(--t3);margin-top:4px;text-transform:uppercase;letter-spacing:.6px}.modal-actions{display:flex;gap:10px;margin-top:16px}.btn-secondary,.btn-primary{flex:1;border-radius:13px;padding:12px;cursor:pointer;font-weight:900;font-family:'DM Sans'}.btn-secondary{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--t)}.btn-primary{border:1px solid var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));color:#00130f;box-shadow:0 10px 28px rgba(0,224,164,.24)}.btn-primary:hover{transform:translateY(-1px)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(14px)}}@keyframes barGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(102,255,209,0)}50%{transform:scale(1.04);box-shadow:0 0 36px rgba(102,255,209,.18)}}@keyframes maskIn{from{opacity:0}to{opacity:1}}@keyframes modalPop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes sheen{from{left:-40%}to{left:120%}}
+@media (max-width:960px){.hero,.split,.grid-4,.grid-3,.rule-list,.claim-box{grid-template-columns:1fr}.tabs{width:100%;display:grid;grid-template-columns:1fr 1fr}.hero h1{font-size:34px}.claim-orb{display:none}.claim-summary{grid-template-columns:1fr}.modal-hero{grid-template-columns:1fr}.cash-amount,.modal-amount{font-size:38px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand"><div class="mark">OW</div><div><div class="brand-title">OpenWin Rewards</div><div class="brand-sub">VIP level & Cashback center</div></div></div>
+    <div class="status"><span class="dot"></span> 实时计算中 · UTC+0</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">VIP & Cashback</div>
+      <h1>玩得越多等级越高，每局都有机会拿 Cashback</h1>
+      <p>看你最近 60 天的有效流水来定 VIP 等级。每局游戏结算后约 10 分钟，都会按你的 VIP 等级和游戏类型生成 Cashback；没领的金额会自动攒起来，随时可以领到主钱包。</p>
+      <div class="hero-flow">
+        <span class="pill">有效流水</span><span class="pill">VIP 等级</span><span class="pill">游戏类型比例</span><span class="pill">每局生成</span><span class="pill">手动领取</span>
+      </div>
+    </div>
+    <div class="cash-card">
+      <div class="cash-inner">
+        <div class="cash-label">累计可领取</div>
+        <div class="cash-amount m">$742.83</div>
+        <div class="cash-desc">来自今日实时返利与历史未领取金额，确认后发放到主钱包。</div>
+        <button class="claim-btn" onclick="openClaimModal()">领取 Cashback</button>
+        <div class="mini-grid">
+          <div class="mini"><div class="v m">$348.25</div><div class="l">今日生成</div></div>
+          <div class="mini"><div class="v">VIP 4</div><div class="l">当前等级</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tabs">
+    <button class="tab active" data-page="vip">VIP 等级体系</button>
+    <button class="tab" data-page="rebate">Cashback</button>
+  </div>
+
+  <section class="page active" id="page-vip">
+    <div class="grid grid-4">
+      <div class="card"><div class="label">当前 VIP 等级</div><div class="value violet">VIP 4</div><div class="sub">Diamond</div></div>
+      <div class="card"><div class="label">最近60天有效流水</div><div class="value m">$186,400</div><div class="sub">全平台滚动累计</div></div>
+      <div class="card"><div class="label">距离下一等级</div><div class="value m gold">$63,600</div><div class="sub">达到 VIP 5 门槛</div></div>
+      <div class="card"><div class="label">当前最高返还比例</div><div class="value accent">0.45%</div><div class="sub">Trading 类型</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="ph"><div class="pt">升级进度</div><div class="pa">月中达标立即升级；降级仅每月 1 日 00:00（UTC+0）统一校准</div></div>
+      <div class="pb">
+        <div class="progress-meta"><span>VIP 4 Diamond</span><span class="m">$186,400 / $250,000</span></div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="panel">
+        <div class="ph"><div class="pt">VIP 档位与返还比例</div><div class="pa">按游戏类型配置</div></div>
+        <div class="pb table-wrap">
+          <table>
+            <thead><tr><th>等级</th><th>名称</th><th>最近60天有效流水门槛</th><th>Live</th><th>Casual</th><th>Trading</th><th>Sports</th></tr></thead>
+            <tbody>
+              <tr><td class="t-strong">VIP 0</td><td>Explorer</td><td class="m">$0</td><td>0.08%</td><td>0.10%</td><td>0.15%</td><td>0.10%</td></tr>
+              <tr><td class="t-strong">VIP 1</td><td>Silver</td><td class="m">$10,000</td><td>0.12%</td><td>0.15%</td><td>0.22%</td><td>0.15%</td></tr>
+              <tr><td class="t-strong">VIP 2</td><td>Gold</td><td class="m">$50,000</td><td>0.16%</td><td>0.20%</td><td>0.30%</td><td>0.20%</td></tr>
+              <tr><td class="t-strong">VIP 3</td><td>Platinum</td><td class="m">$100,000</td><td>0.20%</td><td>0.25%</td><td>0.38%</td><td>0.25%</td></tr>
+              <tr class="tier-row"><td class="t-strong">VIP 4</td><td>Diamond</td><td class="m">$250,000</td><td>0.24%</td><td>0.30%</td><td>0.45%</td><td>0.30%</td></tr>
+              <tr><td class="t-strong">VIP 5</td><td>Master</td><td class="m">$500,000</td><td>0.28%</td><td>0.35%</td><td>0.53%</td><td>0.35%</td></tr>
+              <tr><td class="t-strong">VIP 6</td><td>Elite</td><td class="m">$1,000,000</td><td>0.32%</td><td>0.40%</td><td>0.60%</td><td>0.40%</td></tr>
+              <tr><td class="t-strong">VIP 7</td><td>Crown</td><td class="m">$2,500,000</td><td>0.40%</td><td>0.50%</td><td>0.75%</td><td>0.50%</td></tr>
+              <tr><td class="t-strong">VIP 8</td><td>Royal</td><td class="m">$5,000,000</td><td>0.48%</td><td>0.60%</td><td>0.90%</td><td>0.60%</td></tr>
+              <tr><td class="t-strong">VIP 9</td><td>Imperial</td><td class="m">$10,000,000</td><td>0.56%</td><td>0.70%</td><td>1.05%</td><td>0.70%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="pt">等级规则</div><div class="pa">看懂等级怎么升</div></div>
+        <div class="pb">
+          <div class="rule-list" style="grid-template-columns:1fr">
+            <div class="rule"><div class="num">1</div><h4>等级依据</h4><p>你的 VIP 等级按最近 60 天全平台有效流水计算。</p></div>
+            <div class="rule"><div class="num">2</div><h4>月中升级</h4><p>达到更高等级门槛后立即升级，新的游戏按新等级计算 Cashback。</p></div>
+            <div class="rule"><div class="num">3</div><h4>月初校准</h4><p>每月 1 日 00:00（UTC+0）统一刷新等级；月中不实时降级。</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-rebate">
+    <div class="grid grid-4">
+      <div class="card"><div class="label">今日有效流水</div><div class="value m">$126,800</div><div class="sub">已结算且符合返利规则</div></div>
+      <div class="card"><div class="label">今日已生成 Cashback</div><div class="value m accent">$348.25</div><div class="sub">每局结算后约 10 分钟生成</div></div>
+      <div class="card"><div class="label">累计可领取</div><div class="value m gold">$742.83</div><div class="sub">未领取金额自动累计</div></div>
+      <div class="card"><div class="label">当前 VIP 等级</div><div class="value violet">VIP 4</div><div class="sub">Diamond · 最高 0.45%</div></div>
+    </div>
+
+    <div class="claim-box">
+      <div><h3>你有 $742.83 Cashback 可领取</h3><p>包含今日实时生成金额与历史未领取金额。点击领取后，返利将发放至主钱包。</p></div>
+      <div class="claim-orb"><span>$</span></div>
+    </div>
+
+    <div class="rule-list">
+      <div class="rule"><div class="num">A</div><h4>计算公式</h4><p><span class="m">单局 Cashback = 单局有效流水 × 当前 VIP 等级下该游戏类型返还比例</span></p></div>
+      <div class="rule"><div class="num">B</div><h4>生成时间</h4><p>每局游戏完成并结算后约 10 分钟生成 Cashback。</p></div>
+      <div class="rule"><div class="num">C</div><h4>领取方式</h4><p>你需要手动领取；领取成功后进入主钱包，失败不会扣掉可领取余额。</p></div>
+    </div>
+
+    <div class="note"><strong style="color:#fff">有效流水</strong> 用于 VIP 升级，也用于 Cashback 计算；充值金额、账户余额和无效订单不计入有效流水。</div>
+
+    <div class="panel">
+      <div class="ph"><div class="pt">最近返还记录</div><div class="pa">按单局 / 游戏类型生成</div></div>
+      <div class="pb table-wrap">
+        <table>
+          <thead><tr><th>游戏时间</th><th>类型</th><th>游戏</th><th>有效流水</th><th>VIP</th><th>返还比例</th><th>Cashback</th><th>状态</th><th>生成 / 领取时间</th></tr></thead>
+          <tbody>
+            <tr><td class="t-strong">2026-04-23 15:42 UTC</td><td><span class="badge live">Live</span></td><td>Baccarat Royale</td><td class="m accent">$4,600</td><td><span class="badge vip">VIP 4</span></td><td>0.24%</td><td class="m accent">$11.04</td><td><span class="badge wait">待领取</span></td><td>15:52 UTC 生成</td></tr>
+            <tr><td class="t-strong">2026-04-23 15:28 UTC</td><td><span class="badge ok">Casual</span></td><td>Treasure Slots Max</td><td class="m accent">$4,080</td><td><span class="badge vip">VIP 4</span></td><td>0.30%</td><td class="m accent">$12.24</td><td><span class="badge wait">待领取</span></td><td>15:38 UTC 生成</td></tr>
+            <tr><td class="t-strong">2026-04-23 15:10 UTC</td><td><span class="badge vip">Trading</span></td><td>BTC Rise/Fall</td><td class="m accent">$2,750</td><td><span class="badge vip">VIP 4</span></td><td>0.45%</td><td class="m accent">$12.38</td><td><span class="badge wait">待领取</span></td><td>15:20 UTC 生成</td></tr>
+            <tr><td class="t-strong">2026-04-23 14:55 UTC</td><td><span class="badge wait">Sports</span></td><td>Football Win Pro</td><td class="m accent">$3,200</td><td><span class="badge vip">VIP 4</span></td><td>0.30%</td><td class="m accent">$9.60</td><td><span class="badge wait">待领取</span></td><td>15:05 UTC 生成</td></tr>
+            <tr class="tier-row"><td class="t-strong">今日合计</td><td>多类型</td><td>—</td><td class="m accent">$126,800</td><td><span class="badge vip">VIP 4</span></td><td>按类型计算</td><td class="m accent">$348.25</td><td><span class="badge wait">部分待领取</span></td><td>实时生成</td></tr>
+            <tr><td class="t-strong">2026-04-22 20:18 UTC</td><td><span class="badge live">Live</span></td><td>Blackjack Elite</td><td class="m accent">$3,600</td><td><span class="badge vip">VIP 3</span></td><td>0.20%</td><td class="m accent">$7.20</td><td><span class="badge ok">已领取</span></td><td>21:04 UTC 领取</td></tr>
+            <tr><td class="t-strong">2026-04-22 19:44 UTC</td><td><span class="badge wait">Sports</span></td><td>Tennis Match Point</td><td class="m accent">$4,900</td><td><span class="badge vip">VIP 3</span></td><td>0.25%</td><td class="m accent">$12.25</td><td><span class="badge ok">已领取</span></td><td>21:04 UTC 领取</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-mask" id="claimModal">
+    <div class="modal">
+      <div class="modal-head"><div class="modal-title">Cashback 领取提醒</div><button class="modal-close" onclick="closeClaimModal()">×</button></div>
+      <div class="modal-body">
+        <div class="modal-hero">
+          <div><div class="modal-kicker">本次可领取返利金额</div><div class="modal-amount m">$742.83</div><div class="sub">以下金额来自已生成但尚未领取的 Cashback，领取后将发放到主钱包。</div><div class="claim-chip">今日新增 $348.25 · 历史累计 $394.58</div></div>
+          <div class="claim-orb"><span>$</span></div>
+        </div>
+        <div class="claim-summary">
+          <div class="claim-stat"><div class="v m">$126,800</div><div class="l">今日有效流水</div></div>
+          <div class="claim-stat"><div class="v">VIP 4</div><div class="l">当前等级</div></div>
+          <div class="claim-stat"><div class="v m">$742.83</div><div class="l">累计可领取</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>来源</th><th>游戏类型</th><th>有效流水</th><th>返还比例</th><th>返利金额</th></tr></thead>
+            <tbody>
+              <tr><td>今日实时返利</td><td>Live</td><td class="m">$24,600</td><td>0.24%</td><td class="m accent">$59.04</td></tr>
+              <tr><td>今日实时返利</td><td>Casual</td><td class="m">$32,800</td><td>0.30%</td><td class="m accent">$98.40</td></tr>
+              <tr><td>今日实时返利</td><td>Trading</td><td class="m">$18,200</td><td>0.45%</td><td class="m accent">$81.90</td></tr>
+              <tr><td>历史未领取</td><td>多类型</td><td class="m">—</td><td>按类型计算</td><td class="m accent">$503.49</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-actions"><button class="btn-secondary" onclick="closeClaimModal()">稍后领取</button><button class="btn-primary" onclick="confirmClaimRebate()">确认领取 $742.83</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-hint">VIP / Cashback Center</div>
+</div>
+<script>
+const tabs=document.querySelectorAll('.tab');
+const pages={vip:document.getElementById('page-vip'),rebate:document.getElementById('page-rebate')};
+tabs.forEach(tab=>{tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));tab.classList.add('active');Object.values(pages).forEach(p=>p.classList.remove('active'));pages[tab.dataset.page].classList.add('active');});});
+function openClaimModal(){document.getElementById('claimModal').classList.add('show');}
+function closeClaimModal(){document.getElementById('claimModal').classList.remove('show');}
+function confirmClaimRebate(){closeClaimModal();alert("领取成功！$742.83 USDT 已发放到主钱包。");}
+window.addEventListener('DOMContentLoaded',()=>{requestAnimationFrame(()=>openClaimModal());});
+</script>
+</body>
+</html>

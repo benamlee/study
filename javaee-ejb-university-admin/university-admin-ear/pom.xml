@@ -1,0 +1,117 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ========================================== -->
+    <!-- EAR 模块：打包整个应用（EJB + Web + H2）   -->
+    <!-- packaging=ear 表示这是一个企业应用 EAR 包   -->
+    <!-- EAR = Enterprise Archive，包含 EJB JAR + WAR -->
+    <!-- WebSphere 部署的就是这个 EAR 包              -->
+    <!-- ========================================== -->
+    <parent>
+        <groupId>com.university</groupId>
+        <artifactId>university-admin</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>university-admin-ear</artifactId>
+    <packaging>ear</packaging>
+    <name>University Admin - EAR Package</name>
+
+    <dependencies>
+        <!-- EJB 模块（type=ejb） -->
+        <dependency>
+            <groupId>com.university</groupId>
+            <artifactId>university-admin-ejb</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+        <!-- Web 模块（type=war） -->
+        <dependency>
+            <groupId>com.university</groupId>
+            <artifactId>university-admin-web</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <!-- H2 数据库驱动：打包到 EAR 的 lib/ 目录 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- EAR 打包插件配置 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <configuration>
+                    <!-- 所有第三方 JAR（如 H2）放到 EAR 的 lib/ 目录 -->
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <ejbModule>
+                            <groupId>com.university</groupId>
+                            <artifactId>university-admin-ejb</artifactId>
+                        </ejbModule>
+                        <webModule>
+                            <groupId>com.university</groupId>
+                            <artifactId>university-admin-web</artifactId>
+                            <!-- 应用访问的根路径：http://localhost:9080/university-admin/ -->
+                            <contextRoot>/university-admin</contextRoot>
+                        </webModule>
+                    </modules>
+                </configuration>
+            </plugin>
+
+            <!-- ========================================== -->
+            <!-- WebSphere Liberty Maven 插件                -->
+            <!-- 这个插件能自动下载 WebSphere Liberty，      -->
+            <!-- 创建服务器、安装特征、部署应用、启动服务器  -->
+            <!-- 一条命令完成所有工作                        -->
+            <!-- ========================================== -->
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.12.0</version>
+                <configuration>
+                    <runtimeArtifact>
+                        <groupId>com.ibm.websphere.appserver.runtime</groupId>
+                        <artifactId>wlp-kernel</artifactId>
+                        <version>26.0.0.6</version>
+                        <type>zip</type>
+                    </runtimeArtifact>
+                    <serverName>universityAdminServer</serverName>
+                </configuration>
+            </plugin>
+
+            <!-- 将 H2 驱动复制到 Liberty 的全局库目录 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-h2-to-liberty-global-lib</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.h2database</groupId>
+                                    <artifactId>h2</artifactId>
+                                    <version>${h2.version}</version>
+                                    <outputDirectory>${project.basedir}/src/main/liberty/config/lib/global</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

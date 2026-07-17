@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================================== -->
+<!-- server.xml：WebSphere Liberty 服务器配置    -->
+<!-- 作用：配置服务器端口、功能特性、数据源等    -->
+<!-- 这个文件由 liberty-maven-plugin 自动复制     -->
+<!-- 到 WebSphere 服务器的配置目录                -->
+<!-- ========================================== -->
+<server description="University Admin Server">
+
+    <!-- ========================================== -->
+    <!-- 功能特性管理器：告诉 Liberty 需要加载哪些   -->
+    <!-- Java EE 功能                                -->
+    <!-- javaee-8.0 包含：Servlet 4.0, JSP 2.3,     -->
+    <!-- EJB 3.2, JPA 2.2, JSF 2.3 等所有 Java EE 8 -->
+    <!-- 的功能                                      -->
+    <!-- ========================================== -->
+    <featureManager>
+        <!-- Java EE 8 全功能平台 -->
+        <feature>javaee-8.0</feature>
+    </featureManager>
+
+    <!-- ========================================== -->
+    <!-- 基础用户注册表：EJB 需要安全认证才能启动    -->
+    <!-- 这里创建一个测试用户 admin/admin             -->
+    <!-- 生产环境应该用 LDAP 或数据库用户注册表      -->
+    <!-- ========================================== -->
+    <basicRegistry id="basic" realm="BasicRealm">
+        <user name="admin" password="admin"/>
+    </basicRegistry>
+
+    <!-- ========================================== -->
+    <!-- HTTP 端点：配置服务器的 HTTP/HTTPS 端口     -->
+    <!-- host="*" 表示监听所有网络接口               -->
+    <!-- httpPort="9080" 是 HTTP 端口                -->
+    <!-- httpsPort="9443" 是 HTTPS 端口              -->
+    <!-- ========================================== -->
+    <httpEndpoint host="*"
+                  httpPort="9080"
+                  httpsPort="9443"
+                  id="defaultHttpEndpoint"/>
+
+    <!-- ========================================== -->
+    <!-- H2 JDBC 驱动共享库                         -->
+    <!-- jars 放在 ${server.config.dir}/lib/global/ -->
+    <!-- 会被服务器自动加载                         -->
+    <!-- ========================================== -->
+    <library id="H2JDBCLib">
+        <fileset dir="${server.config.dir}/lib/global" includes="h2*.jar"/>
+    </library>
+
+
+    <!-- ========================================== -->
+    <!-- 应用配置：指定部署的 EAR 文件路径           -->
+    <!-- 在开发模式下，liberty-maven-plugin 会自动   -->
+    <!-- 处理部署，所以这部分可以注释掉               -->
+    <!-- ========================================== -->
+    <!--
+    <application id="universityAdmin"
+                 name="universityAdmin"
+                 location="${server.config.dir}/apps/university-admin-ear.ear"
+                 type="ear"/>
+    -->
+
+</server>

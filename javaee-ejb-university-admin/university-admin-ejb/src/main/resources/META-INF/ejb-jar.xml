@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================================== -->
+<!-- ejb-jar.xml：EJB 部署描述符（选填）         -->
+<!-- 因为我们用了注解 @Stateless @Local 等，     -->
+<!-- 这个文件可以留空或省略。                    -->
+<!-- 这里只保留基本声明，具体配置都在注解中。    -->
+<!-- ========================================== -->
+<ejb-jar xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd"
+         version="3.2">
+    
+    <!-- 应用名称（显示用） -->
+    <display-name>University Admin EJB</display-name>
+    
+</ejb-jar>

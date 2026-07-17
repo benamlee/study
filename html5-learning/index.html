@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!-- ========================================== -->
+<!-- 文件：index.html（首页 - 学习目录导航）       -->
+<!-- 说明：本文件是整个 HTML5 学习课程的入口页面，  -->
+<!--       包含了到所有学习文件的导航链接。         -->
+<!-- ========================================== -->
+
+<!--
+  【HTML5 文档结构】
+  一个完整的 HTML 文件必须包含以下基本结构：
+  1. <!DOCTYPE html> — 文档类型声明，告诉浏览器这是一个 HTML5 文档
+  2. <html> — 根元素，包裹整个页面内容
+  3. <head> — 头部，包含页面的元数据（标题、编码、样式等）
+  4. <body> — 主体，包含页面中所有可见的内容
+-->
+
+<!-- html 标签：所有 HTML 内容的根容器 -->
+<!-- lang="zh-CN" 表示页面内容使用简体中文 -->
+<html lang="zh-CN">
+<head>
+    <!-- ========================================== -->
+    <!-- <head> 区域：页面元数据，不会直接显示在页面上 -->
+    <!-- ========================================== -->
+
+    <!-- meta charset="UTF-8"：设置字符编码为 UTF-8 -->
+    <!-- UTF-8 支持全世界所有语言的文字（中文、日文、阿拉伯文等） -->
+    <!-- 如果不设置，中文可能会显示为乱码 -->
+    <meta charset="UTF-8">
+
+    <!-- meta name="viewport"：设置移动端设备的视口 -->
+    <!-- content="width=device-width, initial-scale=1.0" -->
+    <!-- 让页面在手机上按实际设备宽度显示，不缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- title：浏览器标签页上显示的标题，也对 SEO（搜索引擎优化）很重要 -->
+    <title>HTML5 学习教程 - 首页</title>
+
+    <!--
+      内联样式 <style>：在 HTML 文件中直接写 CSS 样式
+      这里给页面添加一些基本的样式，让页面看起来更美观
+      注意：在实际项目中，一般会把 CSS 单独放在 .css 文件中
+    -->
+    <style>
+        /* CSS 注释的写法（与 HTML 注释不同） */
+        /* 下面这些是 CSS 样式规则 */
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            /* 设置字体：优先使用微软雅黑，没有则用 Arial */
+            max-width: 900px;
+            /* 页面最大宽度 900 像素 */
+            margin: 0 auto;
+            /* 上下边距 0，左右自动居中 */
+            padding: 20px;
+            /* 内边距 20 像素 */
+            background-color: #f5f7fa;
+            /* 浅灰色背景 */
+            color: #333;
+            /* 深灰色文字 */
+            line-height: 1.6;
+            /* 行高 1.6 倍，让文字更容易阅读 */
+        }
+        h1 {
+            color: #e74c3c;
+            /* 红色标题 */
+            border-bottom: 3px solid #e74c3c;
+            /* 底部红色边框线 */
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2c3e50;
+            /* 深蓝色标题 */
+        }
+        ul {
+            padding-left: 20px;
+            /* 列表左侧缩进 */
+        }
+        li {
+            margin: 15px 0;
+            /* 每个列表项上下间距 15 像素 */
+            padding: 15px;
+            /* 内边距 15 像素 */
+            background-color: white;
+            /* 白色背景 */
+            border-radius: 8px;
+            /* 圆角 8 像素 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            /* 轻微阴影，产生立体感 */
+            list-style: none;
+            /* 去掉默认的列表圆点 */
+        }
+        a {
+            color: #3498db;
+            /* 链接蓝色 */
+            text-decoration: none;
+            /* 去掉链接默认的下划线 */
+            font-size: 18px;
+            /* 字体稍大 */
+            font-weight: bold;
+            /* 加粗 */
+        }
+        a:hover {
+            color: #e74c3c;
+            /* 鼠标悬停时变为红色 */
+            text-decoration: underline;
+            /* 鼠标悬停时显示下划线 */
+        }
+        .desc {
+            color: #666;
+            /* 描述文字灰色 */
+            font-size: 14px;
+            /* 字体稍小 */
+            margin-top: 8px;
+            /* 上边距 */
+        }
+        .tag {
+            display: inline-block;
+            /* 行内块级元素 */
+            background-color: #e74c3c;
+            /* 红色背景 */
+            color: white;
+            /* 白色文字 */
+            padding: 2px 8px;
+            /* 内边距 */
+            border-radius: 4px;
+            /* 圆角 */
+            font-size: 12px;
+            /* 小字 */
+            margin-right: 5px;
+            /* 右边距 */
+        }
+        .tag-html5 {
+            background-color: #e67e22;
+            /* 橙色标签 */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- <body> 区域：页面上所有可见的内容都写在这里 -->
+    <!-- ========================================== -->
+
+    <!-- h1：一级标题，一个页面一般只有一个 h1，表示最重要的标题 -->
+    <h1>🚀 HTML5 入门学习教程</h1>
+
+    <!-- p：段落标签，用于包裹一段文字 -->
+    <!-- strong：表示重要内容，浏览器会加粗显示 -->
+    <p>欢迎来到 <strong>HTML5 学习之旅</strong>！本教程从零开始，带你一步步掌握 HTML5 的核心知识。</p>
+
+    <!-- h2：二级标题，用于章节标题 -->
+    <h2>📚 学习目录</h2>
+
+    <!-- p：提示文字 -->
+    <p>点击下面的链接开始学习：</p>
+
+    <!--
+      ul：无序列表（Unordered List）
+      每个列表项使用 <li>（List Item）包裹
+      浏览器会在每个列表项前显示一个圆点
+    -->
+    <ul>
+        <li>
+            <!-- a：超链接标签，href 属性指定链接目标 -->
+            <a href="01-basics.html">第 1 课：HTML5 文档结构与基础标签</a>
+            <!-- div：通用容器标签，没有特殊含义，常用于分组和样式控制 -->
+            <div class="desc">
+                <span class="tag">DOCTYPE</span>
+                <span class="tag">html</span>
+                <span class="tag">head</span>
+                <span class="tag">body</span>
+                <span class="tag">h1-h6</span>
+                <span class="tag">p</span>
+                <!-- br：换行，hr：水平分割线 -->
+                学习 HTML 文件的基本结构、标题、段落、注释等最基础的元素
+            </div>
+        </li>
+        <li>
+            <a href="02-lists-links.html">第 2 课：列表与链接</a>
+            <div class="desc">
+                <span class="tag">ul</span>
+                <span class="tag">ol</span>
+                <span class="tag">li</span>
+                <span class="tag">a</span>
+                <span class="tag">nav</span>
+                学习无序列表、有序列表、超链接、页面内跳转
+            </div>
+        </li>
+        <li>
+            <a href="03-media.html">第 3 课：图片、视频与音频</a>
+            <div class="desc">
+                <span class="tag">img</span>
+                <span class="tag">figure</span>
+                <span class="tag">video</span>
+                <span class="tag">audio</span>
+                学习在页面中嵌入图片、视频和音频文件
+            </div>
+        </li>
+        <li>
+            <a href="04-tables.html">第 4 课：表格</a>
+            <div class="desc">
+                <span class="tag">table</span>
+                <span class="tag">tr</span>
+                <span class="tag">td</span>
+                <span class="tag">th</span>
+                <span class="tag">thead</span>
+                <span class="tag">tbody</span>
+                学习创建和美化表格数据
+            </div>
+        </li>
+        <li>
+            <a href="05-forms.html">第 5 课：表单与输入</a>
+            <div class="desc">
+                <span class="tag">form</span>
+                <span class="tag">input</span>
+                <span class="tag">button</span>
+                <span class="tag">select</span>
+                <span class="tag">textarea</span>
+                <span class="tag">label</span>
+                学习各种表单控件，收集用户输入的数据
+            </div>
+        </li>
+        <li>
+            <a href="06-semantic.html">第 6 课：HTML5 语义化标签</a>
+            <div class="desc">
+                <span class="tag">header</span>
+                <span class="tag">nav</span>
+                <span class="tag">main</span>
+                <span class="tag">section</span>
+                <span class="tag">article</span>
+                <span class="tag">aside</span>
+                <span class="tag">footer</span>
+                学习使用有意义的标签构建页面结构，提升可读性和 SEO
+            </div>
+        </li>
+        <li>
+            <a href="07-project.html">🎯 综合练习：个人主页</a>
+            <div class="desc">
+                运用前面学到的所有知识，动手制作一个完整的个人简介页面
+            </div>
+        </li>
+    </ul>
+
+    <!--
+      hr：水平分割线（Horizontal Rule）
+      用于在视觉上分隔内容
+    -->
+    <hr>
+
+    <!-- h2：二级标题 -->
+    <h2>💡 学习建议</h2>
+
+    <!-- ol：有序列表（Ordered List） -->
+    <!-- 与 ul 不同，ol 会在每项前显示数字序号 -->
+    <ol>
+        <li>按顺序从第 1 课开始学习</li>
+        <li>每学完一课，在浏览器中打开该文件查看效果</li>
+        <li>尝试修改代码中的内容，观察变化</li>
+        <li>完成第 7 课的综合练习，巩固所学知识</li>
+        <li>建议同时打开 <strong>浏览器开发者工具</strong>（F12）查看 HTML 结构</li>
+    </ol>
+
+    <!--
+      p + small：small 表示旁注或免责声明，字体比普通文字小一号
+    -->
+    <p><small>提示：本教程所有文件可以直接用浏览器打开查看效果，无需安装任何软件。</small></p>
+
+</body>
+</html>

@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OpenWin · Dashboard v19</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#090a0e;--bg2:#111219;--bg3:#181923;--bg4:#1e2030;--bdr:#252740;--bdr2:#2e3152;--t:#e8e9f0;--t2:#8b8ea8;--t3:#5c5f7e;--ac:#00b894;--ac2:#55efc4;--acbg:rgba(0,184,148,.1);--pp:#6c5ce7;--pp2:#a29bfe;--ppbg:rgba(108,92,231,.1);--r:#ff6b6b;--rbg:rgba(255,107,107,.1);--o:#ffa94d;--obg:rgba(255,169,77,.1);--bl:#4dabf7;--blbg:rgba(77,171,247,.1);--gd:#ffd43b;--gdbg:rgba(255,212,59,.08)}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+.m{font-family:'JetBrains Mono',monospace}
+[data-def]{position:relative;cursor:help;border-bottom:1px dashed var(--bdr2)}
+[data-def]:hover::after{content:attr(data-def);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--bdr2);color:var(--t2);font-size:9px;padding:5px 8px;border-radius:5px;white-space:pre-line;max-width:280px;z-index:99;font-weight:400;line-height:1.4;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+
+/* WIZARD */
+.wiz{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+.wiz.hide{display:none}
+.wiz-h{padding:16px 32px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.wiz-h .logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700}
+.wiz-h .logo .ic{width:28px;height:28px;background:linear-gradient(135deg,var(--ac),var(--pp));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.wiz-body{flex:1;display:flex;justify-content:center;padding:32px 16px}
+.wiz-card{width:100%;max-width:600px}
+.steps{display:flex;align-items:center;gap:0;margin-bottom:32px}
+.stp{display:flex;align-items:center;gap:6px;flex:1}
+.stp-c{width:28px;height:28px;border-radius:50%;border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--t3);transition:all .2s;flex-shrink:0}
+.stp.a .stp-c{border-color:var(--ac);background:var(--ac);color:#fff}
+.stp.d .stp-c{border-color:var(--ac);background:var(--acbg);color:var(--ac)}
+.stp-l{font-size:11px;color:var(--t3);font-weight:500;white-space:nowrap}
+.stp.a .stp-l{color:var(--t)}.stp.d .stp-l{color:var(--ac)}
+.stp-ln{flex:1;height:2px;background:var(--bdr);margin:0 6px;min-width:16px}
+.stp-ln.d{background:var(--ac)}
+.wt{font-size:20px;font-weight:700;margin-bottom:5px;letter-spacing:-.3px}.ws{font-size:13px;color:var(--t2);margin-bottom:22px}
+.fg{margin-bottom:16px}.fl{font-size:12px;font-weight:600;margin-bottom:5px;display:block}.fl .req{color:var(--r)}.fl small{font-weight:400;color:var(--t3);margin-left:5px}
+.fi{width:100%;padding:9px 12px;background:var(--bg2);border:1px solid var(--bdr);border-radius:7px;color:var(--t);font-size:13px;font-family:'DM Sans';transition:border-color .12s}
+.fi:focus{outline:none;border-color:var(--ac)}.fi::placeholder{color:var(--t3)}
+textarea.fi{resize:vertical;min-height:70px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rci{border:2px solid var(--bdr);border-radius:10px;padding:14px;cursor:pointer;transition:all .15s}
+.rci:hover{border-color:var(--bdr2)}.rci.sel{border-color:var(--ac);background:var(--acbg)}
+.rci .rt{font-size:13px;font-weight:600;margin-bottom:3px}.rci .rd{font-size:11px;color:var(--t2)}.rci .ri{font-size:18px;margin-bottom:6px}
+.upl{border:2px dashed var(--bdr);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:border-color .15s}.upl:hover{border-color:var(--ac)}
+.wa{display:flex;gap:10px;margin-top:24px;justify-content:flex-end}
+.btn{padding:7px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:var(--bg3);color:var(--t);transition:all .12s;font-family:'DM Sans';display:inline-flex;align-items:center;gap:5px}
+.btn:hover{border-color:var(--bdr2);background:var(--bg4)}
+.bp{background:var(--ac);border-color:var(--ac);color:#000}.bp:hover{background:#00d1a0}
+.bs{padding:3px 9px;font-size:10px}
+.br{color:var(--r);border-color:rgba(255,107,107,.3)}.br:hover{background:var(--rbg)}
+.bg{color:var(--ac);border-color:rgba(0,184,148,.3)}.bg:hover{background:var(--acbg)}
+.succ{text-align:center;padding:48px 0}
+.succ-i{width:64px;height:64px;border-radius:50%;background:var(--acbg);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px}
+.succ-t{font-size:20px;font-weight:700;margin-bottom:6px}.succ-s{font-size:13px;color:var(--t2);margin-bottom:20px}
+.succ-info{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:16px;text-align:left;margin-bottom:20px}
+.si-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bdr)}.si-row:last-child{border:none}
+.si-l{font-size:12px;color:var(--t2)}.si-v{font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace}
+.ws-p{display:none}.ws-p.a{display:block}
+
+/* DASHBOARD */
+.app{display:flex;min-height:100vh}.app.hide{display:none}
+.sb{width:228px;height:100vh;position:fixed;left:0;top:0;background:var(--bg2);border-right:1px solid var(--bdr);display:flex;flex-direction:column;z-index:10}
+.sb-logo{padding:14px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px}
+.sb-logo .si{width:28px;height:28px;background:linear-gradient(135deg,var(--ac),var(--pp));border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;color:#fff}
+.sb-logo .sn{font-size:13px;font-weight:700}
+.sb-logo .sb2{font-size:8px;padding:2px 5px;border-radius:3px;background:var(--acbg);color:var(--ac);font-weight:600;margin-left:auto}
+.sb-nav{flex:1;overflow-y:auto;padding:8px 6px}
+.ng{margin-bottom:12px}.ngt{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--t3);padding:3px 10px;margin-bottom:2px;font-weight:600}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;cursor:pointer;color:var(--t2);font-size:12px;font-weight:500;transition:all .12s;position:relative}
+.ni:hover{background:var(--bg3);color:var(--t)}
+.ni.a{background:var(--acbg);color:var(--ac2)}
+.ni.a::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:14px;background:var(--ac);border-radius:0 3px 3px 0}
+.ni svg{width:15px;height:15px;flex-shrink:0;opacity:.6}.ni.a svg{opacity:1}
+.nb{margin-left:auto;font-size:9px;font-weight:600;background:var(--r);color:#fff;padding:1px 5px;border-radius:8px}
+.ma{margin-left:228px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.tp{height:48px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 20px;justify-content:space-between;background:var(--bg2);position:sticky;top:0;z-index:5}
+.tp h2{font-size:14px;font-weight:600}
+.ct{flex:1;padding:18px 20px;overflow-y:auto}
+.sg{display:grid;gap:10px;margin-bottom:16px}.s5{grid-template-columns:repeat(5,1fr)}.s4{grid-template-columns:repeat(4,1fr)}.s3{grid-template-columns:repeat(3,1fr)}.s2{grid-template-columns:1fr 1fr}
+.sc{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:13px 15px}
+.sl{font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);font-weight:600;margin-bottom:5px}
+.sv{font-size:20px;font-weight:700;letter-spacing:-.4px;margin-bottom:2px}
+.ch{font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px;display:inline-flex;align-items:center}.ch.u{color:var(--ac);background:var(--acbg)}.ch.d{color:var(--r);background:var(--rbg)}.ch.w{color:var(--o);background:var(--obg)}
+.pn{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;overflow:hidden}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--bdr)}
+.pt{font-size:12px;font-weight:600}.pa{font-size:10px;color:var(--ac);cursor:pointer;font-weight:500}
+.pb{padding:12px 15px}
+table{width:100%;border-collapse:collapse}
+th{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);font-weight:600;text-align:left;padding:7px 9px;border-bottom:1px solid var(--bdr);white-space:nowrap}
+td{font-size:11px;padding:8px 9px;border-bottom:1px solid var(--bdr);color:var(--t2);white-space:nowrap}
+tr:hover td{background:var(--bg4)}
+.bd{font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;display:inline-block}
+.tabs{display:flex;gap:1px;padding:2px;background:var(--bg);border-radius:7px;margin-bottom:12px;border:1px solid var(--bdr);width:fit-content;flex-wrap:wrap}
+.tab{padding:5px 11px;font-size:10px;font-weight:600;border-radius:5px;cursor:pointer;color:var(--t3);transition:all .12s}
+.tab.a{background:var(--bg3);color:var(--t)}.tab:hover:not(.a){color:var(--t2)}
+.sbar{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.inp{flex:1;min-width:100px;background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:6px 10px;color:var(--t);font-size:11px;font-family:'DM Sans'}.inp:focus{outline:none;border-color:var(--ac)}.inp::placeholder{color:var(--t3)}
+.sel{background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:6px 8px;color:var(--t2);font-size:10px;font-family:'DM Sans'}
+.fb{display:flex;height:20px;border-radius:5px;overflow:hidden;margin-bottom:6px}
+.rm{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.rb{flex:1;height:4px;background:var(--bg);border-radius:2px;overflow:hidden}.rf{height:100%;border-radius:2px;transition:width .5s}
+.scg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sci{text-align:center;padding:10px;background:var(--bg);border-radius:8px}.sci .v{font-size:18px;font-weight:700}.sci .l{font-size:9px;color:var(--t3);margin-top:2px}
+.inv-box{background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:10px}
+.inv-lnk{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--bg2);padding:6px 10px;border-radius:5px;border:1px solid var(--bdr);word-break:break-all;margin:6px 0}
+.chart{height:120px;position:relative;padding:4px 0;background:linear-gradient(to top, rgba(255,255,255,.02) 1px, transparent 1px);background-size:100% 25%;border-radius:8px;overflow:hidden}.chart-axis{display:flex;justify-content:space-between;align-items:center;width:100%;padding:4px 18px 0;color:var(--t2);font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1;letter-spacing:-.2px}.chart-axis span{display:block;white-space:nowrap;min-width:34px;text-align:center}.line-svg{width:100%;height:100%;display:block}.line-point{cursor:pointer}
+.bar{flex:1;border-radius:2px 2px 0 0;transition:height .5s;cursor:pointer;position:relative;min-width:3px}
+.bar:hover{filter:brightness(1.3)}.bar .tip{display:none;position:absolute;top:-22px;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--bdr);padding:2px 5px;border-radius:3px;font-size:8px;white-space:nowrap;font-family:'JetBrains Mono',monospace;z-index:5}.bar:hover .tip{display:block}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;justify-content:center;align-items:center;backdrop-filter:blur(3px)}
+.mo.show{display:flex}
+.md{background:var(--bg2);border:1px solid var(--bdr);border-radius:14px;width:90%;max-width:780px;max-height:82vh;overflow:hidden;display:flex;flex-direction:column;animation:mIn .2s}
+@keyframes mIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--bdr)}.mh h3{font-size:14px;font-weight:700}
+.mx{background:none;border:1px solid var(--bdr);color:var(--t2);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}.mx:hover{color:var(--t)}
+.mbd{flex:1;overflow-y:auto;padding:14px 16px}
+.mf{display:flex;gap:6px;padding:10px 16px;border-top:1px solid var(--bdr)}
+.cfg{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bdr)}.cfg:last-child{border:none}
+.cfg-l{font-size:11px;font-weight:500}.cfg-l small{display:block;font-size:9px;color:var(--t3);font-weight:400;margin-top:1px}
+.cfg-v{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ac2)}
+.cfg-i{background:var(--bg);border:1px solid var(--bdr);border-radius:5px;padding:4px 8px;color:var(--t);font-size:11px;width:80px;text-align:right;font-family:'JetBrains Mono',monospace}.cfg-i:focus{outline:none;border-color:var(--ac)}
+.pg{display:none}.pg.a{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+.two-col-picker{display:grid;grid-template-columns:180px 1fr;gap:12px}
+.type-list{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:8px}
+.type-item{padding:10px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--t2);transition:all .12s;margin-bottom:4px}
+.type-item:last-child{margin-bottom:0}
+.type-item:hover{background:var(--bg4);color:var(--t)}
+.type-item.a{background:var(--acbg);color:var(--ac2)}
+.game-panel{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:12px}
+.game-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.prog-wrap{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:16px}
+.prog-track{height:12px;background:var(--bg);border-radius:999px;overflow:hidden;border:1px solid var(--bdr)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--gd));border-radius:999px}
+.icon-btn{width:18px;height:18px;border-radius:50%;border:1px solid var(--bdr2);background:rgba(255,255,255,.04);color:var(--t2);font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-left:5px;vertical-align:middle}
+.icon-btn:hover{color:var(--ac2);border-color:rgba(0,184,148,.55);background:var(--acbg)}
+.finance-hero{display:grid;grid-template-columns:1.05fr 1fr .85fr;gap:10px;margin-bottom:10px}
+.hero-card{position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--bdr);padding:17px 18px;min-height:124px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}
+.hero-card.net{border-color:rgba(0,184,148,.45);background:linear-gradient(135deg,rgba(0,184,148,.30),rgba(0,184,148,.06))}
+.hero-card.ggr{border-color:rgba(77,171,247,.35);background:linear-gradient(135deg,rgba(77,171,247,.18),rgba(77,171,247,.035))}
+.hero-card.bankroll{border-color:rgba(255,169,77,.34);background:linear-gradient(135deg,rgba(255,169,77,.18),rgba(255,169,77,.035))}
+.hero-title{font-size:12px;font-weight:800;color:var(--t);margin-bottom:13px}
+.hero-value{font-family:'JetBrains Mono',monospace;font-size:37px;font-weight:800;letter-spacing:-1.2px;line-height:1}
+.hero-unit{font-size:13px;font-weight:800;margin-top:5px}
+.hero-ghost{position:absolute;right:20px;bottom:12px;font-size:72px;opacity:.12;transform:rotate(-8deg)}
+.profit-strip{background:linear-gradient(180deg,rgba(17,18,25,.96),rgba(10,11,17,.96));border:1px solid var(--bdr);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.strip-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.strip-chain{display:flex;align-items:center;gap:12px;flex:1}
+.strip-box{flex:1;min-width:120px;text-align:center;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.055);border-radius:9px;padding:12px}
+.strip-box.good{background:rgba(0,184,148,.16);border-color:rgba(0,184,148,.22)}
+.eq{font-size:18px;font-weight:900;color:var(--t3)}
+.stack-bar{height:9px;border-radius:999px;overflow:hidden;display:flex;background:rgba(255,255,255,.08);margin-top:10px}
+.stack-lbl{display:flex;justify-content:space-around;font-size:10px;font-weight:800;margin-top:7px}
+.share-grid{display:grid;grid-template-columns:1.15fr repeat(3,1fr);gap:12px;margin-bottom:14px}
+.share-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:14px;min-height:212px}
+.share-card.accent{border-color:rgba(0,184,148,.3);background:linear-gradient(135deg,rgba(0,184,148,.16),rgba(0,184,148,.04))}
+.ring{width:142px;height:142px;border-radius:50%;background:conic-gradient(var(--ac2) 0 79.3%,rgba(255,255,255,.12) 79.3% 100%);display:flex;align-items:center;justify-content:center;margin:4px auto 0;position:relative}
+.ring:after{content:'';position:absolute;inset:12px;border-radius:50%;background:var(--bg3)}
+.ring-inner{position:relative;z-index:1;text-align:center}
+.mini-track{height:7px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden;margin:12px 0 9px}
+.mini-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--ac2),var(--ac))}
+.mini-fill.pp{background:linear-gradient(90deg,var(--pp2),var(--pp))}
+.mini-fill.bl{background:linear-gradient(90deg,var(--bl),#228be6)}
+.boost-list{display:grid;gap:9px}
+.boost-item{display:grid;grid-template-columns:32px 1fr 14px;gap:10px;align-items:center;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.boost-ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(255,212,59,.12);color:var(--gd)}
+
+.tier-track{position:relative;margin:12px 0 10px;padding-top:2px}
+.tier-line{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;display:flex;gap:2px}
+.tier-seg{height:100%;background:rgba(255,255,255,.08);flex:1;border-radius:999px;position:relative}
+.tier-seg.done{background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.tier-seg.pp.done{background:linear-gradient(90deg,var(--pp),var(--pp2))}
+.tier-seg.bl.done{background:linear-gradient(90deg,#1e8bea,var(--bl))}
+.tier-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:8px;color:var(--t3);font-family:'JetBrains Mono',monospace}
+.tier-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.tier-pill{background:rgba(0,0,0,.18);border:1px solid var(--bdr);border-radius:8px;padding:8px}
+.tier-pill .k{font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.tier-pill .v{font-size:12px;color:var(--t);font-weight:800;margin-top:3px}
+.info-btn{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;border:1px solid currentColor;font-size:10px;line-height:1;cursor:pointer;margin-left:4px;opacity:.9}
+.info-btn:hover{opacity:1;filter:brightness(1.2)}
+.unlock-table{width:100%;border-collapse:collapse;margin-top:10px}
+.unlock-table th{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bdr);padding:9px 10px;text-align:left}
+.unlock-table th:last-child{text-align:right}
+.unlock-table td{font-size:12px;color:var(--t2);border-bottom:1px solid var(--bdr);padding:11px 10px}
+.unlock-table td:last-child{font-weight:900;color:var(--t);text-align:right;white-space:nowrap}
+.unlock-table tr.current-tier td{background:rgba(77,238,194,.08);color:var(--t);border-top:1px solid rgba(77,238,194,.35);border-bottom:1px solid rgba(77,238,194,.35)}
+.unlock-table tr.current-tier td:first-child{border-left:2px solid var(--ac);border-radius:8px 0 0 8px}
+.unlock-table tr.current-tier td:last-child{border-right:2px solid var(--ac);border-radius:0 8px 8px 0;color:var(--ac)}
+.tier-badge{display:inline-flex;align-items:center;margin-left:8px;padding:2px 6px;border-radius:999px;background:rgba(77,238,194,.12);border:1px solid rgba(77,238,194,.45);color:var(--ac);font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;vertical-align:middle}
+.unlock-note{margin-top:12px;padding:10px 12px;border:1px solid var(--bdr);background:rgba(255,255,255,.03);border-radius:9px;color:var(--t2);font-size:11px;line-height:1.6}
+
+@media (max-width: 1100px){.finance-hero,.share-grid{grid-template-columns:1fr}.strip-chain{flex-direction:column}.eq{display:none}}
+@media (max-width: 900px){.two-col-picker{grid-template-columns:1fr}.game-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- WIZARD -->
+<div class="wiz hide" id="wiz">
+  <div class="wiz-h"><div class="logo"><div class="ic">OW</div><span>OpenWin</span></div><button class="btn" onclick="if(confirm('取消创建 Space？')){document.getElementById('wiz').classList.add('hide');document.getElementById('app').classList.remove('hide')}">取消</button></div>
+  <div class="wiz-body"><div class="wiz-card">
+    <div class="steps" id="steps">
+      <div class="stp a" data-s="1"><div class="stp-c">1</div><div class="stp-l">基础信息</div></div><div class="stp-ln"></div>
+      <div class="stp" data-s="2"><div class="stp-c">2</div><div class="stp-l">分享收益告知</div></div><div class="stp-ln"></div>
+      <div class="stp" data-s="3"><div class="stp-c">3</div><div class="stp-l">完成</div></div>
+    </div>
+    <div class="ws-p a" id="ws1">
+      <div class="wt">创建你的 Space</div><div class="ws">设置 Space 的基础信息，打造你的专属品牌</div>
+      <div class="fg"><label class="fl">Space 名称 <span class="req">*</span> <small>2-20字符</small></label><input class="fi" placeholder="例如: OpenWin Club" id="sname"></div>
+      <div class="fg"><label class="fl">二级域名 <span class="req">*</span> <small>3-20字符，仅字母数字连字符</small></label><div style="display:flex"><input class="fi" placeholder="openwinclub" id="sdomain" style="border-radius:7px 0 0 7px"><span style="background:var(--bg3);border:1px solid var(--bdr);border-left:none;padding:9px 10px;border-radius:0 7px 7px 0;font-size:12px;color:var(--t3);white-space:nowrap">.openwin.ai</span></div></div>
+      <div class="fg"><label class="fl">Space 头像 <span class="req">*</span> <small>建议尺寸 320 × 320px</small></label><div class="upl"><div style="font-size:22px;margin-bottom:6px">🪪</div><div style="font-size:12px;color:var(--t2)">点击或拖拽上传 Space 头像</div><div style="font-size:10px;color:var(--t3);margin-top:3px">建议尺寸 320 × 320px · JPG/PNG · 最大5MB</div></div></div>
+      <div class="fg"><label class="fl">封面背景图 <span class="req">*</span> <small>建议尺寸 1440 × 480px</small></label><div class="upl"><div style="font-size:22px;margin-bottom:6px">📷</div><div style="font-size:12px;color:var(--t2)">点击或拖拽上传封面</div><div style="font-size:10px;color:var(--t3);margin-top:3px">建议尺寸 1440 × 480px · JPG/PNG · 最大5MB</div></div></div>
+      <div class="fg"><label class="fl">简介 <small>选填，最多500字</small></label><textarea class="fi" placeholder="介绍你的Space，吸引玩家和投资人..."></textarea></div>
+      <div class="fg"><label class="fl">社交平台链接 <small>选填，仅展示</small></label><div class="fr" style="margin-bottom:8px"><input class="fi" placeholder="Twitter URL"><input class="fi" placeholder="YouTube URL"></div><div class="fr"><input class="fi" placeholder="Instagram URL"><input class="fi" placeholder="TikTok URL"></div></div>
+      <div class="wa"><button class="btn bp" onclick="goS(2)">下一步 →</button></div>
+    </div>
+    
+<div class="ws-p" id="ws2">
+      <div class="wt">分享收益告知</div><div class="ws">请确认 Space 的收益分配规则，分润由有效流水、新增有效用户和 GGR / Revenue 共同决定</div>
+      <div style="background:linear-gradient(135deg,rgba(0,184,148,.08),rgba(108,92,231,.08));border:1px solid var(--bdr);border-radius:12px;padding:16px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px">💰 分享收益说明</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.8">
+          KOL 最终分润比例由 <strong style="color:var(--t)">Rolling / 有效流水</strong>、<strong style="color:var(--t)">新增有效用户</strong>、<strong style="color:var(--t)">GGR / Revenue</strong> 三项指标相加得到，最高 <strong style="color:var(--ac)">70%</strong>，金主最低保留 <strong style="color:var(--gd)">30%</strong>。<br>
+          <strong style="color:var(--t)">净利 = 毛利 - 平台运营成本 - 用户运营成本</strong><br>
+          平台运营成本包含 API 报表费、IDC / 云服务费、平台服务费、税收等；用户运营成本包含 <strong style="color:var(--t)">Cashback 实际生成金额</strong> 与风险相关成本。<br>
+          <strong style="color:var(--t)">KOL 收益 = 净利 × KOL 最终分润比例</strong>；亏损时也按 KOL 最终分润比例和金主比例分摊。<br>
+          Weekly Advance 模式下，KOL 收益的 <strong style="color:var(--gd)">20%</strong> 可按週預提，<strong style="color:var(--gd)">60%</strong> 月底 / 次月返還，<strong style="color:var(--gd)">15%</strong> 於下月首個提現週期釋放，<strong style="color:var(--gd)">5%</strong> 持續滾存到風險準備金池；正式結算仍按月完成。
+        </div>
+      </div>
+      <div class="pn" style="margin-bottom:14px"><div class="ph"><span class="pt">三项分润指标</span></div><div class="pb">
+        <table><thead><tr><th>指标</th><th>最高分润比例</th></tr></thead><tbody>
+          <tr><td>Rolling / 有效流水</td><td>35%</td></tr>
+          <tr><td>新增有效用户</td><td>21%</td></tr>
+          <tr><td>GGR / Revenue</td><td>14%</td></tr>
+          <tr><td style="color:var(--t);font-weight:700">KOL 最终分润</td><td style="color:var(--ac);font-weight:800">70%</td></tr>
+        </tbody></table>
+      </div></div>
+      <div class="wa"><button class="btn" onclick="goS(1)">← 上一步</button><button class="btn bp" onclick="goS(3)">确认并创建 →</button></div>
+    </div>
+    <div class="ws-p" id="ws3">
+      <div class="succ"><div class="succ-i">🎉</div><div class="succ-t">Space 创建成功！</div><div class="succ-s">系统已默认开启全部游戏，后续可在「游戏管理」中随时调整展示与排序</div>
+      <div class="succ-info">
+        <div class="si-row"><span class="si-l">Space 名称</span><span class="si-v" id="r-name">-</span></div>
+        <div class="si-row"><span class="si-l">访问地址</span><span class="si-v" id="r-domain">-</span></div>
+        <div class="si-row"><span class="si-l">默认游戏配置</span><span class="si-v">已默认开启全部游戏</span></div>
+      </div>
+      <button class="btn bp" onclick="enterDash()" style="padding:9px 24px;font-size:13px">进入管理后台 →</button>
+    </div></div>
+    <div class="ws-p" id="ws4" style="display:none">
+      <div class="succ"><div class="succ-i">🎉</div><div class="succ-t">Space 创建成功！</div><div class="succ-s"></div>
+      <div class="succ-info">
+        <div class="si-row"><span class="si-l">Space 名称</span><span class="si-v" id="r-name">-</span></div>
+        <div class="si-row"><span class="si-l">访问地址</span><span class="si-v" id="r-domain">-</span></div>
+      </div>
+      <button class="btn bp" onclick="enterDash()" style="padding:9px 24px;font-size:13px">进入管理后台 →</button>
+    </div></div>
+  </div></div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="app" id="app">
+<aside class="sb">
+  <div class="sb-logo"><div class="si">RF</div><div><div class="sn">RoyalFlush</div><div style="font-size:9px;color:var(--t3)">royalflush.openwin.ai</div></div><span class="sb2">运营中</span></div>
+  <nav class="sb-nav">
+    <div class="ng"><div class="ngt">概览</div><div class="ni a" data-p="ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>数据看板</div></div>
+<div class="ng"><div class="ngt">运营</div>
+      <div class="ni" data-p="gm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>游戏管理</div>
+
+      <div class="ni" data-p="pl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>玩家运营</div>
+    </div>
+
+    <div class="ng"><div class="ngt">设置</div><div class="ni" data-p="st"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42"/></svg>Space 设置</div></div>
+  </nav>
+</aside>
+<div class="ma">
+<header class="tp"><h2 id="ptl">数据看板</h2><div style="display:flex;align-items:center;gap:10px"><span class="m" style="font-size:9px;color:var(--t3)" id="utc"></span><span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;color:var(--ac);background:var(--acbg)">● 运营中</span><div style="width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--ac),var(--pp));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">K</div></div></header>
+<div class="ct" id="ct"></div>
+</div></div>
+
+
+<!-- PLAYER TRANSACTION MODAL -->
+
+<div class="mo" id="mo-unlock-rolling"><div class="md" style="max-width:560px"><div class="mh"><h3>Monthly Qualified Rolling Unlock Table</h3><button class="mx" onclick="hideM('unlock-rolling')">×</button></div><div class="mbd">
+<table class="unlock-table"><thead><tr><th>Monthly Qualified Rolling</th><th>Share Contribution</th></tr></thead><tbody>
+<tr><td>&lt; 100,000 USDT</td><td>28%</td></tr><tr><td>100,000 – 499,999 USDT</td><td>30%</td></tr><tr><td>500,000 – 999,999 USDT</td><td>32%</td></tr><tr class="current-tier"><td>1,000,000 – 2,999,999 USDT <span class="tier-badge">Current Tier</span></td><td>33.5%</td></tr><tr><td>≥ 3,000,000 USDT</td><td>35%</td></tr>
+</tbody></table><div class="unlock-note">Bonus Credits do not count toward Monthly Qualified Rolling. Only settled, real-money, non-abusive activity is counted.</div></div></div></div>
+<div class="mo" id="mo-unlock-users"><div class="md" style="max-width:560px"><div class="mh"><h3>Monthly New Qualified Users Unlock Table</h3><button class="mx" onclick="hideM('unlock-users')">×</button></div><div class="mbd">
+<table class="unlock-table"><thead><tr><th>Monthly New Qualified Users</th><th>Share Contribution</th></tr></thead><tbody>
+<tr><td>&lt; 5 users</td><td>0%</td></tr><tr><td>5 – 9 users</td><td>5%</td></tr><tr><td>10 – 14 users</td><td>10%</td></tr><tr class="current-tier"><td>15 – 29 users <span class="tier-badge">Current Tier</span></td><td>15%</td></tr><tr><td>≥ 30 users</td><td>21%</td></tr>
+</tbody></table><div class="unlock-note">A New Qualified User must meet deposit, activity, and risk-control requirements.</div></div></div></div>
+<div class="mo" id="mo-unlock-revenue"><div class="md" style="max-width:560px"><div class="mh"><h3>Monthly Revenue Unlock Table</h3><button class="mx" onclick="hideM('unlock-revenue')">×</button></div><div class="mbd">
+<table class="unlock-table"><thead><tr><th>Monthly Revenue</th><th>Share Contribution</th></tr></thead><tbody>
+<tr><td>&lt; 20,000 USDT</td><td>0%</td></tr><tr><td>20,000 – 49,999 USDT</td><td>3.5%</td></tr><tr class="current-tier"><td>50,000 – 99,999 USDT <span class="tier-badge">Current Tier</span></td><td>7%</td></tr><tr><td>100,000 – 199,999 USDT</td><td>10.5%</td></tr><tr><td>≥ 200,000 USDT</td><td>14%</td></tr>
+</tbody></table><div class="unlock-note">Revenue is used to determine the monthly share tier. Actual payout is based on Net Profit.</div></div></div></div>
+
+<div class="mo" id="mo-txn"><div class="md" style="max-width:760px"><div class="mh"><h3 id="txn-title">用户记录</h3><button class="mx" onclick="hideM('txn')">×</button></div><div class="mbd">
+  <div class="pn"><div class="ph"><span class="pt">明细记录</span></div>
+    <div style="overflow-x:auto"><table><thead id="txn-head"></thead><tbody id="txn-body"></tbody></table></div>
+  </div>
+</div></div></div>
+
+<!-- PLAYER DETAIL MODAL -->
+<div class="mo" id="mo-pd"><div class="md"><div class="mh"><h3>玩家详情 — user***001 🐋</h3><button class="mx" onclick="hideM('pd')">×</button></div><div class="mbd">
+  <div class="sg s4">
+    <div class="sc"><div class="sl">总投注</div><div class="sv" style="font-size:16px">$280K</div></div>
+    <div class="sc"><div class="sl">净盈亏</div><div class="sv" style="font-size:16px;color:var(--r)">-$18.4K</div></div>
+    <div class="sc"><div class="sl">毛利贡献</div><div class="sv" style="font-size:16px;color:var(--ac)">$18.4K</div></div>
+    <div class="sc"><div class="sl">投注次数</div><div class="sv" style="font-size:16px">1,240</div></div>
+  </div>
+  <div class="sg s2">
+    <div class="pn"><div class="ph"><span class="pt">游戏偏好</span></div><div class="pb">
+      <div class="rm"><span style="font-size:10px;min-width:70px">Baccarat</span><div class="rb"><div class="rf" style="width:75%;background:var(--ac)"></div></div><span class="m" style="font-size:9px;min-width:35px;text-align:right">$210K</span></div>
+      <div class="rm"><span style="font-size:10px;min-width:70px">Blackjack</span><div class="rb"><div class="rf" style="width:20%;background:var(--pp)"></div></div><span class="m" style="font-size:9px;min-width:35px;text-align:right">$56K</span></div>
+      <div class="rm"><span style="font-size:10px;min-width:70px">Slots</span><div class="rb"><div class="rf" style="width:5%;background:var(--o)"></div></div><span class="m" style="font-size:9px;min-width:35px;text-align:right">$14K</span></div>
+    </div></div>
+    <div class="pn"><div class="ph"><span class="pt">活跃信息</span></div><div class="pb">
+      <div class="cfg"><div class="cfg-l">最后活跃</div><div class="cfg-v">5 分钟前</div></div>
+      <div class="cfg"><div class="cfg-l">首次游戏</div><div class="cfg-v">2026-01-15</div></div>
+      <div class="cfg"><div class="cfg-l">日均投注</div><div class="cfg-v">$3,680</div></div>
+      <div class="cfg"><div class="cfg-l">日均次数</div><div class="cfg-v">16.3 次</div></div>
+      <div class="cfg"><div class="cfg-l">单笔最大</div><div class="cfg-v" style="color:var(--gd)">$2,500</div></div>
+      <div class="cfg"><div class="cfg-l">偏好时段</div><div class="cfg-v">20:00-02:00 UTC</div></div>
+    </div></div>
+  </div>
+  <div class="pn" style="margin-top:10px"><div class="ph"><span class="pt">最近游戏记录</span></div>
+  <table><thead><tr><th>时间</th><th>游戏</th><th>投注</th><th>返奖</th><th>盈亏</th></tr></thead><tbody>
+    <tr><td style="font-size:10px">03-31 07:58</td><td>Baccarat</td><td class="m">$2,500</td><td class="m">$0</td><td class="m" style="color:var(--r)">-$2,500</td></tr>
+    <tr><td style="font-size:10px">03-31 07:55</td><td>Baccarat</td><td class="m">$1,500</td><td class="m">$3,000</td><td class="m" style="color:var(--ac)">+$1,500</td></tr>
+    <tr><td style="font-size:10px">03-31 07:52</td><td>Baccarat</td><td class="m">$2,000</td><td class="m">$0</td><td class="m" style="color:var(--r)">-$2,000</td></tr>
+    <tr><td style="font-size:10px">03-31 07:48</td><td>Blackjack</td><td class="m">$1,000</td><td class="m">$2,000</td><td class="m" style="color:var(--ac)">+$1,000</td></tr>
+  </tbody></table></div>
+</div></div></div>
+
+<!-- DIVIDEND DETAIL MODAL -->
+<div class="mo" id="mo-dv"><div class="md" style="max-width:860px"><div class="mh"><h3>发起分红</h3><button class="mx" onclick="hideM('dv')">×</button></div><div class="mbd">
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:10px;padding:16px;margin-bottom:14px">
+    <div style="font-size:11px;color:var(--t3);margin-bottom:6px">分红统计区间（已完成日结 & 未分红）</div>
+    <div style="font-size:18px;font-weight:700;margin-bottom:10px">2026-03-26 ~ 2026-03-30 <span style="font-size:11px;color:var(--t3);font-weight:400">(5个自然日)</span></div>
+    <div class="sg s4" style="margin-bottom:0">
+      <div style="background:var(--bg2);border-radius:7px;padding:8px"><div style="font-size:8px;color:var(--t3)">区间总毛利</div><div class="m" style="font-size:14px;font-weight:700;color:var(--ac)">$18,200</div></div>
+      <div style="background:var(--bg2);border-radius:7px;padding:8px"><div style="font-size:8px;color:var(--t3)">总成本(三方+抽佣)</div><div class="m" style="font-size:14px;font-weight:700;color:var(--o)">$3,640</div></div>
+      <div style="background:var(--bg2);border-radius:7px;padding:8px"><div style="font-size:8px;color:var(--t3)">区间净利润</div><div class="m" style="font-size:14px;font-weight:700;color:var(--ac)">$14,560</div></div>
+      <div style="background:var(--bg2);border-radius:7px;padding:8px"><div style="font-size:8px;color:var(--t3)">管理费 (20%)</div><div class="m" style="font-size:14px;font-weight:700">$2,912</div></div>
+    </div>
+  </div>
+  <div class="pn" style="margin-bottom:14px"><div class="ph"><span class="pt">按游戏成本拆解</span></div>
+  <table><thead><tr><th>游戏</th><th>毛利</th><th>三方费率</th><th>三方费</th><th>抽佣率</th><th>抽佣</th><th>净利润</th></tr></thead><tbody>
+    <tr><td style="font-weight:500;color:var(--t)">Live Baccarat</td><td class="m" style="color:var(--ac)">$12,400</td><td>15%</td><td class="m">$1,860</td><td>3%</td><td class="m">$372</td><td class="m" style="color:var(--ac)">$10,168</td></tr>
+    <tr><td style="font-weight:500;color:var(--t)">Blackjack VIP</td><td class="m" style="color:var(--ac)">$4,200</td><td>15%</td><td class="m">$630</td><td>3%</td><td class="m">$126</td><td class="m" style="color:var(--ac)">$3,444</td></tr>
+    <tr><td style="font-weight:500;color:var(--t)">Mega Slots</td><td class="m" style="color:var(--ac)">$1,600</td><td>12%</td><td class="m">$192</td><td>5%</td><td class="m">$80</td><td class="m" style="color:var(--ac)">$1,328</td></tr>
+    <tr style="font-weight:600"><td style="color:var(--t)">合计</td><td class="m" style="color:var(--ac)">$18,200</td><td></td><td class="m">$2,682</td><td></td><td class="m">$578</td><td class="m" style="color:var(--ac)">$14,560</td></tr>
+  </tbody></table></div>
+  <div class="pn"><div class="ph"><span class="pt">分配预览</span></div><div class="pb">
+    <div class="cfg"><div class="cfg-l"><strong>可分配利润</strong><small>净利润 - 管理费</small></div><div class="m" style="font-size:14px;font-weight:700;color:var(--ac)">$11,648</div></div>
+    <div class="cfg"><div class="cfg-l">KOL 自有资金收益 (40%)</div><div class="cfg-v">$4,659</div></div>
+    <div class="cfg"><div class="cfg-l">Platform Treasury (24%)</div><div class="cfg-v">$2,796 → 自动回收</div></div>
+    <div class="cfg"><div class="cfg-l">GP_Alice (20%)</div><div class="cfg-v">$2,330 → 待领取</div></div>
+    <div class="cfg"><div class="cfg-l">GP_Bob (16%)</div><div class="cfg-v">$1,864 → 待领取</div></div>
+  </div></div>
+</div><div class="mf"><button class="btn bp" style="flex:1;justify-content:center">确认发起分红</button></div></div></div>
+
+
+<!-- ADD OWN FUNDS MODAL -->
+<div class="mo" id="mo-af"><div class="md" style="max-width:520px"><div class="mh"><h3>追加自有资金</h3><button class="mx" onclick="hideM('af')">×</button></div><div class="mbd">
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:14px">
+    <div class="cfg"><div class="cfg-l">当前自有资金</div><div class="cfg-v" style="color:var(--ac)">$50,000</div></div>
+    <div class="cfg"><div class="cfg-l">当前总资金池</div><div class="cfg-v">$125,000</div></div>
+    <div class="cfg"><div class="cfg-l">当前份额</div><div class="cfg-v">25,000 / 62,500</div></div>
+    <div class="cfg"><div class="cfg-l">当前占比</div><div class="cfg-v">40%</div></div>
+    <div class="cfg"><div class="cfg-l" data-def="= 资金池 / 总份额">当前净值</div><div class="cfg-v">$2.00 / 份</div></div>
+  </div>
+  <div style="margin-bottom:14px"><label style="font-size:11px;font-weight:600;display:block;margin-bottom:4px">追加金额 (USDT)</label><input class="fi m" value="50000" id="af-amt" oninput="calcAf()"><div style="display:flex;justify-content:space-between;margin-top:3px"><span style="font-size:9px;color:var(--t3)">最低 1,000 USDT</span><span style="font-size:9px;color:var(--ac)" id="af-wal">钱包余额: $168,500</span></div></div>
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:10px">
+    <div style="font-size:11px;font-weight:600;margin-bottom:8px">追加预览</div>
+    <div class="cfg"><div class="cfg-l">追加金额</div><div class="cfg-v" id="af-p-amt">$50,000</div></div>
+    <div class="cfg"><div class="cfg-l" data-def="= 追加额 / 当前资金池 × 当前总份额">新增份额</div><div class="cfg-v" id="af-p-share">25,000 份</div></div>
+    <div class="cfg"><div class="cfg-l">追加后自有资金</div><div class="cfg-v" id="af-p-total" style="color:var(--ac)">$100,000</div></div>
+    <div class="cfg"><div class="cfg-l">追加后占比</div><div class="cfg-v" id="af-p-pct">57.1%</div></div>
+    <div class="cfg"><div class="cfg-l">支付后钱包余额</div><div class="cfg-v" id="af-p-remain">$118,500</div></div>
+  </div>
+  <div id="af-tier-unlock" style="background:linear-gradient(135deg,rgba(255,212,59,.08),rgba(0,184,148,.08));border:1px solid rgba(255,212,59,.15);border-radius:8px;padding:10px;margin-bottom:12px">
+    <div style="font-size:11px;font-weight:600;color:var(--gd);margin-bottom:4px">🏆 管理费上限提升!</div>
+    <div style="font-size:10px;color:var(--t2);line-height:1.5">追加后自有资金达到 <strong style="color:var(--ac)">$100,000</strong>，管理费上限将从 <strong style="color:var(--o)">40%</strong> 提升至 <strong style="color:var(--gd)">50%（高级档）</strong></div>
+  </div>
+  <div style="font-size:9px;color:var(--t3);margin-bottom:12px;line-height:1.5">· 资金从钱包扣除并注入 Space 资金池，按快照折算份额<br>· 追加后可解锁更高管理费上限<br>· 追加自有资金体现 KOL 对 Space 经营的信心</div>
+  <button class="btn bp" style="width:100%;justify-content:center;padding:9px" onclick="alert('追加 $50,000 成功！自有资金: $100,000\n管理费上限已提升至 50%');hideM('af')">确认追加 · 支付 $50,000</button>
+</div></div></div>
+
+<!-- APPLY PLATFORM FUND MODAL -->
+<div class="mo" id="mo-pf"><div class="md" style="max-width:560px"><div class="mh"><h3>申请平台配资</h3><button class="mx" onclick="hideM('pf')">×</button></div><div class="mbd">
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:14px">
+    <div style="font-size:11px;font-weight:600;margin-bottom:8px">当前配资状况</div>
+    <div class="cfg"><div class="cfg-l">已有配资</div><div class="cfg-v">$30,000 (Platform Treasury)</div></div>
+    <div class="cfg"><div class="cfg-l">配资占比</div><div class="cfg-v">24%</div></div>
+    <div class="cfg"><div class="cfg-l">配资累计收益</div><div class="cfg-v" style="color:var(--ac)">$10,920</div></div>
+    <div class="cfg"><div class="cfg-l" data-def="配资分红自动回收到平台国库\n不需要你手动操作">配资分红方式</div><div class="cfg-v">自动回收</div></div>
+  </div>
+  <div style="margin-bottom:14px"><label style="font-size:11px;font-weight:600;display:block;margin-bottom:4px">申请配资金额 (USDT)</label><input class="fi m" value="50000" id="pf-amt"><div style="font-size:9px;color:var(--t3);margin-top:3px">平台将根据你的 Space 经营状况审批</div></div>
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:14px">
+    <div style="font-size:11px;font-weight:600;margin-bottom:8px">平台审批参考因素</div>
+    <div class="cfg"><div class="cfg-l">Space 评分</div><div class="cfg-v" style="color:var(--gd)">87.2 ✓ 优秀</div></div>
+    <div class="cfg"><div class="cfg-l">运营天数</div><div class="cfg-v">70 天 ✓ 稳定</div></div>
+    <div class="cfg"><div class="cfg-l">KOL 粉丝</div><div class="cfg-v">120K ✓</div></div>
+    <div class="cfg"><div class="cfg-l">累计毛利</div><div class="cfg-v" style="color:var(--ac)">$328K ✓</div></div>
+    <div class="cfg"><div class="cfg-l">风控事件</div><div class="cfg-v" style="color:var(--ac)">0 次 ✓</div></div>
+    <div class="cfg"><div class="cfg-l">KOL 自有资金</div><div class="cfg-v">$50,000 ✓ 有投入</div></div>
+  </div>
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:14px">
+    <div style="font-size:11px;font-weight:600;margin-bottom:8px">配资预览 (审批通过后)</div>
+    <div class="cfg"><div class="cfg-l">新增配资</div><div class="cfg-v">$50,000</div></div>
+    <div class="cfg"><div class="cfg-l">累计配资</div><div class="cfg-v">$80,000</div></div>
+    <div class="cfg"><div class="cfg-l" data-def="= 新增配资 / 当前资金池 × 当前总份额">新增份额</div><div class="cfg-v">25,000 份</div></div>
+    <div class="cfg"><div class="cfg-l">配资后资金池</div><div class="cfg-v" style="color:var(--ac)">$175,000</div></div>
+    <div class="cfg"><div class="cfg-l">审批预计时间</div><div class="cfg-v">1-3 工作日</div></div>
+  </div>
+  <div style="font-size:9px;color:var(--t3);margin-bottom:12px;line-height:1.5">· 配资由平台国库 (Platform Treasury) 提供<br>· 配资按份额比例参与收益分配，分红时自动回收<br>· 平台有权根据 Space 经营状况调整或回收配资<br>· 申请提交后由平台风控团队审批</div>
+  <button class="btn bp" style="width:100%;justify-content:center;padding:9px" onclick="alert('配资申请已提交！\n申请金额: $50,000\n预计审批: 1-3 工作日');hideM('pf')">提交配资申请</button>
+</div></div></div>
+
+<!-- ADD GAME MODAL -->
+<div class="mo" id="mo-ag"><div class="md" style="max-width:760px"><div class="mh"><h3>上架新游戏</h3><button class="mx" onclick="hideM('ag')">×</button></div><div class="mbd">
+  <div style="font-size:11px;color:var(--t2);margin-bottom:14px">左侧展示游戏类型，右侧展示具体游戏，支持多选与全选</div>
+  <div class="two-col-picker">
+    <div class="type-list" id="ag-type-list">
+      <div class="type-item a" onclick="switchPickerType('ag','live',this)">Live</div>
+      <div class="type-item" onclick="switchPickerType('ag','casual',this)">Casual</div>
+      <div class="type-item" onclick="switchPickerType('ag','trading',this)">Trading</div>
+      <div class="type-item" onclick="switchPickerType('ag','sports',this)">Sports</div>
+    </div>
+    <div class="game-panel">
+      <div class="ph" style="padding:0 0 10px 0;border:none"><span class="pt" id="ag-panel-title">Live</span><button class="btn bs bg" onclick="toggleVisibleGroup(this,'ag')">全选</button></div>
+      <div class="game-grid" id="ag-games">
+        <div class="rci ag-panel-item" data-picker="ag" data-type="live" data-game="Baccarat Royale" data-cat="Live" data-fee="8" onclick="selGame(this)"><div class="rt">Baccarat Royale</div><div class="rd">Evolution · Live</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="live" data-game="Blackjack Elite" data-cat="Live" data-fee="8" onclick="selGame(this)"><div class="rt">Blackjack Elite</div><div class="rd">Evolution · Live</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="live" data-game="Roulette Prestige" data-cat="Live" data-fee="8" onclick="selGame(this)"><div class="rt">Roulette Prestige</div><div class="rd">Evolution · Live</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="live" data-game="Dragon Tiger Live" data-cat="Live" data-fee="8" onclick="selGame(this)"><div class="rt">Dragon Tiger Live</div><div class="rd">Evolution · Live</div></div>
+
+        <div class="rci ag-panel-item" data-picker="ag" data-type="casual" data-game="Candy Burst" data-cat="Casual" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Candy Burst</div><div class="rd">Pragmatic · Casual</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="casual" data-game="Lucky Spin Quest" data-cat="Casual" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Lucky Spin Quest</div><div class="rd">Pragmatic · Casual</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="casual" data-game="Treasure Slots Max" data-cat="Casual" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Treasure Slots Max</div><div class="rd">PG · Casual</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="casual" data-game="Ocean Bingo Party" data-cat="Casual" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Ocean Bingo Party</div><div class="rd">Spribe · Casual</div></div>
+
+        <div class="rci ag-panel-item" data-picker="ag" data-type="trading" data-game="BTC Rise/Fall" data-cat="Trading" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">BTC Rise/Fall</div><div class="rd">Crypto · Trading</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="trading" data-game="Gold Sprint" data-cat="Trading" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Gold Sprint</div><div class="rd">Commodities · Trading</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="trading" data-game="FX Turbo EURUSD" data-cat="Trading" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">FX Turbo EURUSD</div><div class="rd">Forex · Trading</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="trading" data-game="Nasdaq Flash" data-cat="Trading" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Nasdaq Flash</div><div class="rd">Index · Trading</div></div>
+
+        <div class="rci ag-panel-item" data-picker="ag" data-type="sports" data-game="Football Win Pro" data-cat="Sports" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Football Win Pro</div><div class="rd">Football · Sports</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="sports" data-game="Basketball Score Rush" data-cat="Sports" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Basketball Score Rush</div><div class="rd">Basketball · Sports</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="sports" data-game="Tennis Match Point" data-cat="Sports" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">Tennis Match Point</div><div class="rd">Tennis · Sports</div></div>
+        <div class="rci ag-panel-item" data-picker="ag" data-type="sports" data-game="UFC Knockout Night" data-cat="Sports" data-fee="8" onclick="selGame(this)" style="display:none"><div class="rt">UFC Knockout Night</div><div class="rd">Combat · Sports</div></div>
+      </div>
+    </div>
+  </div>
+  <div id="ag-preview" style="display:none;background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin:14px 0">
+    <div style="font-size:11px;font-weight:600;margin-bottom:8px">上架预览</div>
+    <div class="cfg"><div class="cfg-l">游戏名称</div><div class="cfg-v" id="ag-p-name">—</div></div>
+    <div class="cfg"><div class="cfg-l">分类</div><div class="cfg-v" id="ag-p-cat">—</div></div>
+    <div class="cfg"><div class="cfg-l">游戏服务商服务费率</div><div class="cfg-v" id="ag-p-fee">—</div></div>
+  </div>
+  <button class="btn bp" style="width:100%;justify-content:center;padding:9px" id="ag-submit" disabled onclick="alert('游戏已上架成功！');hideM('ag')">确认上架</button>
+</div></div></div>
+
+<!-- PAYMENT CONFIRM MODAL -->
+<div class="mo" id="mo-pay"><div class="md" style="max-width:480px"><div class="mh"><h3>确认支付</h3><button class="mx" onclick="hideM('pay')">×</button></div><div class="mbd">
+  <div style="text-align:center;margin-bottom:16px"><div style="font-size:10px;color:var(--t3);margin-bottom:4px">投入自有资金</div><div class="m" style="font-size:28px;font-weight:700;color:var(--ac)" id="pay-amount">$0</div></div>
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:14px">
+    <div class="cfg"><div class="cfg-l">钱包余额</div><div class="cfg-v" style="color:var(--ac)">$168,500</div></div>
+    <div class="cfg"><div class="cfg-l">投入金额</div><div class="cfg-v" id="pay-fund">$0</div></div>
+    <div class="cfg"><div class="cfg-l">支付后余额</div><div class="cfg-v" id="pay-remain">$168,500</div></div>
+  </div>
+  <div style="font-size:10px;color:var(--t3);margin-bottom:12px;line-height:1.5">· 资金将从你的平台钱包扣除并注入 Space 资金池<br>· 投入后按份额比例参与收益分配<br>· 可随时在后台追加自有资金</div>
+  <button class="btn bp" style="width:100%;justify-content:center;padding:9px" onclick="hideM('pay');goS(4)">确认支付并创建</button>
+</div></div></div>
+
+<!-- PARTIAL ACCEPT MODAL -->
+<div class="mo" id="mo-pa"><div class="md" style="max-width:520px"><div class="mh"><h3>部分接受投资</h3><button class="mx" onclick="hideM('pa')">×</button></div><div class="mbd">
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:14px">
+    <div class="cfg"><div class="cfg-l">申请人</div><div class="cfg-v">GP_Charlie</div></div>
+    <div class="cfg"><div class="cfg-l">申请金额</div><div class="cfg-v">$10,000</div></div>
+    <div class="cfg"><div class="cfg-l">快照资金池</div><div class="cfg-v">$125,000</div></div>
+    <div class="cfg"><div class="cfg-l">快照总份额</div><div class="cfg-v">62,500</div></div>
+  </div>
+  <div style="margin-bottom:14px"><label style="font-size:11px;font-weight:600;display:block;margin-bottom:4px">接受金额 (USDT)</label><input class="fi m" value="5000" id="pa-amount" oninput="calcPartial()"><div style="font-size:9px;color:var(--t3);margin-top:3px">范围: 1,000 ~ 10,000 USDT</div></div>
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px;margin-bottom:14px" id="pa-preview">
+    <div style="font-size:11px;font-weight:600;margin-bottom:8px">接受预览</div>
+    <div class="cfg"><div class="cfg-l">接受金额</div><div class="cfg-v" id="pa-accept">$5,000</div></div>
+    <div class="cfg"><div class="cfg-l">对应份额</div><div class="cfg-v" id="pa-share">2,500 份</div></div>
+    <div class="cfg"><div class="cfg-l">占总资金池比</div><div class="cfg-v" id="pa-pct">3.85%</div></div>
+    <div class="cfg"><div class="cfg-l">退回金额</div><div class="cfg-v" style="color:var(--o)" id="pa-refund">$5,000 → 原路退回</div></div>
+  </div>
+  <div style="background:var(--obg);border:1px solid rgba(255,169,77,.15);border-radius:7px;padding:8px;font-size:9px;color:var(--o);margin-bottom:12px;line-height:1.5">⚠ 未接受的部分将原路退回到 GP 的平台钱包，不收取任何费用。接受的部分按快照时的资金池规模折算份额入池。</div>
+  <button class="btn bp" style="width:100%;justify-content:center;padding:9px" onclick="alert('已部分接受 $5,000');hideM('pa')">确认部分接受</button>
+</div></div></div>
+
+<!-- DIVIDEND DETAIL MODAL -->
+<div class="mo" id="mo-dd"><div class="md" style="max-width:780px"><div class="mh"><h3>分红详情 — 03/20 ~ 03/25</h3><button class="mx" onclick="hideM('dd')">×</button></div><div class="mbd">
+  <div class="sg s4" style="margin-bottom:12px">
+    <div style="background:var(--bg);border-radius:7px;padding:8px;text-align:center"><div style="font-size:8px;color:var(--t3)">区间毛利</div><div class="m" style="font-size:14px;font-weight:700;color:var(--ac)">$22,100</div></div>
+    <div style="background:var(--bg);border-radius:7px;padding:8px;text-align:center"><div style="font-size:8px;color:var(--t3)">总成本</div><div class="m" style="font-size:14px;font-weight:700;color:var(--o)">$4,420</div></div>
+    <div style="background:var(--bg);border-radius:7px;padding:8px;text-align:center"><div style="font-size:8px;color:var(--t3)">净利润</div><div class="m" style="font-size:14px;font-weight:700;color:var(--ac)">$17,680</div></div>
+    <div style="background:var(--bg);border-radius:7px;padding:8px;text-align:center"><div style="font-size:8px;color:var(--t3)">管理费(20%)</div><div class="m" style="font-size:14px;font-weight:700">$3,536</div></div>
+  </div>
+  <div class="pn" style="margin-bottom:12px"><div class="ph"><span class="pt">各资金方分红明细</span></div>
+  <table><thead><tr><th>资金方</th><th>类型</th><th>持有份额</th><th>占比</th><th>投资时净值</th><th>分红时净值</th><th>分配收益</th><th>领取方式</th><th>领取时间</th></tr></thead><tbody>
+    <tr><td style="font-weight:600;color:var(--t)">KOL 自有</td><td><span class="bd" style="color:var(--ac);background:var(--acbg)">KOL</span></td><td class="m">25,000</td><td>40%</td><td class="m">$2.00</td><td class="m">$2.73</td><td class="m" style="color:var(--ac)">$5,658</td><td>—</td><td>自动</td></tr>
+    <tr><td style="font-weight:600;color:var(--t)">Platform Treasury</td><td><span class="bd" style="color:var(--pp2);background:var(--ppbg)">配资</span></td><td class="m">15,000</td><td>24%</td><td class="m">$2.00</td><td class="m">$2.73</td><td class="m" style="color:var(--ac)">$3,395</td><td>自动回收</td><td>03-26 01:00</td></tr>
+    <tr><td style="font-weight:600;color:var(--t)">GP_Alice</td><td><span class="bd" style="color:var(--bl);background:var(--blbg)">GP</span></td><td class="m">12,500</td><td>20%</td><td class="m">$2.00</td><td class="m">$2.73</td><td class="m" style="color:var(--ac)">$2,829</td><td>领取到钱包</td><td>03-26 08:00</td></tr>
+    <tr><td style="font-weight:600;color:var(--t)">GP_Bob</td><td><span class="bd" style="color:var(--bl);background:var(--blbg)">GP</span></td><td class="m">10,000</td><td>16%</td><td class="m">$2.00</td><td class="m">$2.73</td><td class="m" style="color:var(--ac)">$2,263</td><td>领取到钱包</td><td>03-26 09:30</td></tr>
+  </tbody></table></div>
+  <div style="font-size:10px;color:var(--t3);line-height:1.5">发起时间: 2026-03-26 01:00 UTC · 管理费率: 20% · 可分配利润 = 净利润 - 管理费 = $14,144 · 按各资金方份额占比分配</div>
+</div></div></div>
+
+
+<div class="mo" id="mo-rate"><div class="md" style="max-width:680px"><div class="mh"><h3>KOL 分润比例构成</h3><button class="mx" onclick="hideM('rate')">×</button></div><div class="mbd">
+  <div style="background:linear-gradient(135deg,rgba(0,184,148,.08),rgba(108,92,231,.08));border:1px solid var(--bdr);border-radius:10px;padding:14px;margin-bottom:14px">
+    <div style="font-size:12px;font-weight:700;margin-bottom:6px">当前结算口径</div>
+    <div style="font-size:11px;color:var(--t2);line-height:1.8">分享收益按 <strong style="color:var(--t)">自然月（UTC+0）</strong> 进行结算。每个自然月结束后，根据 Rolling / 有效流水、新增有效用户、GGR / Revenue 三项指标确认 KOL 最终分润比例。</div>
+  </div>
+  <table><thead><tr><th>指标</th><th>当前值</th><th>当前贡献</th><th>最高贡献</th></tr></thead><tbody>
+    <tr><td>Rolling / 有效流水</td><td class="m">1,500,000 USDT</td><td>33.5%</td><td>35%</td></tr>
+    <tr><td>新增有效用户</td><td class="m">18 users</td><td>15%</td><td>21%</td></tr>
+    <tr><td>GGR / Revenue</td><td class="m">80,000 USDT</td><td>7%</td><td>14%</td></tr>
+    <tr><td style="font-weight:800;color:var(--t)">合计</td><td>KOL 最终分润比例</td><td style="font-weight:900;color:var(--ac)">55.5%</td><td>70%</td></tr>
+  </tbody></table>
+  <div style="font-size:10px;color:var(--t3);margin-top:12px;line-height:1.7">说明：本自然月看板中的分享收益为实时预估值；历史自然月以月结锁定后的三项指标为准。</div>
+</div></div></div>
+
+<div class="mo" id="mo-profit"><div class="md" style="max-width:760px"><div class="mh"><h3>利润结构总览</h3><button class="mx" onclick="hideM('profit')">×</button></div><div class="mbd">
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="flex:1;min-width:130px;text-align:center;background:var(--bg4);border-radius:8px;padding:14px"><div style="font-size:12px;font-weight:800">Gross Profit / GGR</div><div class="m" style="font-size:20px;font-weight:900;margin-top:10px">1,000,000</div><div>USDT</div></div>
+    <div style="font-size:24px;color:var(--t3);font-weight:900">−</div>
+    <div style="flex:1;min-width:130px;text-align:center;background:rgba(108,92,231,.18);border-radius:8px;padding:14px"><div style="font-size:12px;font-weight:800">平台營運成本</div><div class="m" style="font-size:20px;font-weight:900;margin-top:10px">210,000</div><div>USDT<br>(21%)</div></div>
+    <div style="font-size:24px;color:var(--t3);font-weight:900">−</div>
+    <div style="flex:1;min-width:130px;text-align:center;background:rgba(255,169,77,.16);border-radius:8px;padding:14px"><div style="font-size:12px;font-weight:800">用户營運成本</div><div class="m" style="font-size:20px;font-weight:900;margin-top:10px">220,000</div><div>USDT<br>(22%)</div></div>
+    <div style="font-size:24px;color:var(--t3);font-weight:900">=</div>
+    <div style="flex:1;min-width:130px;text-align:center;background:rgba(0,184,148,.22);border-radius:8px;padding:14px"><div style="font-size:12px;font-weight:800">Net Profit（净利）</div><div class="m" style="font-size:20px;font-weight:900;margin-top:10px">570,000</div><div>USDT<br>(57%)</div></div>
+  </div>
+  <div class="fb" style="height:14px;margin-top:16px"><div style="width:21%;background:var(--pp)"></div><div style="width:22%;background:var(--o)"></div><div style="width:57%;background:var(--ac)"></div></div>
+  <div style="display:flex;justify-content:space-around;font-size:11px;font-weight:800;margin-top:8px"><span style="color:var(--pp2)">21% 平台成本</span><span style="color:var(--o)">22% 用户成本</span><span style="color:var(--ac2)">57% 净利</span></div>
+  <div style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:14px">平台營運成本包含 API 報表費、IDC / 雲服務費、平台服務費、稅收。用户營運成本包含 Cashback 和增長金庫。</div>
+</div></div></div>
+
+<div class="mo" id="mo-risk"><div class="md" style="max-width:520px"><div class="mh"><h3>Weekly Advance 风险准备金规则</h3><button class="mx" onclick="hideM('risk')">×</button></div><div class="mbd">
+  <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:10px;padding:14px;margin-bottom:12px">
+    <div class="cfg"><div class="cfg-l"><strong>KOL 本月收益</strong><small>净利 × KOL 最终分润比例</small></div><div class="cfg-v">316,350 USDT</div></div>
+    <div class="cfg"><div class="cfg-l"><strong>本週可提 20%</strong><small>週提為預提，正式結算仍按月完成</small></div><div class="cfg-v" style="color:var(--ac)">63,270 USDT</div></div>
+    <div class="cfg"><div class="cfg-l"><strong>月結保留 80%</strong><small>60% 月底 / 次月返還 + 15% 下月首個提現週期釋放 + 5% 持續滾存</small></div><div class="cfg-v" style="color:var(--o)">253,080 USDT</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+    <div style="background:rgba(255,169,77,.10);border:1px solid rgba(255,169,77,.18);border-radius:10px;padding:14px"><div style="font-size:12px;font-weight:900">60% 月底 / 次月返還</div><div class="m" style="font-size:22px;font-weight:900;color:var(--o);margin-top:8px">189,810</div><div style="font-size:11px">USDT</div><div style="font-size:10px;color:var(--t2);line-height:1.6;margin-top:8px">無風控、無異常、無負結算時，月底 / 次月進入可提金額。</div></div>
+    <div style="background:rgba(77,171,247,.10);border:1px solid rgba(77,171,247,.20);border-radius:10px;padding:14px"><div style="font-size:12px;font-weight:900">15% 下月首週釋放</div><div class="m" style="font-size:22px;font-weight:900;color:var(--bl);margin-top:8px">47,452.5</div><div style="font-size:11px">USDT</div><div style="font-size:10px;color:var(--t2);line-height:1.6;margin-top:8px">若無風控或負結算，於下月第一個 Weekly Payout Window 一次性釋放。</div></div>
+    <div style="background:rgba(0,184,148,.10);border:1px solid rgba(0,184,148,.18);border-radius:10px;padding:14px"><div style="font-size:12px;font-weight:900">5% 持續滾存</div><div class="m" style="font-size:22px;font-weight:900;color:var(--ac);margin-top:8px">15,817.5</div><div style="font-size:11px">USDT</div><div style="font-size:10px;color:var(--t2);line-height:1.6;margin-top:8px">長期留存在風險準備金池，用於後續虧損和異常波動抵扣。</div></div>
+  </div>
+  <div style="background:rgba(255,255,255,.035);border:1px solid var(--bdr);border-radius:10px;padding:12px">
+    <div class="cfg"><div class="cfg-l">持續滾存池原餘額</div><div class="cfg-v">64,507.5 USDT</div></div>
+    <div class="cfg"><div class="cfg-l">下月首週待釋放</div><div class="cfg-v" style="color:var(--bl)">47,452.5 USDT</div></div>
+    <div class="cfg"><div class="cfg-l">本月新增持續滾存</div><div class="cfg-v" style="color:var(--ac)">15,817.5 USDT</div></div>
+    <div class="cfg"><div class="cfg-l"><strong>持續風險準備金期末餘額</strong></div><div class="cfg-v" style="color:var(--gd)">80,325 USDT</div></div>
+  </div>
+</div></div></div>
+
+<div class="mo" id="mo-hs"><div class="md" style="max-width:820px"><div class="mh"><h3>历史分享收益</h3><button class="mx" onclick="hideM('hs')">×</button></div><div class="mbd">
+  <table><thead><tr><th>结算周期</th><th>毛利</th><th>净利</th><th>KOL 最终分润</th><th>KOL 收益</th><th>週提預提</th><th>月底 / 次月返还</th><th>持续滚存</th></tr></thead><tbody>
+    <tr><td>2026-03</td><td class="m">$183,800</td><td class="m">$86,400</td><td>59%</td><td class="m" style="color:var(--ac)">$50,976</td><td class="m" style="color:var(--ac)">$35,683</td><td class="m" style="color:var(--o)">$10,195</td><td class="m">$5,098</td></tr>
+    <tr><td>2026-02</td><td class="m">$142,500</td><td class="m">$67,000</td><td>55.5%</td><td class="m" style="color:var(--ac)">$37,185</td><td class="m" style="color:var(--ac)">$26,030</td><td class="m" style="color:var(--o)">$7,437</td><td class="m">$3,719</td></tr>
+    <tr><td>2026-01</td><td class="m">$95,200</td><td class="m">$44,700</td><td>40.5%</td><td class="m" style="color:var(--ac)">$18,104</td><td class="m" style="color:var(--ac)">$12,673</td><td class="m" style="color:var(--o)">$3,621</td><td class="m">$1,810</td></tr>
+  </tbody></table>
+</div></div></div>
+<script>
+// Wizard
+function goS(n){document.querySelectorAll('.ws-p').forEach(s=>s.classList.remove('a'));document.getElementById('ws'+n).classList.add('a');
+document.querySelectorAll('.stp').forEach(s=>{const sn=+s.dataset.s;s.classList.remove('a','d');if(sn<n)s.classList.add('d');if(sn===n)s.classList.add('a')});
+document.querySelectorAll('.stp-ln').forEach((l,i)=>l.classList.toggle('d',i<n-1));
+if(n===3){document.getElementById('r-name').textContent=document.getElementById('sname').value||'My Space';document.getElementById('r-domain').textContent=(document.getElementById('sdomain').value||'myspace')+'.openwin.ai'}}
+function selRC(el,g){el.parentElement.querySelectorAll('.rci').forEach(c=>c.classList.remove('sel'));el.classList.add('sel')}
+function togglePwd(){const sel=document.querySelector('#mode-rc .rci.sel');document.getElementById('pwd-group').style.display=sel&&sel.dataset.v==='private'?'block':'none'}
+function enterDash(){document.getElementById('wiz').classList.add('hide');document.getElementById('app').classList.remove('hide')}
+
+// Pages
+const pages = {
+ov: `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:12px;flex-wrap:wrap">
+  <div><div style="font-size:20px;font-weight:700;letter-spacing:-.4px">财务总览 <span data-def="所有金额均以 USDT 计算" style="font-size:12px;color:var(--t3)">ⓘ</span></div><div style="font-size:11px;color:var(--t2);margin-top:4px">所有金额均以 USDT 计算</div></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-size:11px;color:var(--t2);font-weight:600">结算期间</span><div class="m" style="border:1px solid var(--bdr);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--t)">2025-04-01 → 2025-04-22 📅</div></div>
+</div>
+
+<div class="finance-hero">
+  <div class="hero-card net">
+    <div class="hero-title">◎ Net Profit（净利） <button class="icon-btn" onclick="showM('profit')" title="利润结构总览">!</button></div>
+    <div class="hero-value">570,000</div><div class="hero-unit">USDT</div><div class="hero-ghost">▰</div>
+  </div>
+  <div class="hero-card ggr">
+    <div style="display:flex;justify-content:space-between;gap:12px"><div class="hero-title">◎ Gross Profit / GGR（毛利） <span data-def="GGR = 用户总投注金额 - 用户总返奖金额">ⓘ</span></div><div style="font-size:12px;font-weight:800;color:var(--ac2)">本月截止到：4 月 22 号</div></div>
+    <div class="hero-value">1,000,000</div><div class="hero-unit">USDT</div><div class="hero-ghost">↗</div>
+  </div>
+  <div class="hero-card bankroll">
+    <div class="hero-title">◎ Space Bankroll <span data-def="由 OpenWin / Backers 分配給此 Space 的營運風險資金，用於承接玩家兌付與房間波動；不是 Partner 可提收益。">ⓘ</span></div>
+    <div class="hero-value" style="font-size:38px">500,000</div><div class="hero-unit">USDT Allocated</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+      <div style="background:rgba(0,0,0,.16);border:1px solid var(--bdr);border-radius:9px;padding:8px"><div style="font-size:10px;color:var(--t2);font-weight:800">Available</div><div class="m" style="font-size:15px;font-weight:900;margin-top:3px;color:var(--o)">420,000</div></div>
+      <div style="background:rgba(0,0,0,.16);border:1px solid var(--bdr);border-radius:9px;padding:8px"><div style="font-size:10px;color:var(--t2);font-weight:800">Utilization</div><div class="m" style="font-size:15px;font-weight:900;margin-top:3px;color:var(--o)">16%</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--t3);margin-top:10px;line-height:1.4">Provided by OpenWin / Backers · Not withdrawable</div>
+    <div class="hero-ghost">◇</div>
+  </div>
+</div>
+
+<div class="sg s3">
+  <div class="sc" style="background:linear-gradient(135deg,rgba(0,184,148,.16),rgba(0,184,148,.04));border-color:rgba(0,184,148,.28)">
+    <div style="font-size:14px;font-weight:800;margin-bottom:12px">股东利润分配 <span data-def="KOL 收益 = 净利 × KOL 最终分润比例">ⓘ</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><div><div style="font-size:11px;color:var(--t2)">KOL / 房主</div><div class="m" style="font-size:20px;font-weight:900;margin-top:6px">316,350 <span style="font-size:11px">USDT</span></div><div style="font-size:12px;color:var(--ac2);font-weight:900">55.5%</div></div><div><div style="font-size:11px;color:var(--t2)">金主（Backer）</div><div class="m" style="font-size:20px;font-weight:900;margin-top:6px">253,650 <span style="font-size:11px">USDT</span></div><div style="font-size:12px;color:var(--bl);font-weight:900">44.5%</div></div></div>
+    <div style="height:1px;background:var(--bdr);margin:10px 0"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-size:11px;color:var(--t2)">本週新增可提（預提）</div><div class="m" style="font-size:20px;font-weight:900;margin-top:6px">63,270 <span style="font-size:11px">USDT</span></div><div style="font-size:12px;font-weight:800">(20%)</div></div><div><div style="font-size:11px;color:var(--o);font-weight:800">月結 / 風險保留 <button class="icon-btn" onclick="showM('risk')" title="Weekly Advance 月結與風險準備金規則">!</button></div><div class="m" style="font-size:20px;font-weight:900;margin-top:6px;color:var(--o)">253,080 <span style="font-size:11px">USDT</span></div><div style="font-size:12px;font-weight:800;color:var(--o)">60%返還 + 15%釋放 + 5%滾存</div></div></div>
+  </div>
+  <div class="sc" style="background:linear-gradient(135deg,rgba(108,92,231,.18),rgba(108,92,231,.06));border-color:rgba(108,92,231,.28)"><div style="font-size:14px;font-weight:800;margin-bottom:12px">總平台營運成本 <span data-def="GGR 为正时，平台运营成本按费率正常收取">ⓘ</span><span class="m" style="float:right;font-size:13px">210,000 USDT&nbsp;&nbsp;21%</span></div><div style="display:grid;gap:7px"><div class="cfg"><div class="cfg-l">API 報表費</div><div class="cfg-v">80,000 USDT&nbsp;&nbsp;8%</div></div><div class="cfg"><div class="cfg-l">IDC / 雲服務</div><div class="cfg-v">30,000 USDT&nbsp;&nbsp;3%</div></div><div class="cfg"><div class="cfg-l">平台服務費</div><div class="cfg-v">30,000 USDT&nbsp;&nbsp;3%</div></div><div class="cfg"><div class="cfg-l">稅收</div><div class="cfg-v">70,000 USDT&nbsp;&nbsp;7%</div></div></div></div>
+  <div class="sc" style="background:linear-gradient(135deg,rgba(255,169,77,.14),rgba(255,107,107,.06));border-color:rgba(255,169,77,.22)"><div style="font-size:14px;font-weight:800;margin-bottom:12px">總用户營運成本 <span data-def="用户运营成本 = Cashback + 增長金庫">ⓘ</span><span class="m" style="float:right;font-size:13px">220,000 USDT&nbsp;&nbsp;22%</span></div><div style="display:grid;gap:9px"><div class="cfg"><div class="cfg-l"><strong>Cashback</strong><small><button class="btn bs" onclick="showCashbackDetail()" style="margin-top:4px">20,000 USDT</button></small></div><div class="cfg-v" style="color:var(--t)">约 2%</div></div><div class="cfg"><div class="cfg-l"><strong>增長金庫</strong><small>200,000 USDT<br>用于活动、用户激励、回流活动</small></div><div class="cfg-v" style="color:var(--t)">20%</div></div></div></div>
+</div>
+
+<div style="margin:0 0 14px;padding:10px 12px;border:1px solid rgba(0,229,184,.20);background:rgba(0,184,148,.07);border-radius:12px;color:var(--t2);font-size:11px;line-height:1.6">
+  <strong style="color:var(--ac2)">分潤檔位：月度考核</strong> ｜ <strong style="color:var(--ac2)">每週可提：週度預提</strong> ｜ <strong style="color:var(--ac2)">正式結算：月底完成</strong>
+</div>
+
+<div class="pn" style="margin-bottom:14px;border-color:rgba(0,229,184,.24);background:linear-gradient(135deg,rgba(0,184,148,.10),rgba(77,171,247,.045))">
+  <div class="ph">
+    <span class="pt">每週預提進度 <span data-def="每週提現為預提；正式結算仍以月結為準。每 7 天開放一次提現；未提現金額會自動滾入下一週可提餘額。">ⓘ</span></span>
+    <span style="font-size:10px;color:var(--ac2);font-weight:800">Weekly Advance · Week 2 / 4 · Day 4 / 7</span>
+  </div>
+  <div class="pb">
+    <div style="font-size:11px;color:var(--t2);margin-bottom:12px;line-height:1.6">每 7 天開放一次預提；未提現金額會自動滾入下一週。正式分潤與風控調整仍以月底結算為準。</div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">
+      <div style="background:rgba(0,184,148,.12);border:1px solid rgba(0,229,184,.30);border-radius:12px;padding:12px;position:relative;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <div style="font-size:12px;font-weight:900;color:var(--ac2)">Week 1</div>
+          <div style="font-size:10px;color:var(--ac2);font-weight:800">Completed</div>
+        </div>
+        <div class="mini-track" style="height:8px;margin:10px 0 8px"><div class="mini-fill" style="width:100%"></div></div>
+        <div class="m" style="font-size:18px;font-weight:900;color:var(--ac2)">18,500 <span style="font-size:10px">USDT</span></div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">未提，已滾入 Week 2</div>
+        <button class="btn" style="margin-top:10px;width:100%;justify-content:center;opacity:.55;cursor:not-allowed">Rolled Over</button>
+      </div>
+      <div style="background:rgba(0,184,148,.16);border:1px solid rgba(0,229,184,.42);box-shadow:0 0 20px rgba(0,229,184,.08);border-radius:12px;padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <div style="font-size:12px;font-weight:900;color:var(--ac2)">Week 2</div>
+          <div style="font-size:10px;color:var(--ac2);font-weight:800">Day 4 / 7</div>
+        </div>
+        <div class="mini-track" style="height:8px;margin:10px 0 8px"><div class="mini-fill" style="width:57%"></div></div>
+        <div class="m" style="font-size:18px;font-weight:900;color:var(--ac2)">81,770 <span style="font-size:10px">USDT</span></div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">距離下次週期還有 3 天</div>
+        <button class="btn bp" style="margin-top:10px;width:100%;justify-content:center">Withdraw Now</button>
+      </div>
+      <div style="background:rgba(0,0,0,.16);border:1px solid var(--bdr);border-radius:12px;padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <div style="font-size:12px;font-weight:900;color:var(--t)">Week 3</div>
+          <div style="font-size:10px;color:var(--t3);font-weight:800">Upcoming</div>
+        </div>
+        <div class="mini-track" style="height:8px;margin:10px 0 8px"><div class="mini-fill" style="width:0%"></div></div>
+        <div class="m" style="font-size:18px;font-weight:900;color:var(--t2)">Pending</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">本週未提將自動滾入</div>
+        <button class="btn" style="margin-top:10px;width:100%;justify-content:center;opacity:.45;cursor:not-allowed">Locked</button>
+      </div>
+      <div style="background:rgba(0,0,0,.16);border:1px solid var(--bdr);border-radius:12px;padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <div style="font-size:12px;font-weight:900;color:var(--t)">Week 4</div>
+          <div style="font-size:10px;color:var(--t3);font-weight:800">Upcoming</div>
+        </div>
+        <div class="mini-track" style="height:8px;margin:10px 0 8px"><div class="mini-fill" style="width:0%"></div></div>
+        <div class="m" style="font-size:18px;font-weight:900;color:var(--t2)">Pending</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">月結前最後週期</div>
+        <button class="btn" style="margin-top:10px;width:100%;justify-content:center;opacity:.45;cursor:not-allowed">Locked</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px">
+      <div style="background:rgba(0,0,0,.16);border:1px solid var(--bdr);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--t2);font-weight:700">本週新增可提</div>
+        <div class="m" style="font-size:20px;font-weight:900;margin-top:8px;color:var(--ac2)">63,270 <span style="font-size:10px">USDT</span></div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">Partner 收益的 20%</div>
+      </div>
+      <div style="background:rgba(0,0,0,.16);border:1px solid var(--bdr);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--t2);font-weight:700">上週未提餘額</div>
+        <div class="m" style="font-size:20px;font-weight:900;margin-top:8px;color:var(--gd)">18,500 <span style="font-size:10px">USDT</span></div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">已自動滾入本週</div>
+      </div>
+      <div style="background:rgba(0,184,148,.10);border:1px solid rgba(0,229,184,.22);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--t2);font-weight:700">本週總可提</div>
+        <div class="m" style="font-size:20px;font-weight:900;margin-top:8px;color:var(--ac2)">81,770 <span style="font-size:10px">USDT</span></div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">新增可提 + 未提餘額</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--t2);line-height:1.5">每 7 天開放一次提現。每週預提只釋放 Partner 預估收益的 20%；未提現金額不會失效，會自動滾入下一週可提餘額。60% 於月底 / 次月返還，15% 於下月首個提現週期釋放，5% 持續滾存。正式結算仍按月完成，風控或負結算將於月結時統一調整。</div>
+  </div>
+</div>
+<div class="share-grid">
+  <div class="share-card">
+    <div style="font-size:16px;font-weight:900">KOL 分润进度 <span data-def="当前 KOL 最终分润比例 / 最高 70%">ⓘ</span></div>
+    <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:12px;align-items:center;margin-top:10px">
+      <div class="ring"><div class="ring-inner"><div class="m" style="font-size:28px;font-weight:900">79.3%</div><div style="font-size:13px;font-weight:800">55.5% / 70%</div><div style="font-size:11px;color:var(--t2)">目前分润进度</div></div></div>
+      <div><div style="font-size:11px;color:var(--t2)">最高可达 <strong style="color:var(--ac2);font-size:16px">70%</strong></div><div style="height:1px;background:var(--bdr);margin:10px 0"></div><div style="font-size:11px;color:var(--t2)">距离满额还差</div><div class="m" style="font-size:16px;color:var(--ac2);font-weight:900">14.5%</div><div style="height:1px;background:var(--bdr);margin:10px 0"></div><div style="font-size:11px;color:var(--t2)">升至滿額後預估<br>可提收益增加</div><div class="m" style="font-size:18px;color:var(--ac2);font-weight:900">+57,855 USDT</div><div style="font-size:10px;color:var(--t3);margin-top:4px">按本月 Net Profit 估算</div></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px"><button class="btn bp" style="flex:1;justify-content:center">立即邀请新用户</button><button class="btn" style="flex:1;justify-content:center">建立活动</button></div><div style="font-size:10px;color:var(--t3);line-height:1.5;margin-top:10px">週提為預提收益；正式分潤與風控調整仍以月結為準。</div>
+  </div>
+  <div class="share-card accent">
+    <div style="font-size:12px;font-weight:900;color:var(--ac2)">1 Rolling / 有效流水 <span class="info-btn" onclick="showM('unlock-rolling')">i</span></div>
+    <div style="font-size:25px;font-weight:900;margin-top:6px">33.5% <span style="font-size:16px;color:var(--t2)">/ 35%</span></div>
+    <div class="tier-track">
+      <div class="tier-line"><div class="tier-seg done"></div><div class="tier-seg done"></div><div class="tier-seg done"></div><div class="tier-seg done"></div><div class="tier-seg"></div></div>
+      <div class="tier-labels"><span>&lt;100K</span><span>100K</span><span>500K</span><span>1M</span><span>3M</span></div>
+    </div>
+    <div style="font-size:11px;color:var(--t2)">本月 Qualified Rolling</div>
+    <div class="m" style="font-size:13px;font-weight:800;margin-top:5px">1,500,000 / 3,000,000 USDT</div>
+    <div class="tier-info"><div class="tier-pill"><div class="k">下一檔</div><div class="v">35%</div></div><div class="tier-pill"><div class="k">還差</div><div class="v">1,500,000 USDT</div></div></div>
+  </div>
+  <div class="share-card" style="border-color:rgba(108,92,231,.35);background:linear-gradient(135deg,rgba(108,92,231,.14),rgba(108,92,231,.04))">
+    <div style="font-size:12px;font-weight:900;color:var(--pp2)">2 新增有效用戶 <span class="info-btn" onclick="showM('unlock-users')">i</span></div>
+    <div style="font-size:25px;font-weight:900;margin-top:6px">15% <span style="font-size:16px;color:var(--t2)">/ 21%</span></div>
+    <div class="tier-track">
+      <div class="tier-line"><div class="tier-seg pp done"></div><div class="tier-seg pp done"></div><div class="tier-seg pp done"></div><div class="tier-seg pp done"></div><div class="tier-seg"></div></div>
+      <div class="tier-labels"><span>&lt;5</span><span>5</span><span>10</span><span>15</span><span>30</span></div>
+    </div>
+    <div style="font-size:11px;color:var(--t2)">本月新增有效用戶</div>
+    <div class="m" style="font-size:13px;font-weight:800;margin-top:5px">18 / 30 users</div>
+    <div class="tier-info"><div class="tier-pill"><div class="k">下一檔</div><div class="v">21%</div></div><div class="tier-pill"><div class="k">還差</div><div class="v">12 人</div></div></div>
+  </div>
+  <div class="share-card" style="border-color:rgba(77,171,247,.35);background:linear-gradient(135deg,rgba(77,171,247,.13),rgba(77,171,247,.04))">
+    <div style="font-size:12px;font-weight:900;color:var(--bl)">3 Revenue <span class="info-btn" onclick="showM('unlock-revenue')">i</span></div>
+    <div style="font-size:25px;font-weight:900;margin-top:6px">7% <span style="font-size:16px;color:var(--t2)">/ 14%</span></div>
+    <div class="tier-track">
+      <div class="tier-line"><div class="tier-seg bl done"></div><div class="tier-seg bl done"></div><div class="tier-seg bl done"></div><div class="tier-seg"></div><div class="tier-seg"></div></div>
+      <div class="tier-labels"><span>&lt;20K</span><span>20K</span><span>50K</span><span>100K</span><span>200K</span></div>
+    </div>
+    <div style="font-size:11px;color:var(--t2)">本月 Revenue</div>
+    <div class="m" style="font-size:13px;font-weight:800;margin-top:5px">80,000 / 100,000 USDT</div>
+    <div class="tier-info"><div class="tier-pill"><div class="k">下一檔</div><div class="v">10.5%</div></div><div class="tier-pill"><div class="k">還差</div><div class="v">20,000 USDT</div></div></div>
+  </div>
+
+</div>
+<div class="sg s2">
+<div class="pn"><div class="ph"><span class="pt">逐日投注金额 (最近30天)</span></div><div class="pb"><div class="chart" id="ch-bet" style="height:120px"></div><div class="chart-axis" id="axis-bet"></div></div></div>
+<div class="pn"><div class="ph"><span class="pt">逐日本月预估分享收益 (最近30天)</span></div><div class="pb"><div class="chart" id="ch-profit" style="height:120px"></div><div class="chart-axis" id="axis-profit"></div></div></div>
+</div>
+
+<div class="sg s2">
+<div class="pn"><div class="ph"><span class="pt">毛利趋势 (最近30天)</span><span class="pa">导出</span></div><div class="pb"><div class="chart" id="ggr-ch" style="height:140px"></div><div class="chart-axis" id="axis-ggr"></div></div></div>
+<div class="pn"><div class="ph"><span class="pt">历史分享收益</span><span class="pa" onclick="showM('hs')">查看全部</span></div><div class="pb">
+<table><thead><tr><th>结算周期</th><th>毛利</th><th>净利</th><th>KOL 最终分润</th><th>KOL 收益</th><th>週提預提</th><th>月底 / 次月返还</th><th>持续滚存</th></tr></thead><tbody>
+<tr><td>2026-03</td><td class="m">$183,800</td><td class="m">$86,400</td><td>59%</td><td class="m" style="color:var(--ac)">$50,976</td><td class="m" style="color:var(--ac)">$35,683</td><td class="m" style="color:var(--o)">$10,195</td><td class="m">$5,098</td></tr>
+<tr><td>2026-02</td><td class="m">$142,500</td><td class="m">$67,000</td><td>55.5%</td><td class="m" style="color:var(--ac)">$37,185</td><td class="m" style="color:var(--ac)">$26,030</td><td class="m" style="color:var(--o)">$7,437</td><td class="m">$3,719</td></tr>
+<tr><td>2026-01</td><td class="m">$95,200</td><td class="m">$44,700</td><td>40.5%</td><td class="m" style="color:var(--ac)">$18,104</td><td class="m" style="color:var(--ac)">$12,673</td><td class="m" style="color:var(--o)">$3,621</td><td class="m">$1,810</td></tr>
+</tbody></table>
+</div></div></div>
+
+<div class="pn"><div class="ph"><span class="pt">游戏表现</span><div style="display:flex;align-items:center;gap:6px"><select class="sel" id="gp-date" onchange="switchGameDate(this.value)"><option value="settlement">本结算周期（本自然月）</option><option value="last1m">上1个自然月</option><option value="last2m">上2个自然月</option><option value="0330">03-30（逐日）</option><option value="0329">03-29（逐日）</option><option value="0328">03-28（逐日）</option></select></div></div>
+<div style="padding:10px 15px;border-bottom:1px solid var(--bdr);font-size:10px;color:var(--t2);line-height:1.7">支持按历史自然月、本自然月或逐日查看。成本项：<span data-def="平台營運成本 = GGR为正时按平台成本率计算；用户營運成本 = Cashback + 增長金庫；增長金庫 = GGR为正时按20%计算" style="color:var(--t)">平台營運成本 / 用户營運成本</span> · <span style="color:var(--gd)">历史自然月显示最终分享收益，本自然月和逐日显示预估分享收益</span></div>
+<div id="gp-table-wrap"><table><thead><tr><th rowspan="2">游戏</th><th rowspan="2">投注额</th><th rowspan="2">返奖</th><th rowspan="2">毛利</th><th rowspan="2">平台營運成本</th><th colspan="3">用户營運成本</th><th rowspan="2">净利</th><th rowspan="2" id="gp-share-th">预估分享收益</th></tr><tr><th>Cashback</th><th>增長金庫<br>（風險緩衝金）</th><th>合計</th></tr></thead><tbody id="gp-tbody"></tbody></table></div></div>
+
+<div class="pn" style="margin-top:14px"><div class="ph"><span class="pt">玩家表</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:var(--t3)">支持查看逐日数据</span><select class="sel" id="player-date" onchange="switchPlayerDate(this.value)"><option value="0330">03-30（逐日）</option><option value="0329">03-29（逐日）</option><option value="0328">03-28（逐日）</option></select></div></div>
+<div style="overflow-x:auto"><table><thead><tr><th>玩家昵称</th><th>ID</th><th>累计充值</th><th>累计提现</th><th>累计总投注</th><th>累计总盈亏</th><th>累计毛利贡献</th><th>当日投注</th><th>当日盈亏</th><th>当日毛利贡献</th></tr></thead><tbody id="player-tbody"></tbody></table></div></div>`,
+gm: `<div class="sbar"><input class="inp" placeholder="搜索游戏..."><select class="sel" id="gm-date" onchange="switchGmDate(this.value)"><option value="today">今日 (实时)</option><option value="0330">03-30</option><option value="0329">03-29</option><option value="0328">03-28</option></select><button class="btn bp" onclick="showM('ag')">+ 上架新游戏</button><button class="btn" onclick="alert('导出CSV成功')">导出</button></div>
+<div class="pn"><div class="ph"><span class="pt">已上架游戏</span><span style="font-size:9px;color:var(--t3)">仅保留选择游戏操作，支持多选 / 全选</span></div>
+<table><thead><tr><th>游戏</th><th>分类</th><th data-def="当日独立投注玩家数">玩家数</th><th data-def="当日所有玩家投注总额">投注额</th><th data-def="= 投注 - 返奖">毛利</th><th>排序</th><th>状态</th><th>操作</th></tr></thead><tbody id="gm-tbody"></tbody></table></div>
+<div style="margin-top:12px;background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:14px"><div style="font-size:12px;font-weight:600;margin-bottom:6px">💡 游戏管理说明</div><div style="font-size:11px;color:var(--t2);line-height:1.6">· 上架新游戏时，仅需从平台游戏库中选择游戏<br>· 选择器采用左侧游戏类型、右侧具体游戏的交互方式，支持多选与全选<br>· 排序决定游戏在 Space 大厅的展示顺序</div></div>`,
+
+lv: `<div class="sg s2">
+<div class="pn"><div class="ph"><span class="pt">直播控制</span></div><div class="pb" style="text-align:center">
+<div style="font-size:42px;margin-bottom:10px">📹</div>
+<div style="font-size:14px;font-weight:600;margin-bottom:4px">当前未直播</div>
+<div style="font-size:11px;color:var(--t2);margin-bottom:16px">使用 OBS 等推流工具连接推流地址开始直播</div>
+<button class="btn bp" style="margin-bottom:14px">开始直播</button>
+<div style="background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:10px;text-align:left">
+<div style="font-size:10px;color:var(--t3);margin-bottom:3px">推流地址 (RTMP)</div>
+<div class="m" style="font-size:10px;word-break:break-all;color:var(--t2)">rtmp://live.openwin.ai/stream/rf-a8f2c3d4</div>
+<div style="font-size:10px;color:var(--t3);margin-top:6px">推流密钥</div>
+<div class="m" style="font-size:10px;color:var(--t2)">sk_live_••••••••••••</div></div>
+</div></div>
+<div class="pn"><div class="ph"><span class="pt">直播设置</span><button class="btn bp bs">保存</button></div><div class="pb">
+<div class="fg"><label class="fl" style="font-size:11px">主播公告</label><textarea class="fi" style="font-size:11px;min-height:50px">欢迎来到 OpenWin Club 直播间！</textarea></div>
+<div class="fg"><label class="fl" style="font-size:11px">弹幕屏蔽词 <small>逗号分隔</small></label><input class="fi" style="font-size:11px" placeholder="敏感词1,敏感词2,..."></div>
+<div class="fg"><label class="fl" style="font-size:11px">盈利弹幕阈值</label><div style="font-size:10px;color:var(--t3)">单笔盈利 > 100 USDT 自动触发金色弹幕</div></div>
+<div class="fg"><label class="fl" style="font-size:11px">管理员</label><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="bd" style="color:var(--pp2);background:var(--ppbg)">@Mod_Alice</span><span class="bd" style="color:var(--pp2);background:var(--ppbg)">@Mod_Bob</span><button class="btn bs">+ 添加</button></div></div>
+<div style="font-size:10px;color:var(--t3)">管理员可禁言: 10分钟 / 1小时 / 1天 / 永久</div>
+</div></div></div>
+<div class="pn" style="margin-top:10px"><div class="ph"><span class="pt">直播历史统计</span><button class="btn bs" onclick="alert('导出CSV成功')">导出</button></div>
+<table><thead><tr><th>日期</th><th>直播时长</th><th>峰值观看</th><th>弹幕数</th><th>盈利弹幕</th><th>期间投注</th></tr></thead><tbody>
+<tr><td>03-30</td><td>4h 32min</td><td>1,248</td><td>3,420</td><td>18</td><td class="m">$42,000</td></tr>
+<tr><td>03-29</td><td>3h 15min</td><td>986</td><td>2,180</td><td>12</td><td class="m">$31,500</td></tr>
+<tr><td>03-28</td><td>5h 10min</td><td>1,502</td><td>4,100</td><td>24</td><td class="m">$58,200</td></tr>
+</tbody></table></div>`,
+
+pl: `<div class="sg s5">
+<div class="sc"><div class="sl">累计玩家数</div><div class="sv">1,286</div></div>
+<div class="sc"><div class="sl">今日玩家数</div><div class="sv">96</div></div>
+<div class="sc"><div class="sl">本月新增玩家</div><div class="sv">318</div></div>
+<div class="sc"><div class="sl">累计充值</div><div class="sv">$174K</div><div style="font-size:10px;color:var(--t2);margin-top:4px">玩家历史累计充值总额</div></div>
+<div class="sc"><div class="sl">累计提现</div><div class="sv">$69K</div><div style="font-size:10px;color:var(--t2);margin-top:4px">玩家历史累计提现总额</div></div></div>
+<div class="pn" style="margin-bottom:14px"><div class="ph"><span class="pt">逐日玩家新增数据 (最近30天)</span></div><div class="pb"><div class="chart" id="ch-newp" style="height:120px"></div><div class="chart-axis" id="axis-newp"></div></div></div>
+<div class="tabs"><div class="tab a">全部(342)</div><div class="tab">🐋 鲸鱼(12)</div><div class="tab">高频(45)</div><div class="tab">沉默(68)</div><div class="tab">新用户(32)</div></div>
+<div class="sbar"><input class="inp" placeholder="搜索玩家名 / ID..."><select class="sel"><option>排序:投注↓</option><option>毛利贡献↓</option><option>累计充值↓</option><option>累计提现↓</option><option>最后活跃↓</option><option>投注次数↓</option></select><button class="btn">导出报表</button></div>
+<div class="pn"><div class="ph"><span class="pt">玩家运营明细</span><span style="font-size:9px;color:var(--t3)">累计充值 / 累计提现支持点击查看明细</span></div><div style="overflow-x:auto"><table><thead><tr><th>玩家</th><th>标签</th><th>累计充值</th><th>累计提现</th><th>总投注</th><th>净盈亏</th><th>偏好游戏</th><th>次数</th><th>最后活跃</th><th>毛利贡献</th><th>操作</th></tr></thead><tbody>
+<tr><td style="font-weight:600;color:var(--t)">user***001</td><td><span class="bd" style="background:var(--gdbg);color:var(--gd)">🐋 鲸鱼</span></td><td><button class="btn bs" onclick="showTxn('dep','U10001')">$96K</button></td><td><button class="btn bs" onclick="showTxn('wd','U10001')">$41K</button></td><td class="m">$280K</td><td class="m" style="color:var(--r)">-$18.4K</td><td>Baccarat</td><td>1,240</td><td>5min</td><td class="m" style="color:var(--ac)">$18.4K</td><td><button class="btn bs" onclick="showM('pd')">详情</button></td></tr>
+<tr><td style="font-weight:600;color:var(--t)">user***042</td><td><span class="bd" style="background:var(--gdbg);color:var(--gd)">🐋 鲸鱼</span></td><td><button class="btn bs" onclick="showTxn('dep','U10042')">$52K</button></td><td><button class="btn bs" onclick="showTxn('wd','U10042')">$18K</button></td><td class="m">$145K</td><td class="m" style="color:var(--r)">-$12.1K</td><td>Blackjack</td><td>680</td><td>2h</td><td class="m" style="color:var(--ac)">$12.1K</td><td><button class="btn bs">详情</button></td></tr>
+<tr><td style="font-weight:600;color:var(--t)">user***198</td><td><span class="bd" style="color:var(--bl);background:var(--blbg)">高频</span></td><td><button class="btn bs" onclick="showTxn('dep','U10198')">$14K</button></td><td><button class="btn bs" onclick="showTxn('wd','U10198')">$9K</button></td><td class="m">$52K</td><td class="m" style="color:var(--ac)">+$3.2K</td><td>Slots</td><td>2,100</td><td>30min</td><td class="m" style="color:var(--r)">-$3.2K</td><td><button class="btn bs">详情</button></td></tr>
+</tbody></table></div></div>`,
+rp: `<div class="sbar" style="margin-bottom:14px"><select class="sel" id="rp-date-sel" onchange="switchRpDate(this.value)" style="font-size:12px;padding:7px 12px"><option value="0330">2026-03-30</option><option value="0329">2026-03-29</option><option value="0328">2026-03-28</option><option value="0327">2026-03-27</option><option value="0326">2026-03-26</option></select><span style="font-size:10px;color:var(--t3);margin-left:8px">日结: UTC 00:30 · 今日实时数据不计入</span><button class="btn" style="margin-left:auto" onclick="alert('导出CSV成功')">导出</button></div>
+<div class="sg s4" id="rp-kpis">
+<div class="sc"><div class="sl" data-def="Gross Gaming Revenue\n= 当日总投注 - 当日总返奖\n日结时间: UTC 00:30">选中日毛利</div><div class="sv" style="color:var(--ac)" id="rp-ggr">$7,200</div></div>
+<div class="sc"><div class="sl" data-def="= 三方费(GGR×三方费率)\n+ 平台抽佣(GGR×抽佣率)">选中日成本</div><div class="sv" style="color:var(--o)" id="rp-cost">$1,296</div></div>
+<div class="sc"><div class="sl" data-def="= 当日毛利 - 三方费 - 平台抽佣\n负值表示当日亏损">选中日净利润</div><div class="sv" style="color:var(--ac)" id="rp-net">$5,904</div></div>
+<div class="sc"><div class="sl" data-def="已完成日结但KOL尚未发起分红的天数">累计未分红天数</div><div class="sv" style="color:var(--o)">5</div></div></div>
+<div class="pn"><div class="ph"><span class="pt" id="rp-table-title">03-30 按游戏日结</span></div>
+<div style="overflow-x:auto"><table><thead><tr><th>游戏</th><th>总投注</th><th>总返奖</th><th>毛利</th><th>三方费率</th><th>三方费</th><th>抽佣率</th><th>抽佣</th><th>净利润</th></tr></thead><tbody id="rp-tbody"></tbody></table></div></div>`,
+
+st: `<div class="sg s2">
+<div class="pn"><div class="ph"><span class="pt">基础信息</span><button class="btn bp bs">保存</button></div><div class="pb">
+<div class="fg"><label class="fl" style="font-size:11px">Space 名称</label><input class="fi" style="font-size:11px" value="OpenWin Club"></div>
+<div class="fg"><label class="fl" style="font-size:11px">二级域名</label><div style="font-size:11px;color:var(--t3)">royalflush.openwin.ai <span class="bd" style="color:var(--t3);background:rgba(92,95,126,.12)">不可修改</span></div></div>
+<div class="fg"><label class="fl" style="font-size:11px">简介</label><textarea class="fi" style="font-size:11px;min-height:50px">高活跃、多品类、重视分享收益转化的 Space</textarea></div>
+<div class="fg"><label class="fl" style="font-size:11px">Space 头像</label><div class="upl" style="padding:16px"><div style="font-size:10px;color:var(--t2)">点击更换 Space 头像 · 建议尺寸 320 × 320px · JPG/PNG 最大5MB</div></div></div>
+<div class="fg"><label class="fl" style="font-size:11px">封面</label><div class="upl" style="padding:16px"><div style="font-size:10px;color:var(--t2)">点击更换封面 · 建议尺寸 1440 × 480px · JPG/PNG 最大5MB</div></div></div>
+<div class="fg"><label class="fl" style="font-size:11px">社交链接</label>
+<div class="fr" style="margin-bottom:6px"><input class="fi" style="font-size:10px" value="https://twitter.com/openwinclub" placeholder="Twitter"><input class="fi" style="font-size:10px" placeholder="YouTube"></div>
+<div class="fr"><input class="fi" style="font-size:10px" placeholder="Instagram"><input class="fi" style="font-size:10px" placeholder="TikTok"></div></div>
+</div></div>
+<div><div class="pn" style="margin-bottom:10px"><div class="ph"><span class="pt">访问信息</span></div><div class="pb">
+<div class="cfg"><div class="cfg-l">访问地址</div><div class="cfg-v" style="font-size:10px">https://royalflush.openwin.ai</div></div>
+<div class="cfg"><div class="cfg-l">当前状态</div><div><span class="bd" style="color:var(--o);background:var(--obg)">筹备中</span></div></div>
+</div></div></div>`
+};
+
+const ct = document.getElementById('ct');
+let curPage = 'ov';
+
+function nav(p) {
+  curPage = p;
+  document.querySelectorAll('.ni').forEach(n => n.classList.toggle('a', n.dataset.p === p));
+  document.getElementById('ptl').textContent = document.querySelector('.ni[data-p="'+p+'"]')?.textContent?.trim() || '';
+  ct.innerHTML = '<div class="pg a">' + (pages[p] || '') + '</div>';
+  initPage(p);
+}
+document.querySelectorAll('.ni[data-p]').forEach(n => n.addEventListener('click', () => nav(n.dataset.p)));
+
+function initPage(p) {
+  ct.querySelectorAll('.tabs').forEach(g => {
+    g.querySelectorAll('.tab').forEach(t => {
+      t.addEventListener('click', () => { g.querySelectorAll('.tab').forEach(x => x.classList.remove('a')); t.classList.add('a'); });
+    });
+  });
+  if (p === 'ov') {
+    buildLineChart('ggr-ch', [12,18,24,21,16,8,5,-4,6,14,22,19,26,31,28,24,18,12,9,15,22,29,34,30,26,20,16,11,18,24], 'var(--ac)', v => '$'+Math.round(v*1000), {showZero:true, axisId:'axis-ggr'});
+    buildLineChart('ch-bet', [420,510,488,560,592,574,620,650,630,690,720,705,760,782,768,815,842,830,876,905,890,942,968,950,1006,1032,1018,1075,1110,1158], 'var(--ac)', v => '$'+Math.round(v).toLocaleString(), {axisId:'axis-bet'});
+    buildLineChart('ch-profit', [8.4,10.2,11.8,9.6,7.1,4.2,2.1,-1.8,1.2,4.8,8.9,11.4,13.2,16.8,18.5,17.2,15.6,12.4,10.8,14.1,18.6,22.4,25.2,23.7,21.3,19.8,17.4,16.1,18.7,21.5], 'var(--gd)', v => '$'+v.toFixed(1)+'K', {showZero:true, axisId:'axis-profit'});
+    switchGameDate('settlement');
+    switchPlayerDate('0330');
+  }
+  if (p === 'pl') {
+    buildLineChart('ch-newp', [8,11,10,12,13,9,14,15,13,16,18,17,15,19,21,18,20,22,19,24,23,21,25,27,24,28,29,27,31,30], 'var(--bl)', v => Math.round(v)+' 人', {axisId:'axis-newp'});
+  }
+  if (p === 'rp') {
+    switchRpDate('0330');
+  }
+  if (p === 'gm') {
+    switchGmDate('today');
+  }
+}
+
+// Line chart builder
+function buildLineChart(id, data, color, fmt, opts = {}) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  el.style.position = 'relative';
+  const w = 720, h = 140, pX = 20, pY = 14;
+  const minVal = Math.min(...data), maxVal = Math.max(...data);
+  const baseMin = opts.showZero ? Math.min(minVal, 0) : minVal;
+  const baseMax = opts.showZero ? Math.max(maxVal, 0) : maxVal;
+  const span = (baseMax - baseMin) || 1;
+  const zeroY = h - pY - ((0 - baseMin) / span) * (h - pY * 2);
+  const pts = data.map((v, i) => {
+    const x = pX + (w - pX * 2) * (i / (data.length - 1));
+    const y = h - pY - ((v - baseMin) / span) * (h - pY * 2);
+    return [x, y, v];
+  });
+  const ns='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(ns,'svg');
+  svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
+  svg.setAttribute('class','line-svg');
+
+  const grid=document.createElementNS(ns,'line');
+  grid.setAttribute('x1', pX); grid.setAttribute('x2', w - pX);
+  grid.setAttribute('y1', h - pY); grid.setAttribute('y2', h - pY);
+  grid.setAttribute('stroke', 'rgba(255,255,255,0.08)');
+  svg.appendChild(grid);
+
+  if (baseMin < 0 && baseMax > 0) {
+    const zero=document.createElementNS(ns,'line');
+    zero.setAttribute('x1', pX); zero.setAttribute('x2', w - pX);
+    zero.setAttribute('y1', zeroY); zero.setAttribute('y2', zeroY);
+    zero.setAttribute('stroke', 'rgba(255,255,255,0.18)');
+    zero.setAttribute('stroke-dasharray', '4 4');
+    svg.appendChild(zero);
+  }
+
+  const poly = pts.map(([x,y]) => `${x},${y}`).join(' ');
+  const line=document.createElementNS(ns,'polyline');
+  line.setAttribute('points', poly);
+  line.setAttribute('fill', 'none');
+  line.setAttribute('stroke', color);
+  line.setAttribute('stroke-width', '3');
+  line.setAttribute('stroke-linecap', 'round');
+  line.setAttribute('stroke-linejoin', 'round');
+  svg.appendChild(line);
+
+  pts.forEach(([x,y])=>{
+    const c=document.createElementNS(ns,'circle');
+    c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r','3.5');
+    c.setAttribute('fill',color);
+    svg.appendChild(c);
+  });
+
+  const guide=document.createElementNS(ns,'line');
+  guide.setAttribute('y1', pY); guide.setAttribute('y2', h - pY);
+  guide.setAttribute('stroke', 'rgba(255,255,255,0.22)');
+  guide.setAttribute('stroke-dasharray', '4 4');
+  guide.style.display = 'none';
+  svg.appendChild(guide);
+
+  el.appendChild(svg);
+
+  const tooltip = document.createElement('div');
+  tooltip.className = 'line-tooltip';
+  el.appendChild(tooltip);
+
+  const hover = document.createElement('div');
+  hover.className = 'line-hover';
+  el.appendChild(hover);
+
+  const dateLabels = getRecent30DayLabels();
+  const axis = document.getElementById(opts.axisId || '');
+  if (axis) axis.innerHTML = [0, 5, 10, 15, 20, 25, 29].map(i => `<span>${dateLabels[i]}</span>`).join('');
+
+  hover.addEventListener('mousemove', (e) => {
+    const rect = hover.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const ratio = Math.max(0, Math.min(1, x / rect.width));
+    const idx = Math.round(ratio * (data.length - 1));
+    const [px, py, val] = pts[idx];
+    guide.style.display = '';
+    guide.setAttribute('x1', px); guide.setAttribute('x2', px);
+    tooltip.style.display = 'block';
+    tooltip.style.left = `calc(${(px / w) * 100}% - 28px)`;
+    tooltip.style.top = `calc(${(py / h) * 100}% - 42px)`;
+    tooltip.textContent = `${dateLabels[idx]} · ${fmt(val)}`;
+  });
+  hover.addEventListener('mouseleave', () => {
+    guide.style.display = 'none';
+    tooltip.style.display = 'none';
+  });
+}
+function getRecent30DayLabels(){
+  const base = new Date('2026-04-23T00:00:00');
+  const arr = [];
+  for(let i=29;i>=0;i--){
+    const d = new Date(base);
+    d.setDate(base.getDate() - i);
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    arr.push((d.getMonth()+1) + '/' + d.getDate());
+  }
+  return arr;
+}
+
+// Game performance date switching
+const gameData = {
+  settlement: [
+    {n:'Live Baccarat',bet:'$842,000',ret:'$756,600',gross:'$85,400',feeRate:'23%',fee:'$19,642',riskFeeRate:'30%',riskFeeAmount:'$25,620',share:'$28,912',gc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$468,000',ret:'$426,500',gross:'$41,500',feeRate:'23%',fee:'$9,545',riskFeeRate:'30%',riskFeeAmount:'$12,450',share:'$14,061',gc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$226,000',ret:'$239,800',gross:'-$13,800',feeRate:'23%',fee:'-$3,174',riskFeeRate:'30%',riskFeeAmount:'-$4,140',share:'-$4,536',gc:'var(--r)'}
+  ],
+  last1m: [
+    {n:'Live Baccarat',bet:'$916,000',ret:'$830,000',gross:'$86,000',feeRate:'23%',fee:'$19,780',riskFeeRate:'30%',riskFeeAmount:'$25,800',share:'$32,250',gc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$502,000',ret:'$455,200',gross:'$46,800',feeRate:'23%',fee:'$10,764',riskFeeRate:'30%',riskFeeAmount:'$14,040',share:'$17,550',gc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$248,000',ret:'$257,400',gross:'-$9,400',feeRate:'23%',fee:'-$2,162',riskFeeRate:'30%',riskFeeAmount:'-$2,820',share:'-$3,525',gc:'var(--r)'}
+  ],
+  last2m: [
+    {n:'Live Baccarat',bet:'$768,000',ret:'$703,500',gross:'$64,500',feeRate:'23%',fee:'$14,835',riskFeeRate:'30%',riskFeeAmount:'$19,350',share:'$22,669',gc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$438,000',ret:'$399,200',gross:'$38,800',feeRate:'23%',fee:'$8,924',riskFeeRate:'30%',riskFeeAmount:'$11,640',share:'$13,636',gc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$212,000',ret:'$220,600',gross:'-$8,600',feeRate:'23%',fee:'-$1,978',riskFeeRate:'30%',riskFeeAmount:'-$2,580',share:'-$3,024',gc:'var(--r)'}
+  ],
+  '0330': [
+    {n:'Live Baccarat',bet:'$32,000',ret:'$27,600',gross:'$4,400',feeRate:'23%',fee:'$1,012',riskFeeRate:'30%',riskFeeAmount:'$1,320',share:'$1,448',gc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$18,000',ret:'$15,200',gross:'$2,800',feeRate:'23%',fee:'$644',riskFeeRate:'30%',riskFeeAmount:'$840',share:'$922',gc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$6,000',ret:'$6,000',gross:'$0',feeRate:'23%',fee:'$0',riskFeeRate:'30%',riskFeeAmount:'$0',share:'$0',gc:'var(--t3)'}
+  ],
+  '0329': [
+    {n:'Live Baccarat',bet:'$26,800',ret:'$24,000',gross:'$2,800',feeRate:'23%',fee:'$644',riskFeeRate:'30%',riskFeeAmount:'$840',share:'$922',gc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$14,200',ret:'$12,800',gross:'$1,400',feeRate:'23%',fee:'$322',riskFeeRate:'30%',riskFeeAmount:'$420',share:'$461',gc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$9,600',ret:'$11,200',gross:'-$1,600',feeRate:'23%',fee:'-$368',riskFeeRate:'30%',riskFeeAmount:'-$480',share:'-$526',gc:'var(--r)'}
+  ],
+  '0328': [
+    {n:'Live Baccarat',bet:'$35,200',ret:'$29,600',gross:'$5,600',feeRate:'23%',fee:'$1,288',riskFeeRate:'30%',riskFeeAmount:'$1,680',share:'$1,842',gc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$16,800',ret:'$14,600',gross:'$2,200',feeRate:'23%',fee:'$506',riskFeeRate:'30%',riskFeeAmount:'$660',share:'$724',gc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$7,400',ret:'$6,200',gross:'$1,200',feeRate:'23%',fee:'$276',riskFeeRate:'30%',riskFeeAmount:'$360',share:'$395',gc:'var(--ac)'}
+  ]
+};
+function parseMoney(v){return Number(String(v).replace(/[$,]/g,''))||0}
+function formatMoney(v){ return v<0 ? '-$'+Math.abs(v).toLocaleString() : '$'+v.toLocaleString(); }
+function calcGpCosts(gross){
+  const platform = gross > 0 ? Math.round(gross * 0.21) : 0;
+  const cashback = gross > 0 ? Math.round(gross * 0.02) : 0;
+  const reviveVault = gross > 0 ? Math.round(gross * 0.20) : 0;
+  const userCost = cashback + reviveVault;
+  const net = gross - platform - userCost;
+  return {platform, cashback, reviveVault, userCost, net};
+}
+function switchGameDate(v) {
+  const tbody = document.getElementById('gp-tbody');
+  const shareTh = document.getElementById('gp-share-th');
+  if (!tbody) return;
+  const rows = gameData[v] || gameData.settlement;
+  const isHistoricalMonth = ['last1m','last2m'].includes(v);
+  const isCurrentMonth = v === 'settlement';
+  if (shareTh) shareTh.textContent = isHistoricalMonth ? '分享收益' : '预估分享收益';
+  let totalBet=0,totalRet=0,totalGross=0,totalPlatform=0,totalCashback=0,totalReviveVault=0,totalUserCost=0,totalNet=0,totalShare=0;
+  tbody.innerHTML = rows.map(g => {
+    const gross = parseMoney(g.gross);
+    const costs = calcGpCosts(gross);
+    totalBet += parseMoney(g.bet); totalRet += parseMoney(g.ret); totalGross += gross; totalPlatform += costs.platform; totalCashback += costs.cashback; totalReviveVault += costs.reviveVault; totalUserCost += costs.userCost; totalNet += costs.net; totalShare += parseMoney(g.share);
+    const shareColor = String(g.share).startsWith('-') ? 'var(--r)' : (g.share=='$0' ? 'var(--t3)' : 'var(--gd)');
+    return `<tr><td style="font-weight:600;color:var(--t)">${g.n}</td><td class="m">${g.bet}</td><td class="m">${g.ret}</td><td class="m" style="color:${g.gc}">${g.gross}</td><td class="m">${formatMoney(costs.platform)}</td><td class="m">${formatMoney(costs.cashback)}</td><td class="m">${formatMoney(costs.reviveVault)}</td><td class="m">${formatMoney(costs.userCost)}</td><td class="m" style="color:${costs.net<0?'var(--r)':'var(--ac)'}">${formatMoney(costs.net)}</td><td class="m" style="color:${shareColor}">${g.share}</td></tr>`;
+  }).join('') + `<tr style="font-weight:700"><td style="color:var(--t)">合计</td><td class="m">${formatMoney(totalBet)}</td><td class="m">${formatMoney(totalRet)}</td><td class="m" style="color:${totalGross<0?'var(--r)':'var(--ac)'}">${formatMoney(totalGross)}</td><td class="m">${formatMoney(totalPlatform)}</td><td class="m">${formatMoney(totalCashback)}</td><td class="m">${formatMoney(totalReviveVault)}</td><td class="m">${formatMoney(totalUserCost)}</td><td class="m" style="color:${totalNet<0?'var(--r)':'var(--ac)'}">${formatMoney(totalNet)}</td><td class="m" style="color:${totalShare<0?'var(--r)':'var(--gd)'}">${formatMoney(totalShare)}</td></tr>`;
+}
+// Report date switching
+const rpData = {
+  '0330': {ggr:'$7,200',cost:'$1,296',net:'$5,904',title:'03-30',games:[
+    {n:'Live Baccarat',bet:'$32,000',ret:'$27,600',ggr:'$4,400',gc:'var(--ac)',fr:'15%',ff:'$660',cr:'3%',cf:'$132',np:'$3,608',nc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$18,000',ret:'$15,200',ggr:'$2,800',gc:'var(--ac)',fr:'15%',ff:'$420',cr:'3%',cf:'$84',np:'$2,296',nc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$6,000',ret:'$6,000',ggr:'$0',gc:'var(--t3)',fr:'12%',ff:'$0',cr:'5%',cf:'$0',np:'$0',nc:'var(--t3)'}
+  ]},
+  '0329': {ggr:'$2,600',cost:'$468',net:'$2,132',title:'03-29',games:[
+    {n:'Live Baccarat',bet:'$26,800',ret:'$24,000',ggr:'$2,800',gc:'var(--ac)',fr:'15%',ff:'$420',cr:'3%',cf:'$84',np:'$2,296',nc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$14,200',ret:'$12,800',ggr:'$1,400',gc:'var(--ac)',fr:'15%',ff:'$210',cr:'3%',cf:'$42',np:'$1,148',nc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$9,600',ret:'$11,200',ggr:'-$1,600',gc:'var(--r)',fr:'12%',ff:'$0',cr:'5%',cf:'$0',np:'-$1,600',nc:'var(--r)'}
+  ]},
+  '0328': {ggr:'$9,000',cost:'$1,620',net:'$7,380',title:'03-28',games:[
+    {n:'Live Baccarat',bet:'$35,200',ret:'$29,600',ggr:'$5,600',gc:'var(--ac)',fr:'15%',ff:'$840',cr:'3%',cf:'$168',np:'$4,592',nc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$16,800',ret:'$14,600',ggr:'$2,200',gc:'var(--ac)',fr:'15%',ff:'$330',cr:'3%',cf:'$66',np:'$1,804',nc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$7,400',ret:'$6,200',ggr:'$1,200',gc:'var(--ac)',fr:'12%',ff:'$144',cr:'5%',cf:'$60',np:'$996',nc:'var(--ac)'}
+  ]},
+  '0327': {ggr:'$4,800',cost:'$864',net:'$3,936',title:'03-27',games:[
+    {n:'Live Baccarat',bet:'$22,000',ret:'$18,400',ggr:'$3,600',gc:'var(--ac)',fr:'15%',ff:'$540',cr:'3%',cf:'$108',np:'$2,952',nc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$12,000',ret:'$11,200',ggr:'$800',gc:'var(--ac)',fr:'15%',ff:'$120',cr:'3%',cf:'$24',np:'$656',nc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$5,200',ret:'$4,800',ggr:'$400',gc:'var(--ac)',fr:'12%',ff:'$48',cr:'5%',cf:'$20',np:'$332',nc:'var(--ac)'}
+  ]},
+  '0326': {ggr:'$5,200',cost:'$936',net:'$4,264',title:'03-26',games:[
+    {n:'Live Baccarat',bet:'$28,000',ret:'$24,200',ggr:'$3,800',gc:'var(--ac)',fr:'15%',ff:'$570',cr:'3%',cf:'$114',np:'$3,116',nc:'var(--ac)'},
+    {n:'Blackjack VIP',bet:'$15,000',ret:'$13,200',ggr:'$1,800',gc:'var(--ac)',fr:'15%',ff:'$270',cr:'3%',cf:'$54',np:'$1,476',nc:'var(--ac)'},
+    {n:'Mega Slots',bet:'$4,000',ret:'$4,400',ggr:'-$400',gc:'var(--r)',fr:'12%',ff:'$0',cr:'5%',cf:'$0',np:'-$400',nc:'var(--r)'}
+  ]}
+};
+function switchRpDate(v) {
+  const d = rpData[v];
+  if (!d) return;
+  const el = (id) => document.getElementById(id);
+  if(el('rp-ggr')) el('rp-ggr').textContent = d.ggr;
+  if(el('rp-cost')) el('rp-cost').textContent = d.cost;
+  if(el('rp-net')) el('rp-net').textContent = d.net;
+  if(el('rp-table-title')) el('rp-table-title').textContent = d.title + ' 按游戏日结';
+  const tbody = el('rp-tbody');
+  if (!tbody) return;
+  let totalBet=0,totalRet=0,totalGGR=0,totalFF=0,totalCF=0,totalNP=0;
+  tbody.innerHTML = d.games.map(g => {
+    return `<tr><td style="font-weight:600;color:var(--t)">${g.n}</td><td class="m">${g.bet}</td><td class="m">${g.ret}</td><td class="m" style="color:${g.gc}">${g.ggr}</td><td>${g.fr}</td><td class="m">${g.ff}</td><td>${g.cr}</td><td class="m">${g.cf}</td><td class="m" style="color:${g.nc}">${g.np}</td></tr>`;
+  }).join('') + `<tr style="font-weight:700"><td style="color:var(--t)">合计</td><td class="m">—</td><td class="m">—</td><td class="m" style="color:var(--ac)">${d.ggr}</td><td></td><td class="m">—</td><td></td><td class="m">—</td><td class="m" style="color:var(--ac)">${d.net}</td></tr>`;
+}
+
+
+const playerData = {
+  settlement: [
+    {nick:'WhaleNova',id:'U10001',tb:'$280K',tp:'-$18.4K',cg:'$18.4K',db:'$12.8K',dp:'-$1.2K',dep:'$96K',wd:'$41K',dg:'$1.2K'},
+    {nick:'AceRiver',id:'U10042',tb:'$145K',tp:'-$12.1K',cg:'$12.1K',db:'$8.4K',dp:'+$0.6K',dep:'$52K',wd:'$18K',dg:'$0.9K'},
+    {nick:'LunaSpin',id:'U10198',tb:'$52K',tp:'+$3.2K',cg:'-$3.2K',db:'$3.4K',dp:'+$0.4K',dep:'$14K',wd:'$9K',dg:'-$0.4K'},
+    {nick:'TigerChip',id:'U10235',tb:'$118K',tp:'-$8.6K',cg:'$8.6K',db:'$6.9K',dp:'-$0.7K',dep:'$34K',wd:'$11K',dg:'$0.7K'}
+  ],
+  '0330': [
+    {nick:'WhaleNova',id:'U10001',tb:'$280K',tp:'-$18.4K',cg:'$18.4K',db:'$14.2K',dp:'-$1.6K',dep:'$96K',wd:'$41K',dg:'$1.6K'},
+    {nick:'AceRiver',id:'U10042',tb:'$145K',tp:'-$12.1K',cg:'$12.1K',db:'$9.1K',dp:'+$0.8K',dep:'$52K',wd:'$18K',dg:'$1.1K'},
+    {nick:'LunaSpin',id:'U10198',tb:'$52K',tp:'+$3.2K',cg:'-$3.2K',db:'$2.8K',dp:'+$0.2K',dep:'$14K',wd:'$9K',dg:'-$0.2K'}
+  ],
+  '0329': [
+    {nick:'WhaleNova',id:'U10001',tb:'$280K',tp:'-$18.4K',cg:'$18.4K',db:'$11.4K',dp:'-$0.9K',dep:'$96K',wd:'$41K',dg:'$0.9K'},
+    {nick:'AceRiver',id:'U10042',tb:'$145K',tp:'-$12.1K',cg:'$12.1K',db:'$7.3K',dp:'+$0.3K',dep:'$52K',wd:'$18K',dg:'$0.6K'},
+    {nick:'LunaSpin',id:'U10198',tb:'$52K',tp:'+$3.2K',cg:'-$3.2K',db:'$4.1K',dp:'+$0.6K',dep:'$14K',wd:'$9K',dg:'-$0.6K'}
+  ],
+  '0328': [
+    {nick:'WhaleNova',id:'U10001',tb:'$280K',tp:'-$18.4K',cg:'$18.4K',db:'$15.6K',dp:'-$2.1K',dep:'$96K',wd:'$41K',dg:'$2.1K'},
+    {nick:'AceRiver',id:'U10042',tb:'$145K',tp:'-$12.1K',cg:'$12.1K',db:'$10.2K',dp:'+$1.0K',dep:'$52K',wd:'$18K',dg:'$1.3K'},
+    {nick:'LunaSpin',id:'U10198',tb:'$52K',tp:'+$3.2K',cg:'-$3.2K',db:'$3.0K',dp:'+$0.1K',dep:'$14K',wd:'$9K',dg:'-$0.1K'}
+  ]
+};
+const playerTxnData = {
+
+  U10001: {
+    nick:'WhaleNova',
+    dep:[
+      {time:'2026-03-03 11:25', channel:'TRON', token:'USDT', amount:'$40,000'},
+      {time:'2026-03-12 19:40', channel:'Ethereum', token:'USDC', amount:'$18,000'},
+      {time:'2026-03-24 09:18', channel:'BSC', token:'USDT', amount:'$38,000'}
+    ],
+    wd:[
+      {time:'2026-03-15 14:12', channel:'TRON / TQ8x...92Ka', token:'USDT', amount:'$16,000'},
+      {time:'2026-03-27 22:06', channel:'Ethereum / 0x7a...4f91', token:'USDC', amount:'$25,000'}
+    ]
+  },
+  U10042: {
+    nick:'AceRiver',
+    dep:[
+      {time:'2026-03-05 08:36', channel:'TRON', token:'USDT', amount:'$20,000'},
+      {time:'2026-03-18 16:05', channel:'BSC', token:'USDT', amount:'$12,000'},
+      {time:'2026-03-26 10:50', channel:'Ethereum', token:'USDC', amount:'$20,000'}
+    ],
+    wd:[
+      {time:'2026-03-14 21:40', channel:'TRON / TS1e...3hQ9', token:'USDT', amount:'$8,000'},
+      {time:'2026-03-28 12:18', channel:'Ethereum / 0x25...7bb0', token:'USDC', amount:'$10,000'}
+    ]
+  },
+  U10198: {
+    nick:'LunaSpin',
+    dep:[
+      {time:'2026-03-07 13:11', channel:'Ethereum', token:'USDC', amount:'$6,000'},
+      {time:'2026-03-17 09:33', channel:'TRON', token:'USDT', amount:'$4,000'},
+      {time:'2026-03-29 18:26', channel:'BSC', token:'USDT', amount:'$4,000'}
+    ],
+    wd:[
+      {time:'2026-03-20 15:08', channel:'TRON / TH4n...8sK2', token:'USDT', amount:'$3,000'},
+      {time:'2026-03-30 20:42', channel:'Ethereum / 0x8c...2ae7', token:'USDC', amount:'$6,000'}
+    ]
+  },
+  U10235: {
+    nick:'TigerChip',
+    dep:[
+      {time:'2026-03-04 10:20', channel:'BSC', token:'USDT', amount:'$12,000'},
+      {time:'2026-03-13 17:54', channel:'TRON', token:'USDT', amount:'$10,000'},
+      {time:'2026-03-25 07:41', channel:'Ethereum', token:'USDC', amount:'$12,000'}
+    ],
+    wd:[
+      {time:'2026-03-19 11:30', channel:'BSC / 0x1f...92ac', token:'USDT', amount:'$5,000'},
+      {time:'2026-03-31 01:16', channel:'TRON / TN8w...6Lm4', token:'USDC', amount:'$6,000'}
+    ]
+  }
+};
+function switchPlayerDate(v){
+  const tbody = document.getElementById('player-tbody');
+  if(!tbody) return;
+  const rows = playerData[v] || playerData['0330'];
+  tbody.innerHTML = rows.map(r => `<tr><td style="font-weight:600;color:var(--t)">${r.nick}</td><td class="m">${r.id}</td><td><button class="btn bs" onclick="showTxn('dep','${r.id}')">${r.dep}</button></td><td><button class="btn bs" onclick="showTxn('wd','${r.id}')">${r.wd}</button></td><td class="m">${r.tb}</td><td class="m" style="color:${r.tp.startsWith('-')?'var(--r)':'var(--ac)'}">${r.tp}</td><td class="m" style="color:${r.cg.startsWith('-')?'var(--r)':'var(--ac)'}">${r.cg}</td><td class="m">${r.db}</td><td class="m" style="color:${r.dp.startsWith('-')?'var(--r)':'var(--ac)'}">${r.dp}</td><td class="m" style="color:${r.dg.startsWith('-')?'var(--r)':'var(--ac)'}">${r.dg}</td></tr>`).join('');
+}
+function showTxn(type,userId){
+  const modal = document.getElementById('mo-txn');
+  const title = document.getElementById('txn-title');
+  const head = document.getElementById('txn-head');
+  const body = document.getElementById('txn-body');
+  const user = playerTxnData[userId] || {nick:userId,dep:[],wd:[]};
+  const rows = (user[type] || []);
+  const isDep = type === 'dep';
+  title.textContent = `${user.nick} · ${isDep ? '充值记录' : '提现记录'}`;
+  head.innerHTML = isDep
+    ? '<tr><th>时间</th><th>充值的渠道-链名称</th><th>充值Token</th><th>金额</th></tr>'
+    : '<tr><th>时间</th><th>提现的渠道-链名称/地址</th><th>提现Token</th><th>金额</th></tr>';
+  body.innerHTML = rows.map(x => `<tr><td class="m">${x.time}</td><td>${x.channel}</td><td>${x.token}</td><td class="m" style="color:var(--t)">${x.amount}</td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--t3)">暂无记录</td></tr>';
+  modal.classList.add('show');
+}
+function switchPickerType(prefix,type,el){
+  document.querySelectorAll('#'+prefix+'-type-list .type-item').forEach(x=>x.classList.remove('a'));
+  if(el) el.classList.add('a');
+  const title = document.getElementById(prefix+'-panel-title');
+  if(title) title.textContent = type.charAt(0).toUpperCase()+type.slice(1);
+  document.querySelectorAll('.'+prefix+'-panel-item').forEach(item => {
+    item.style.display = item.dataset.type === type ? '' : 'none';
+  });
+  updateVisibleGroupButton(prefix);
+}
+function updateVisibleGroupButton(prefix){
+  const btn = document.querySelector('#'+prefix+'-type-list').parentElement.querySelector('.game-panel .btn');
+  const items=[...document.querySelectorAll('.'+prefix+'-panel-item')].filter(x=>x.style.display!=='none');
+  if(!btn || !items.length) return;
+  const all=items.every(x=>x.classList.contains('sel'));
+  btn.textContent = all ? '取消全选' : '全选';
+}
+function toggleVisibleGroup(btn,prefix){
+  const items=[...document.querySelectorAll('.'+prefix+'-panel-item')].filter(x=>x.style.display!=='none');
+  const all=items.every(x=>x.classList.contains('sel'));
+  items.forEach(x=>x.classList.toggle('sel', !all));
+  btn.textContent = all ? '全选' : '取消全选';
+  if(prefix==='ag') syncAgPreview();
+}
+// Add game selection
+function toggleMulti(el){el.classList.toggle('sel'); if(el.dataset.picker){updateVisibleGroupButton(el.dataset.picker);} if(el.dataset.picker==='ag'){syncAgPreview();}}
+function toggleGroup(btn,id){
+  const items=[...document.querySelectorAll('#'+id+' .rci')];
+  const all=items.every(x=>x.classList.contains('sel'));
+  items.forEach(x=>x.classList.toggle('sel', !all));
+  btn.textContent = all ? '全选' : '取消全选';
+}
+function syncAgPreview(){
+  const selected=[...document.querySelectorAll('#ag-games .rci.sel')];
+  const pv=document.getElementById('ag-preview'); const sb=document.getElementById('ag-submit');
+  if(pv) pv.style.display = selected.length ? 'block' : 'none';
+  if(sb) sb.disabled = !selected.length;
+  if(document.getElementById('ag-p-name')) document.getElementById('ag-p-name').textContent = selected.map(x=>x.dataset.game).join('、') || '—';
+  if(document.getElementById('ag-p-cat')) document.getElementById('ag-p-cat').textContent = [...new Set(selected.map(x=>x.dataset.cat))].join('、') || '—';
+  if(document.getElementById('ag-p-fee')) document.getElementById('ag-p-fee').textContent = (selected[0]?.dataset.fee || '8') + '%';
+}
+function selGame(el) {
+  el.classList.toggle('sel');
+  syncAgPreview();
+}
+// Wallet balance check
+function checkWalletBal(){const v=parseFloat((document.getElementById('sfund').value||'0').replace(/,/g,''));document.getElementById('wal-warn').style.display=v>168500?'block':'none'}
+
+// Payment confirm
+function showPayConfirm(){const v=parseFloat((document.getElementById('sfund').value||'0').replace(/,/g,''));if(v>168500){alert('投入金额超过钱包余额 ($168,500)');return}document.getElementById('pay-amount').textContent='$'+v.toLocaleString();document.getElementById('pay-fund').textContent='$'+v.toLocaleString();document.getElementById('pay-remain').textContent='$'+(168500-v).toLocaleString();showM('pay')}
+
+// Partial accept calculation
+function calcPartial(){const v=parseFloat((document.getElementById('pa-amount').value||'0').replace(/,/g,''));const pool=125000,shares=62500;const s=Math.round(v/pool*shares);const pct=(v/(pool+v)*100).toFixed(2);document.getElementById('pa-accept').textContent='$'+v.toLocaleString();document.getElementById('pa-share').textContent=s.toLocaleString()+' 份';document.getElementById('pa-pct').textContent=pct+'%';document.getElementById('pa-refund').textContent='$'+(10000-v).toLocaleString()+' → 原路退回'}
+
+// Game management date switching
+const gmData = {
+  today: [
+    {n:'Baccarat Royale',cat:'Live',rake:'3%',fee:'8%',ppl:'128',bet:'$28,400',ggr:'$4,200',gc:'var(--ac)',sort:'1'},
+    {n:'Blackjack Elite',cat:'Live',rake:'3%',fee:'8%',ppl:'65',bet:'$15,800',ggr:'$1,700',gc:'var(--ac)',sort:'2'},
+    {n:'Nasdaq Flash',cat:'Trading',rake:'5%',fee:'8%',ppl:'42',bet:'$8,200',ggr:'-$1,200',gc:'var(--r)',sort:'3'}
+  ],
+  '0330': [
+    {n:'Baccarat Royale',cat:'Live',rake:'3%',fee:'8%',ppl:'152',bet:'$32,000',ggr:'$4,400',gc:'var(--ac)',sort:'1'},
+    {n:'Blackjack Elite',cat:'Live',rake:'3%',fee:'8%',ppl:'78',bet:'$18,000',ggr:'$2,800',gc:'var(--ac)',sort:'2'},
+    {n:'Football Win Pro',cat:'Sports',rake:'5%',fee:'8%',ppl:'38',bet:'$6,000',ggr:'$0',gc:'var(--t3)',sort:'3'}
+  ],
+  '0329': [
+    {n:'Baccarat Royale',cat:'Live',rake:'3%',fee:'8%',ppl:'138',bet:'$26,800',ggr:'$2,800',gc:'var(--ac)',sort:'1'},
+    {n:'Blackjack Elite',cat:'Live',rake:'3%',fee:'8%',ppl:'62',bet:'$14,200',ggr:'$1,400',gc:'var(--ac)',sort:'2'},
+    {n:'Gold Sprint',cat:'Trading',rake:'5%',fee:'8%',ppl:'48',bet:'$9,600',ggr:'-$1,600',gc:'var(--r)',sort:'3'}
+  ],
+  '0328': [
+    {n:'Baccarat Royale',cat:'Live',rake:'3%',fee:'8%',ppl:'168',bet:'$35,200',ggr:'$5,600',gc:'var(--ac)',sort:'1'},
+    {n:'Basketball Score Rush',cat:'Sports',rake:'3%',fee:'8%',ppl:'72',bet:'$16,800',ggr:'$2,200',gc:'var(--ac)',sort:'2'},
+    {n:'Treasure Slots Max',cat:'Casual',rake:'5%',fee:'8%',ppl:'35',bet:'$7,400',ggr:'$1,200',gc:'var(--ac)',sort:'3'}
+  ]
+};
+function switchGmDate(v) {
+  const tbody = document.getElementById('gm-tbody');
+  if (!tbody) return;
+  const rows = gmData[v] || gmData.today;
+  tbody.innerHTML = rows.map(g => `<tr><td style="font-weight:600;color:var(--t)">${g.n}</td><td>${g.cat}</td><td>${g.ppl}</td><td class="m">${g.bet}</td><td class="m" style="color:${g.gc}">${g.ggr}</td><td>${g.sort} ↕</td><td><span class="bd" style="color:var(--ac);background:var(--acbg)">上架</span></td><td><button class="btn bs">配置</button> <button class="btn br bs">下架</button></td></tr>`).join('');
+}
+// Fee cap configuration (server-configurable)
+const feeTiers = [
+  { minFund: 0, maxFee: 30, label: '未注资', tier: 0 },
+  { minFund: 10000, maxFee: 40, label: '基础档', tier: 1 },
+  { minFund: 100000, maxFee: 50, label: '高级档', tier: 2 }
+];
+
+function getFeeCap(fund) {
+  let cap = feeTiers[0];
+  for (const t of feeTiers) { if (fund >= t.minFund) cap = t; }
+  return cap;
+}
+
+function updateWizFeeCap() {
+  const fund = parseFloat((document.getElementById('sfund').value || '0').replace(/,/g, ''));
+  const cap = getFeeCap(fund);
+  document.getElementById('wiz-fee-range').textContent = '% (范围 1-' + cap.maxFee + '%)';
+  // Highlight active tier
+  feeTiers.forEach((t, i) => {
+    const el = document.getElementById('tier-' + i);
+    if (el) {
+      const active = t.tier === cap.tier;
+      el.style.borderColor = active ? 'var(--ac)' : 'var(--bdr)';
+      el.style.background = active ? 'var(--acbg)' : 'transparent';
+      el.querySelector('div:nth-child(2)').style.color = active ? 'var(--ac)' : 'var(--t3)';
+    }
+  });
+  checkWizFee();
+}
+
+function checkWizFee() {
+  const fund = parseFloat((document.getElementById('sfund').value || '0').replace(/,/g, ''));
+  const fee = parseFloat(document.getElementById('wiz-fee').value || '0');
+  const cap = getFeeCap(fund);
+  const warn = document.getElementById('wiz-fee-warn');
+  if (warn) warn.style.display = fee > cap.maxFee ? 'block' : 'none';
+}
+
+function checkDvFee() {
+  const fee = parseFloat(document.getElementById('dv-fee-input').value || '0');
+  // Current KOL owns $50K → cap is 40%
+  const cap = getFeeCap(50000);
+  const warn = document.getElementById('dv-fee-warn');
+  if (warn) {
+    warn.style.display = fee > cap.maxFee ? 'block' : 'none';
+    warn.textContent = fee > cap.maxFee ? '⚠ 超过当前档位上限 ' + cap.maxFee + '%（你的自有资金 $50,000 属于' + cap.label + '）' : '';
+  }
+}
+
+function submitDvFee() {
+  const fee = parseFloat(document.getElementById('dv-fee-input').value || '0');
+  const cap = getFeeCap(50000);
+  if (fee > cap.maxFee) { alert('管理费不能超过当前档位上限 ' + cap.maxFee + '%\n\n你的自有资金: $50,000 → ' + cap.label + '\n如需更高上限，请追加自有资金。'); return; }
+  if (fee < 1) { alert('管理费不能低于 1%'); return; }
+  alert('费率修改成功！\n新费率 ' + fee + '% 将于明日 (UTC+0) 生效');
+}
+
+// Add own funds calculation
+function calcAf() {
+  const v = parseFloat((document.getElementById('af-amt').value || '0').replace(/,/g, ''));
+  const pool = 125000, shares = 62500, curOwn = 50000;
+  const s = Math.round(v / pool * shares);
+  const newOwn = curOwn + v;
+  const newPct = ((25000 + s) / (shares + s) * 100).toFixed(1);
+  document.getElementById('af-p-amt').textContent = '$' + v.toLocaleString();
+  document.getElementById('af-p-share').textContent = s.toLocaleString() + ' 份';
+  document.getElementById('af-p-total').textContent = '$' + newOwn.toLocaleString();
+  document.getElementById('af-p-pct').textContent = newPct + '%';
+  document.getElementById('af-p-remain').textContent = '$' + (168500 - v).toLocaleString();
+  // Check tier unlock
+  const curCap = getFeeCap(curOwn);
+  const newCap = getFeeCap(newOwn);
+  const unlock = document.getElementById('af-tier-unlock');
+  if (unlock) {
+    if (newCap.tier > curCap.tier) {
+      unlock.style.display = 'block';
+      unlock.querySelector('div:last-child').innerHTML = '追加后自有资金达到 <strong style="color:var(--ac)">$' + newOwn.toLocaleString() + '</strong>，管理费上限将从 <strong style="color:var(--o)">' + curCap.maxFee + '%</strong> 提升至 <strong style="color:var(--gd)">' + newCap.maxFee + '%（' + newCap.label + '）</strong>';
+    } else {
+      unlock.style.display = 'none';
+    }
+  }
+}
+
+// UTC Clock
+!function u(){const d=new Date();const el=document.getElementById('utc');if(el)el.textContent='UTC '+d.toISOString().replace('T',' ').slice(0,19);setTimeout(u,1000)}();
+
+
+function showCashbackDetail(){
+  const modal = document.getElementById('mo-txn');
+  const title = document.getElementById('txn-title');
+  const head = document.getElementById('txn-head');
+  const body = document.getElementById('txn-body');
+  title.textContent = 'Cashback 明细';
+  head.innerHTML = '<tr><th>时间</th><th>用户昵称 / ID</th><th>游戏名称</th><th>有效流水</th><th>Cashback 金额</th></tr>';
+  const rows = [
+    ['2025-04-22 18:42','user***001 / U10001','Live Baccarat','420,000 USDT','8,400 USDT'],
+    ['2025-04-22 16:18','user***042 / U10042','Blackjack VIP','260,000 USDT','5,200 USDT'],
+    ['2025-04-21 23:09','user***198 / U10198','Mega Slots','180,000 USDT','3,600 USDT'],
+    ['2025-04-21 12:35','user***276 / U10276','Sports Pro','140,000 USDT','2,800 USDT']
+  ];
+  body.innerHTML = rows.map(r => `<tr><td class="m">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="m">${r[3]}</td><td class="m" style="color:var(--ac)">${r[4]}</td></tr>`).join('');
+  modal.classList.add('show');
+}
+
+// Modal
+function showM(id){document.getElementById('mo-'+id).classList.add('show')}
+function hideM(id){document.getElementById('mo-'+id).classList.remove('show')}
+document.querySelectorAll('.mo').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')})});
+
+nav('ov');
+</script>
+</body>
+</html>

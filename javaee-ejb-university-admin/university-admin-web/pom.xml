@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ========================================== -->
+    <!-- Web 模块：包含所有页面和控制器（JSP + Servlet）-->
+    <!-- packaging=war 表示这是一个 Web 应用 WAR 包  -->
+    <!-- ========================================== -->
+    <parent>
+        <groupId>com.university</groupId>
+        <artifactId>university-admin</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>university-admin-web</artifactId>
+    <packaging>war</packaging>
+    <name>University Admin - Web UI</name>
+
+    <dependencies>
+        <!-- Java EE 8 API（provided） -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+        <!-- 依赖 EJB 模块：Servlet 需要调用 EJB 的业务方法 -->
+        <!-- provided 表示不需要打包到 WAR 中，因为 EAR 会包含 -->
+        <dependency>
+            <groupId>com.university</groupId>
+            <artifactId>university-admin-ejb</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

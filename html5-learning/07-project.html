@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<!-- ========================================== -->
+<!-- 文件：07-project.html                       -->
+<!-- 主题：综合练习 — 个人主页                    -->
+<!-- 说明：运用前 6 课学到的所有知识              -->
+<!-- ========================================== -->
+
+<!--
+  🎯 项目目标
+  完成一个完整的个人简介页面，运用到以下知识：
+  ✓ 文档结构（DOCTYPE, html, head, body）
+  ✓ 标题、段落、文本格式化
+  ✓ 列表（无序、有序、定义列表）
+  ✓ 超链接（外部链接、锚点、邮件）
+  ✓ 图片、视频
+  ✓ 表格
+  ✓ 表单
+  ✓ 语义化标签（header, nav, main, section, article, aside, footer）
+
+  💡 学习提示
+  - 请仔细阅读每一行注释，理解每个标签的作用
+  - 在浏览器中打开这个文件查看效果
+  - 尝试修改内容，把它变成你自己的个人主页
+-->
+
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 页面标题：显示在浏览器标签页上 -->
+    <title>我的个人主页 - HTML5 综合练习</title>
+
+    <style>
+        /* ================================
+           页面全局样式
+           ================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #e74c3c;
+            text-decoration: underline;
+        }
+
+        /* ================================
+           布局容器：固定宽度 + 居中
+           ================================ */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ================================
+           Header（页面头部）
+           ================================ */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* ================================
+           Nav（导航栏）
+           ================================ */
+        nav {
+            background-color: #2c3e50;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #34495e;
+            color: #f1c40f;
+            text-decoration: none;
+        }
+
+        /* ================================
+           Main（主体）
+           ================================ */
+        main {
+            background-color: white;
+            padding: 40px 0;
+        }
+
+        section {
+            padding: 30px 0;
+            border-bottom: 1px solid #eee;
+        }
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #34495e;
+            margin: 20px 0 10px;
+        }
+
+        /* ================================
+           关于我部分
+           ================================ */
+        .about-content {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+        .about-content .avatar {
+            border-radius: 50%;
+            border: 4px solid #667eea;
+        }
+
+        /* ================================
+           技能部分（进度条效果）
+           ================================ */
+        .skill-bar {
+            margin: 15px 0;
+        }
+        .skill-bar .skill-name {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+        .skill-bar .bar-bg {
+            display: inline-block;
+            width: 300px;
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            vertical-align: middle;
+        }
+        .skill-bar .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            text-align: right;
+            line-height: 20px;
+            padding-right: 8px;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* ================================
+           作品集
+           ================================ */
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .project-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: box-shadow 0.3s;
+        }
+        .project-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .project-card h3 {
+            margin-top: 0;
+        }
+
+        /* ================================
+           表格样式
+           ================================ */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        /* ================================
+           表单样式
+           ================================ */
+        form {
+            max-width: 600px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 5px rgba(102,126,234,0.3);
+        }
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* ================================
+           Footer（页脚）
+           ================================ */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+        footer a {
+            color: #f1c40f;
+        }
+
+        /* ================================
+           响应式：小屏幕适配
+           ================================ */
+        @media (max-width: 768px) {
+            .about-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            nav a {
+                display: inline-block;
+                margin: 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- HEADER：页面头部                            -->
+    <!-- 包含：头像、姓名、一句话介绍                 -->
+    <!-- ========================================== -->
+    <header>
+        <div class="container">
+            <!--
+              img：头像图片
+              src 使用了网络图片，你可以换成自己的照片
+            -->
+            <img
+                src="https://via.placeholder.com/120x120/ffffff/667eea?text=ME"
+                alt="我的头像"
+                width="120"
+                height="120"
+                style="border-radius: 50%; border: 4px solid white; margin-bottom: 15px;"
+            >
+            <!-- h1：页面主标题，一页只用一个 -->
+            <h1>你好，我是 [你的名字]</h1>
+            <!-- p：一句话介绍 -->
+            <p>🚀 前端开发初学者 | 热爱编程与设计 | 正在学习 HTML5</p>
+        </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- NAV：导航栏（粘性定位，滚动时固定在顶部）    -->
+    <!-- ========================================== -->
+    <nav>
+        <div class="container">
+            <!--
+              导航链接使用锚点（#id）实现页面内跳转
+              点击后平滑滚动到对应区域
+            -->
+            <a href="#about">关于我</a>
+            <a href="#skills">技能</a>
+            <a href="#experience">经历</a>
+            <a href="#projects">作品</a>
+            <a href="#gallery">相册</a>
+            <a href="#contact">联系我</a>
+        </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- MAIN：页面主体内容                          -->
+    <!-- ========================================== -->
+    <main>
+        <div class="container">
+
+            <!-- ========================================== -->
+            <!-- SECTION 1：关于我                           -->
+            <!-- ========================================== -->
+            <section id="about">
+                <h2>📖 关于我</h2>
+
+                <div class="about-content">
+                    <!-- 头像图片 -->
+                    <img
+                        src="https://via.placeholder.com/200x200/667eea/ffffff?text=AVATAR"
+                        alt="我的头像"
+                        width="200"
+                        height="200"
+                        class="avatar"
+                    >
+
+                    <div>
+                        <!-- p：段落 -->
+                        <p>
+                            你好！我是一名 <strong>编程初学者</strong>，正在努力学习
+                            <em>前端开发技术</em>。这个页面是我用 HTML5 制作的
+                            <strong>第一个综合项目</strong>，用到了前 6 课学到的所有知识。
+                        </p>
+
+                        <!--
+                          定义列表 <dl>：展示个人基本信息
+                          dt：术语名称
+                          dd：术语说明
+                        -->
+                        <dl>
+                            <dt>📛 姓名：</dt>
+                            <dd>[你的名字]</dd>
+
+                            <dt>📍 所在地：</dt>
+                            <dd>中国 · 北京</dd>
+
+                            <dt>🎓 学历：</dt>
+                            <dd>计算机科学与技术（在读）</dd>
+
+                            <dt>💡 爱好：</dt>
+                            <dd>
+                                <!-- 行内元素，在一个 dd 中用多个 span -->
+                                <span style="background-color: #e8f4fd; padding: 2px 8px; border-radius: 4px; margin-right: 5px;">编程</span>
+                                <span style="background-color: #fef9e7; padding: 2px 8px; border-radius: 4px; margin-right: 5px;">阅读</span>
+                                <span style="background-color: #e8f8f5; padding: 2px 8px; border-radius: 4px;">摄影</span>
+                            </dd>
+                        </dl>
+
+                        <!-- 外部链接 -->
+                        <p>
+                            <!-- a：链接到 GitHub（新标签页打开） -->
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer">🌐 GitHub</a>
+                            |
+                            <!-- 邮件链接 -->
+                            <a href="mailto:your-email@example.com">📧 给我发邮件</a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECTION 2：技能                             -->
+            <!-- ========================================== -->
+            <section id="skills">
+                <h2>⚡ 我的技能</h2>
+
+                <!--
+                  使用无序列表 + 自定义样式的进度条
+                  展示各项技能的熟练程度
+                -->
+                <div class="skill-bar">
+                    <span class="skill-name">HTML5</span>
+                    <span class="bar-bg">
+                        <span class="bar-fill" style="width: 85%;">85%</span>
+                    </span>
+                </div>
+
+                <div class="skill-bar">
+                    <span class="skill-name">CSS3</span>
+                    <span class="bar-bg">
+                        <span class="bar-fill" style="width: 70%;">70%</span>
+                    </span>
+                </div>
+
+                <div class="skill-bar">
+                    <span class="skill-name">JavaScript</span>
+                    <span class="bar-bg">
+                        <span class="bar-fill" style="width: 40%;">40%</span>
+                    </span>
+                </div>
+
+                <div class="skill-bar">
+                    <span class="skill-name">Python</span>
+                    <span class="bar-bg">
+                        <span class="bar-fill" style="width: 50%;">50%</span>
+                    </span>
+                </div>
+
+                <!--
+                  details + summary：可折叠的更多信息
+                -->
+                <details>
+                    <summary>📚 正在学习</summary>
+                    <!-- ul：正在学习的技术列表 -->
+                    <ul>
+                        <li>JavaScript 进阶</li>
+                        <li>Vue.js 框架</li>
+                        <li>Node.js 后端</li>
+                    </ul>
+                </details>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECTION 3：学习和工作经历                    -->
+            <!-- ========================================== -->
+            <section id="experience">
+                <h2>📅 学习与工作经历</h2>
+
+                <!--
+                  表格：用表格展示经历最合适
+                  用到 thead、tbody、colspan
+                -->
+                <table>
+                    <!-- caption：表格标题 -->
+                    <caption>个人经历一览</caption>
+
+                    <!-- thead：表头 -->
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>机构/公司</th>
+                            <th>职位/专业</th>
+                            <th>描述</th>
+                        </tr>
+                    </thead>
+
+                    <!-- tbody：数据体 -->
+                    <tbody>
+                        <tr>
+                            <td>2024 - 至今</td>
+                            <td>自学编程</td>
+                            <td>前端开发学习者</td>
+                            <td>系统学习 HTML5、CSS3、JavaScript</td>
+                        </tr>
+                        <tr>
+                            <td>2023 - 2024</td>
+                            <td>XX 大学</td>
+                            <td>计算机科学与技术</td>
+                            <td>学习编程基础知识</td>
+                        </tr>
+                        <tr>
+                            <td>2022 - 2023</td>
+                            <td>XX 公司</td>
+                            <td>实习生</td>
+                            <td>初步接触 Web 开发</td>
+                        </tr>
+                    </tbody>
+
+                    <!-- tfoot：表尾，使用 colspan 合并列 -->
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" style="text-align: right; font-style: italic;">
+                                ⏳ 持续更新中...
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- 有序列表：教育经历的详细步骤 -->
+                <h3>📖 学习路线</h3>
+                <ol>
+                    <li>第一阶段：HTML5 基础（已完成 ✅）</li>
+                    <li>第二阶段：CSS3 样式与布局（进行中 🔄）</li>
+                    <li>第三阶段：JavaScript 交互（即将开始 ⏳）</li>
+                    <li>第四阶段：框架与项目实战（计划中 📋）</li>
+                </ol>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECTION 4：作品集                           -->
+            <!-- ========================================== -->
+            <section id="projects">
+                <h2>🎨 我的作品</h2>
+
+                <div class="projects">
+                    <!-- 作品卡片 1 -->
+                    <!-- article：每个作品是一个独立的内容单元 -->
+                    <article class="project-card">
+                        <!-- figure + figcaption：展示作品截图 -->
+                        <figure>
+                            <img
+                                src="https://via.placeholder.com/300x180/e74c3c/ffffff?text=项目1"
+                                alt="项目1 截图"
+                                width="100%"
+                                style="border-radius: 4px;"
+                            >
+                            <figcaption>项目 1 预览图</figcaption>
+                        </figure>
+                        <h3>个人博客</h3>
+                        <p>使用 HTML5 语义化标签构建的个人博客页面，包含文章列表、侧边栏和评论区。</p>
+                        <!--
+                          a 标签：链接到项目
+                          如果还没有真实链接，可以用 # 代替
+                        -->
+                        <p>
+                            <a href="#">🔗 查看演示</a> |
+                            <a href="#">📂 源代码</a>
+                        </p>
+                        <!-- small：技术标签 -->
+                        <p>
+                            <small style="color: #666;">
+                                HTML5 · CSS3 · 语义化布局
+                            </small>
+                        </p>
+                    </article>
+
+                    <!-- 作品卡片 2 -->
+                    <article class="project-card">
+                        <figure>
+                            <img
+                                src="https://via.placeholder.com/300x180/3498db/ffffff?text=项目2"
+                                alt="项目2 截图"
+                                width="100%"
+                                style="border-radius: 4px;"
+                            >
+                            <figcaption>项目 2 预览图</figcaption>
+                        </figure>
+                        <h3>在线留言板</h3>
+                        <p>一个带表单的留言板页面，练习了各种表单控件的使用和验证。</p>
+                        <p>
+                            <a href="#">🔗 查看演示</a> |
+                            <a href="#">📂 源代码</a>
+                        </p>
+                        <p>
+                            <small style="color: #666;">
+                                HTML5 表单 · 输入验证 · 响应式
+                            </small>
+                        </p>
+                    </article>
+
+                    <!-- 作品卡片 3 -->
+                    <article class="project-card">
+                        <figure>
+                            <img
+                                src="https://via.placeholder.com/300x180/2ecc71/ffffff?text=项目3"
+                                alt="项目3 截图"
+                                width="100%"
+                                style="border-radius: 4px;"
+                            >
+                            <figcaption>项目 3 预览图</figcaption>
+                        </figure>
+                        <h3>数据展示页</h3>
+                        <p>使用表格展示数据的页面，练习了表格分组、合并单元格等高级特性。</p>
+                        <p>
+                            <a href="#">🔗 查看演示</a> |
+                            <a href="#">📂 源代码</a>
+                        </p>
+                        <p>
+                            <small style="color: #666;">
+                                HTML 表格 · 数据可视化
+                            </small>
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECTION 5：相册/媒体展示                    -->
+            <!-- ========================================== -->
+            <section id="gallery">
+                <h2>📸 我的相册</h2>
+
+                <!--
+                  展示图片时使用 figure + figcaption 是最语义化的方式
+                -->
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <figure style="flex: 1; min-width: 200px;">
+                        <img
+                            src="https://via.placeholder.com/300x200/9b59b6/ffffff?text=图片1"
+                            alt="风景照片1"
+                            width="100%"
+                            style="border-radius: 8px;"
+                        >
+                        <figcaption>美丽的风景 1</figcaption>
+                    </figure>
+
+                    <figure style="flex: 1; min-width: 200px;">
+                        <img
+                            src="https://via.placeholder.com/300x200/e67e22/ffffff?text=图片2"
+                            alt="风景照片2"
+                            width="100%"
+                            style="border-radius: 8px;"
+                        >
+                        <figcaption>美丽的风景 2</figcaption>
+                    </figure>
+
+                    <figure style="flex: 1; min-width: 200px;">
+                        <img
+                            src="https://via.placeholder.com/300x200/1abc9c/ffffff?text=图片3"
+                            alt="风景照片3"
+                            width="100%"
+                            style="border-radius: 8px;"
+                        >
+                        <figcaption>美丽的风景 3</figcaption>
+                    </figure>
+                </div>
+
+                <!--
+                  audio 音频播放器
+                -->
+                <h3>🎵 我喜欢的音乐</h3>
+                <audio controls style="width: 100%; max-width: 400px;">
+                    <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+                    您的浏览器不支持音频播放。
+                </audio>
+
+                <!--
+                  video 视频播放器
+                -->
+                <h3>🎬 推荐视频</h3>
+                <video controls width="100%" max-width="560" poster="https://via.placeholder.com/560x315/2c3e50/ffffff?text=视频封面">
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECTION 6：联系我（表单）                   -->
+            <!-- ========================================== -->
+            <section id="contact">
+                <h2>✉️ 联系我</h2>
+
+                <p>如果你有任何问题或建议，欢迎通过下面的表单给我留言！</p>
+
+                <!--
+                  form：表单
+                  action="#" 表示提交到当前页面（学习阶段）
+                  实际使用时需要改为服务器接口地址
+                  method="post" 用 POST 方法提交数据
+                -->
+                <form action="#" method="post">
+                    <!--
+                      fieldset：给表单分组
+                      legend：分组的标题
+                    -->
+                    <fieldset style="border: 1px solid #ddd; border-radius: 8px; padding: 20px;">
+                        <legend style="font-size: 18px; font-weight: bold; color: #667eea;">📝 留言表单</legend>
+
+                        <!--
+                          姓名输入框
+                          label 的 for 指向 input 的 id
+                        -->
+                        <div class="form-group">
+                            <label for="name">姓名 *：</label>
+                            <!--
+                              required：必填
+                              placeholder：占位文字
+                            -->
+                            <input type="text" id="name" name="name" placeholder="请输入你的姓名" required>
+                        </div>
+
+                        <!--
+                          邮箱输入框
+                          type="email" 自动验证邮箱格式
+                        -->
+                        <div class="form-group">
+                            <label for="email">邮箱 *：</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        </div>
+
+                        <!--
+                          主题下拉选择
+                          select + option
+                        -->
+                        <div class="form-group">
+                            <label for="subject">主题：</label>
+                            <select id="subject" name="subject">
+                                <option value="">请选择主题</option>
+                                <option value="suggestion">建议</option>
+                                <option value="question">问题咨询</option>
+                                <option value="cooperation">合作意向</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <!--
+                          消息多行文本
+                          textarea：可以输入多行文字
+                        -->
+                        <div class="form-group">
+                            <label for="message">留言内容 *：</label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                rows="6"
+                                placeholder="请输入你想说的话..."
+                                maxlength="1000"
+                                required
+                            ></textarea>
+                            <br>
+                            <small>最多 1000 字</small>
+                        </div>
+
+                        <!--
+                          单选框：希望如何回复
+                          所有 radio 的 name 相同，只能选一个
+                        -->
+                        <div class="form-group">
+                            <p><strong>希望如何回复？</strong></p>
+                            <label><input type="radio" name="reply" value="email" checked> 邮件回复</label>
+                            <label><input type="radio" name="reply" value="phone"> 电话回复</label>
+                            <label><input type="radio" name="reply" value="no"> 不需要回复</label>
+                        </div>
+
+                        <!--
+                          复选框：同意条款
+                        -->
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="agree" required>
+                                我已阅读并同意 <a href="#" target="_blank">隐私政策</a> *
+                            </label>
+                        </div>
+
+                        <!-- 提交按钮 -->
+                        <button type="submit">📤 发送留言</button>
+                        <!-- 重置按钮 -->
+                        <button type="reset" style="background: #95a5a6; margin-left: 10px;">🔄 重新填写</button>
+
+                    </fieldset>
+                </form>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- FOOTER：页面底部                            -->
+    <!-- 包含：版权信息、备案号、友情链接            -->
+    <!-- ========================================== -->
+    <footer>
+        <div class="container">
+            <p>
+                <!--
+                  small：旁注文字
+                  &copy;：版权符号 ©
+                -->
+                <small>&copy; 2024 [你的名字]. 本站仅供学习使用.</small>
+            </p>
+            <p>
+                <small>
+                    <!--
+                      友情链接：使用 a 标签链接到其他网站
+                      target="_blank" 在新标签页打开
+                    -->
+                    友情链接：
+                    <a href="https://developer.mozilla.org/zh-CN/" target="_blank">MDN 文档</a> |
+                    <a href="https://www.w3schools.com" target="_blank">W3Schools</a> |
+                    <a href="https://www.runoob.com" target="_blank">菜鸟教程</a>
+                </small>
+            </p>
+            <p>
+                <!-- 返回顶部链接 -->
+                <a href="#" style="color: #f1c40f;">⬆ 回到顶部</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

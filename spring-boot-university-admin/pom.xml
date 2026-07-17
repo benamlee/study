@@ -1,0 +1,174 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ========================================== -->
+    <!-- Spring Boot 版本大学行政管理系统              -->
+    <!--                                             -->
+    <!-- 这是三个版本中最现代的一个：                  -->
+    <!--   1. Java EE + EJB + WebSphere              -->
+    <!--   2. Spring MVC + Hibernate + Tomcat         -->
+    <!--   3. Spring Boot + Spring Data JPA (本版本)  -->
+    <!--                                             -->
+    <!-- Spring Boot 最大的特点：                     -->
+    <!--   "约定优于配置"（Convention over Config）   -->
+    <!--   大部分配置由框架自动完成，开发者只需写     -->
+    <!--   业务代码和少量个性化配置。                 -->
+    <!-- ========================================== -->
+
+    <!-- spring-boot-starter-parent = Spring Boot 的父 POM
+         它管理了所有依赖的版本号（版本仲裁），
+         所以我们写子依赖时不需要写 version 属性。
+         2.7.18 是 Spring Boot 2.x 最终版，
+         使用 javax.persistence.*（与 Java EE 版本兼容）。
+         Spring Boot 3.x 改用 jakarta.persistence.* -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.university</groupId>
+    <artifactId>spring-boot-university-admin</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+    <!-- packaging = war：
+         用 war 打包才能正常使用 JSP。
+         但 Spring Boot 的 war 仍然可以 java -jar 运行
+         （内嵌 Tomcat），也可以部署到外部 Tomcat。 -->
+    <name>University Admin System - Spring Boot Version</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- ========================================== -->
+        <!-- spring-boot-starter-web：Web 开发核心        -->
+        <!-- 包含：                                      -->
+        <!--   - Spring MVC（@Controller、@RequestMapping）-->
+        <!--   - 嵌入式 Tomcat（自动下载，无需安装）      -->
+        <!--   - Jackson（JSON 处理，本版本暂不涉及）     -->
+        <!--   - Hibernate Validator（@Valid 校验）       -->
+        <!--   - 等等                                    -->
+        <!--                                             -->
+        <!-- 对比 Spring MVC 版：需要手动引入            -->
+        <!--   spring-webmvc + javax.servlet-api          -->
+        <!--   + 配置 WebAppInitializer + WebMvcConfig    -->
+        <!-- Spring Boot 一步到位。                      -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- spring-boot-starter-data-jpa：数据库访问核心 -->
+        <!-- 包含：                                      -->
+        <!--   - Spring Data JPA（JpaRepository）        -->
+        <!--   - Hibernate（JPA 实现）                   -->
+        <!--   - HikariCP（数据库连接池）                -->
+        <!--   - Spring ORM（@Transactional）            -->
+        <!--                                             -->
+        <!-- 对比 Spring MVC 版：需要手动引入            -->
+        <!--   spring-orm + hibernate-core + HikariCP    -->
+        <!--   并在 AppConfig.java 中配置 3 个 Bean。    -->
+        <!-- Spring Boot 自动配置全部。                  -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- spring-boot-starter-validation：Bean Validation -->
+        <!-- 包含 @Valid、@NotBlank、@NotNull 等注解      -->
+        <!-- Spring Boot 2.3+ 后从 web starter 中分离    -->
+        <!-- 需要单独引入。                               -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- H2 内存数据库（和前面两个版本一样）         -->
+        <!-- 不用写版本号，由 spring-boot-starter-parent -->
+        <!-- 统一管理。                                  -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- Lombok：消除 Java 样板代码                  -->
+        <!-- 编译时自动生成 getter/setter/constructor    -->
+        <!-- 等代码，让实体类从 70 行减少到 20 行。      -->
+        <!--                                             -->
+        <!-- 需要 IDE 安装 Lombok 插件才能正常开发       -->
+        <!-- （VSCode 默认支持，Eclipse/IDEA 需安装）    -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- JSP 支持：Spring Boot 默认不支持 JSP        -->
+        <!-- 需要额外引入 tomcat-embed-jasper 来编译     -->
+        <!-- JSP 文件。                                  -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ========================================== -->
+        <!-- JSTL：JSP 中需要用 <c:forEach> <c:if> 等   -->
+        <!-- ========================================== -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- ========================================== -->
+            <!-- Spring Boot Maven 插件                     -->
+            <!-- 功能：                                     -->
+            <!--   1. mvn spring-boot:run → 直接运行        -->
+            <!--   2. mvn package → 打可执行 war 包         -->
+            <!--      可以用 java -jar target/xxx.war 运行  -->
+            <!--      嵌入式 Tomcat 会自动启动。            -->
+            <!--                                             -->
+            <!-- 对比 Spring MVC 版：需要 tomcat7-maven-    -->
+            <!-- plugin；对比 Java EE 版：需要 liberty-     -->
+            <!-- maven-plugin。Spring Boot 内置。           -->
+            <!-- ========================================== -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <!-- Lombok 只在编译时需要，打包时排除 -->
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

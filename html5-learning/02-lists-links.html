@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<!-- ========================================== -->
+<!-- 文件：02-lists-links.html                   -->
+<!-- 主题：列表与链接                            -->
+<!-- ========================================== -->
+
+<!--
+  【本节学习目标】
+  1. 学会创建无序列表 <ul> + <li>
+  2. 学会创建有序列表 <ol> + <li>
+  3. 学会创建定义列表 <dl> + <dt> + <dd>
+  4. 学会创建超链接 <a>
+  5. 学会使用链接的各种属性（href, target, title）
+  6. 了解页面内锚点跳转
+-->
+
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 2 课 - 列表与链接</title>
+    <style>
+        body { font-family: "Microsoft YaHei", sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #fafafa; line-height: 1.8; }
+        .example { background-color: #fff; border-left: 4px solid #27ae60; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        code { background-color: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h1>2. 列表与链接</h1>
+
+    <!-- ========================================== -->
+    <!-- 1. 无序列表 <ul>                            -->
+    <!-- ========================================== -->
+
+    <h2>1.1 无序列表 &lt;ul&gt;</h2>
+
+    <!--
+      <ul>：无序列表（Unordered List）
+      - 每个列表项用 <li>（List Item）包裹
+      - 默认在每个 <li> 前显示一个实心圆点
+      - 常用于导航菜单、商品列表、特点清单等
+      - type 属性可以改变项目符号样式（disc / circle / square），但推荐用 CSS 控制
+    -->
+
+    <!--
+      type="disc"   → 实心圆点（默认）
+      type="circle" → 空心圆点
+      type="square" → 实心方块
+    -->
+    <ul type="disc">
+        <!-- li：列表项，每个 li 前有一个项目符号 -->
+        <li>苹果</li>
+        <li>香蕉</li>
+        <li>橙子</li>
+        <li>葡萄</li>
+    </ul>
+
+    <!-- 修改项目符号为方块 -->
+    <ul type="square">
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>HTML</li>
+    </ul>
+
+    <!-- ========================================== -->
+    <!-- 2. 有序列表 <ol>                            -->
+    <!-- ========================================== -->
+
+    <h2>1.2 有序列表 &lt;ol&gt;</h2>
+
+    <!--
+      <ol>：有序列表（Ordered List）
+      - 每个 <li> 前默认显示数字序号（1, 2, 3...）
+      - 常用于步骤说明、排行榜、目录等
+
+      type 属性（改变编号样式）：
+      type="1"  → 数字（默认）
+      type="A"  → 大写字母
+      type="a"  → 小写字母
+      type="I"  → 大写罗马数字
+      type="i"  → 小写罗马数字
+
+      start 属性：设置起始编号
+      reversed 属性：倒序排列
+    -->
+
+    <h3>默认数字序号：</h3>
+    <ol>
+        <li>第一步：打开编辑器</li>
+        <li>第二步：编写 HTML 代码</li>
+        <li>第三步：在浏览器中查看效果</li>
+    </ol>
+
+    <h3>大写字母序号（type="A"），从第 3 个开始：</h3>
+    <ol type="A" start="3">
+        <li>第三个选项</li>
+        <li>第四个选项</li>
+        <li>第五个选项</li>
+    </ol>
+
+    <h3>倒序排列（reversed）：</h3>
+    <!-- reversed 属性让序号从大到小排列 -->
+    <ol reversed>
+        <li>第三名：铜牌</li>
+        <li>第二名：银牌</li>
+        <li>第一名：金牌</li>
+    </ol>
+
+    <!-- ========================================== -->
+    <!-- 3. 嵌套列表                                 -->
+    <!-- ========================================== -->
+
+    <h2>1.3 嵌套列表</h2>
+
+    <!--
+      列表可以嵌套：在一个 <li> 内部再放一个 <ul> 或 <ol>
+      常用于：目录结构、分类菜单、多层级的内容
+    -->
+
+    <ul>
+        <li>前端开发
+            <!-- 在 li 内部再嵌套一个 ul -->
+            <ul>
+                <li>HTML</li>
+                <li>CSS
+                    <ul>
+                        <li>Flexbox</li>
+                        <li>Grid</li>
+                    </ul>
+                </li>
+                <li>JavaScript</li>
+            </ul>
+        </li>
+        <li>后端开发
+            <ul>
+                <li>Python</li>
+                <li>Java</li>
+                <li>Node.js</li>
+            </ul>
+        </li>
+    </ul>
+
+    <!-- ========================================== -->
+    <!-- 4. 定义列表 <dl> <dt> <dd>                  -->
+    <!-- ========================================== -->
+
+    <h2>1.4 定义列表 &lt;dl&gt;</h2>
+
+    <!--
+      <dl>：定义列表（Definition List）
+      <dt>：定义术语（Definition Term）— 要解释的词
+      <dd>：定义描述（Definition Description）— 对该词的解释
+      常用于：词汇表、FAQ（常见问题）、元数据列表
+    -->
+
+    <dl>
+        <!-- dt：要定义的术语名称 -->
+        <dt>HTML</dt>
+        <!-- dd：对该术语的解释说明 -->
+        <dd>超文本标记语言，用于创建网页的结构。</dd>
+
+        <dt>CSS</dt>
+        <dd>层叠样式表，用于控制网页的样式和布局。</dd>
+
+        <dt>JavaScript</dt>
+        <dd>一种脚本语言，用于为网页添加交互功能。</dd>
+    </dl>
+
+    <hr>
+
+    <!-- ========================================== -->
+    <!-- 5. 超链接 <a>                               -->
+    <!-- ========================================== -->
+
+    <h2>2.1 超链接 &lt;a&gt;</h2>
+
+    <!--
+      <a>：超链接标签（Anchor，锚点）
+      - 用于从一个页面跳转到另一个页面、文件、或页面内的某个位置
+      - 核心属性：
+
+      href（Hypertext REFerence）：链接目标地址
+        - 绝对路径：http://www.example.com
+        - 相对路径：about.html, ./images/photo.jpg
+        - 锚点：#section-id
+        - 电子邮件：mailto:someone@example.com
+        - 电话号码：tel:+8613800138000
+
+      target：在哪里打开链接
+        - _self  ：在当前窗口打开（默认）
+        - _blank ：在新标签页打开
+        - _parent：在父框架中打开
+        - _top   ：在整个窗口中打开
+
+      title：鼠标悬停时显示的提示文字
+      download：点击时下载文件，而不是打开它
+    -->
+
+    <div class="example">
+        <h3>基本链接：</h3>
+
+        <!-- 链接到外部网站（绝对路径） -->
+        <!-- target="_blank" 表示在新标签页打开 -->
+        <!-- title 提供额外信息，鼠标悬停时显示 -->
+        <p>
+            <a href="https://www.google.com" target="_blank" title="打开 Google 搜索">
+                打开 Google（新标签页）
+            </a>
+        </p>
+
+        <!-- 链接到本地文件（相对路径） -->
+        <!-- 因为本文件和 01-basics.html 在同一目录，直接用文件名即可 -->
+        <p>
+            <a href="01-basics.html">打开第 1 课（相对路径）</a>
+        </p>
+
+        <!-- target="_self" 在当前窗口打开（默认行为，可以不写） -->
+        <p>
+            <a href="index.html" target="_self">返回首页（当前窗口）</a>
+        </p>
+
+        <!-- 电子邮件链接：点击会打开系统默认的邮件客户端 -->
+        <p>
+            <a href="mailto:example@email.com">发送邮件（mailto:）</a>
+        </p>
+
+        <!-- 电话链接：在手机上会直接拨号 -->
+        <p>
+            <a href="tel:+8613800138000">拨打电话（tel:）</a>
+        </p>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 6. 页面内锚点跳转                           -->
+    <!-- ========================================== -->
+
+    <h2>2.2 页面内锚点跳转</h2>
+
+    <!--
+      【锚点跳转】在长页面中快速跳转到指定位置
+      实现方式：
+      1. 在目标元素上设置 id 属性（如：<h2 id="section1">）
+      2. 在链接的 href 中使用 #id 值（如：<a href="#section1">）
+
+      注意：id 在一个页面中必须是唯一的
+    -->
+
+    <!-- 点击这些链接，页面会平滑滚动到对应的 id 位置 -->
+    <p>
+        <strong>快速导航：</strong>
+        <!-- href="#无序列表" 表示跳转到 id="无序列表" 的元素位置 -->
+        <a href="#无序列表">跳转到"无序列表"</a> |
+        <a href="#有序列表">跳转到"有序列表"</a> |
+        <a href="#链接属性">跳转到"链接属性"</a> |
+        <!-- 空链接 href="#" 跳转到页面顶部 -->
+        <a href="#">回到顶部</a>
+    </p>
+
+    <!--
+      下面用 id 属性标记目标位置
+      id 值不能以数字开头，不能包含空格
+    -->
+
+    <!-- ========================================== -->
+    <!-- 7. 链接的其他属性                           -->
+    <!-- ========================================== -->
+
+    <!-- 给这个 h2 设置 id，让锚点可以跳转到这里 -->
+    <h2 id="链接属性">2.3 链接的其他属性</h2>
+
+    <div class="example">
+        <!-- download 属性：让链接变为下载文件 -->
+        <p>
+            <a href="01-basics.html" download>下载第 1 课文件（download 属性）</a>
+        </p>
+
+        <!-- rel="noopener noreferrer" 安全属性 -->
+        <!-- 当使用 target="_blank" 时，加上此属性可以防止安全漏洞 -->
+        <p>
+            <a href="https://www.wikipedia.org" target="_blank" rel="noopener noreferrer">
+                打开维基百科（带安全属性）
+            </a>
+        </p>
+
+        <!-- 使用图片作为链接 -->
+        <p>
+            <a href="https://www.baidu.com" target="_blank">
+                <!-- img 标签在下一课详细讲解，这里先简单了解 -->
+                <img src="https://www.baidu.com/favicon.ico" alt="百度图标" style="vertical-align: middle;">
+                点击图标打开百度
+            </a>
+        </p>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 8. 导航标签 <nav>                           -->
+    <!-- ========================================== -->
+
+    <h2>2.4 导航标签 &lt;nav&gt;</h2>
+
+    <!--
+      <nav>：HTML5 语义化标签，表示"导航区域"
+      用于包裹页面中的主要导航链接
+      搜索引擎和辅助设备（如屏幕阅读器）会通过 <nav> 识别导航区域
+    -->
+
+    <nav>
+        <!-- 用无序列表来组织导航链接是常见做法 -->
+        <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="01-basics.html">第 1 课</a></li>
+            <li><a href="03-media.html">第 3 课</a></li>
+        </ul>
+    </nav>
+
+    <!-- 为锚点练习增加一些距离 -->
+    <div style="height: 100px;"></div>
+
+    <!-- 设置锚点目标：id 和文本内容不需要一致 -->
+    <h3 id="无序列表">📍 你跳转到了"无序列表"部分</h3>
+    <p>通过点击上面的锚点链接，页面直接跳转到了这里。</p>
+
+    <div style="height: 100px;"></div>
+
+    <h3 id="有序列表">📍 你跳转到了"有序列表"部分</h3>
+    <p>在长页面中使用锚点跳转可以极大提高用户体验。</p>
+
+    <div style="height: 100px;"></div>
+
+    <hr>
+
+    <h2>✏️ 课后练习</h2>
+    <ol>
+        <li>创建一个包含你日常喜好的无序列表（至少 5 项）</li>
+        <li>创建一个今天学习计划的有序列表</li>
+        <li>练习嵌套列表：制作一个"编程语言分类"的嵌套列表</li>
+        <li>在页面中添加 3 个链接：一个打开百度、一个打开本地文件、一个邮件链接</li>
+        <li>在页面底部添加一个"回到顶部"的锚点链接</li>
+    </ol>
+
+    <hr>
+
+    <p>
+        <a href="01-basics.html">⬅ 上一课：基础标签</a>
+        <span style="float: right;"><a href="03-media.html">下一课：媒体元素 ➡</a></span>
+    </p>
+
+</body>
+</html>
