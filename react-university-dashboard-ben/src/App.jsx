@@ -1,11 +1,14 @@
-
+import Header from "./components/Header";
 
 function App() {
   return (
-    <div className='p-8 text-center'>
-      <h1 className='text-2xl font-bold text-gray-800'>Hello React</h1>
+    <div>
+      <Header
+        title="React 大學管理系統"
+        subtitle="學習 React 核心概念"
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
